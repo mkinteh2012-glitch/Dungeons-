@@ -1,0 +1,85 @@
+[gd_scene load_steps=13 format=3 uid="uid://drcjwnfgschuo"]
+
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_8a645"]
+[ext_resource type="Script" uid="uid://bnhqxwp63qmbw" path="res://Scripts/skitter.gd" id="1_kug7q"]
+[ext_resource type="PackedScene" uid="uid://ci38jjf03150f" path="res://Sprites/Projectile/skitter_projectile.tscn" id="2_iri0i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qta1n"]
+atlas = ExtResource("1_8a645")
+region = Rect2(384, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sl8p1"]
+atlas = ExtResource("1_8a645")
+region = Rect2(400, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kug7q"]
+atlas = ExtResource("1_8a645")
+region = Rect2(416, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iri0i"]
+atlas = ExtResource("1_8a645")
+region = Rect2(432, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0thfl"]
+atlas = ExtResource("1_8a645")
+region = Rect2(448, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37nh4"]
+atlas = ExtResource("1_8a645")
+region = Rect2(464, 84, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mqonu"]
+atlas = ExtResource("1_8a645")
+region = Rect2(480, 84, 16, 21)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qta1n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qta1n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sl8p1")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kug7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iri0i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0thfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37nh4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mqonu")
+}],
+"loop": true,
+"name": &"Run",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sl8p1"]
+size = Vector2(8, 13)
+
+[node name="Skitter" type="CharacterBody2D"]
+script = ExtResource("1_kug7q")
+projectile_scene = ExtResource("2_iri0i")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qta1n")
+animation = &"Idle"
+frame_progress = 0.7569336
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_sl8p1")

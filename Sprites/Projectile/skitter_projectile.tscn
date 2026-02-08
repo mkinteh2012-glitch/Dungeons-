@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci38jjf03150f"]
+
+[ext_resource type="Script" uid="uid://b4tqs01lhi134" path="res://Scripts/skitter_projectile.gd" id="1_6yud1"]
+[ext_resource type="Texture2D" uid="uid://cxpkogv7ga6ih" path="res://Images/SkitterProjectile.png" id="1_cbqlo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yud1"]
+size = Vector2(4, 4)
+
+[node name="SkitterProjectile" type="Area2D"]
+script = ExtResource("1_6yud1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6yud1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_cbqlo")
