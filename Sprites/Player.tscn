@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7hddce26nu4x"]
+[gd_scene load_steps=13 format=3 uid="uid://b7hddce26nu4x"]
 
 [ext_resource type="Script" uid="uid://cdhnb3xfajp6p" path="res://Scripts/player.gd" id="1_7dks2"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_awwv4"]
+[ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/Health.gd" id="3_c2xe1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4daxp"]
 atlas = ExtResource("1_awwv4")
@@ -84,3 +85,9 @@ shape = SubResource("RectangleShape2D_0ykl6")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+
+[node name="WeaponHolder" type="Node2D" parent="."]
+script = ExtResource("3_c2xe1")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_c2xe1")

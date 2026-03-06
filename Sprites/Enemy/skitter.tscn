@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_8a645"]
 [ext_resource type="Script" uid="uid://bnhqxwp63qmbw" path="res://Scripts/skitter.gd" id="1_kug7q"]
-[ext_resource type="PackedScene" uid="uid://ci38jjf03150f" path="res://Sprites/Projectile/skitter_projectile.tscn" id="2_iri0i"]
+[ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/Health.gd" id="4_0thfl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qta1n"]
 atlas = ExtResource("1_8a645")
@@ -71,7 +71,6 @@ size = Vector2(8, 13)
 
 [node name="Skitter" type="CharacterBody2D"]
 script = ExtResource("1_kug7q")
-projectile_scene = ExtResource("2_iri0i")
 
 [node name="Timer" type="Timer" parent="."]
 
@@ -83,3 +82,6 @@ frame_progress = 0.7569336
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_sl8p1")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_0thfl")
