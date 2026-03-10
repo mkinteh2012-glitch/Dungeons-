@@ -20,24 +20,29 @@ func attack(direction: Vector2):
 
 	can_attack = false
 
-	# 1. Position and Rotate
+	# 1. Position the Dagger
+	# We use global_position to ensure it stays where the player swung
 	global_position = owner_player.global_position + direction.normalized() * attack_range
-	rotation = direction.angle() + deg_to_rad(90)
+	rotation = direction.angle()
 
-	# 2. Enable Hitbox
+	# 2. Wake up the Hitbox
 	hitbox.monitoring = true
 	
-	# Wait for the next physics frame to ensure overlap is detected
-	await get_tree().process_frame 
+	# 3. Give the Physics Engine time to "feel" the overlap
+	# We wait 0.1 seconds (the duration of your swing/lunge)
+	await get_tree().create_timer(0.1).timeout
 
-	# 3. Detect and Damage
-	for body in hitbox.get_overlapping_bodies():
-		# Check if the body has a take_damage method and isn't the player
-		if body != owner_player and body.has_method("take_damage"):
+	# 4. Check what we hit
+	var bodies = hitbox.get_overlapping_bodies()
+	
+	# Check the 'Output' console for this message!
+	print("Dagger hit: ", bodies) 
+
+	for body in bodies:
+		if body.has_method("take_damage") and body != owner_player:
 			body.take_damage(damage)
-			
 
-	# 4. Disable Hitbox and wait for cooldown
+	# 5. Cleanup
 	hitbox.monitoring = false
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true

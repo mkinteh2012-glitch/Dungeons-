@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://bmhy8a5lishmo"]
+
+[ext_resource type="Texture2D" uid="uid://c6h7smd27gbiu" path="res://Images/HealthUI.png" id="1_0lx7c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56ksd"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 0, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7oqs"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 11, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8kmf1"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 22, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eeble"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 33, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bpxh"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 44, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j7a1o"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 55, 33, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_roiue"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 66, 33, 11)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_linqy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56ksd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7oqs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8kmf1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eeble")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bpxh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j7a1o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_roiue")
+}],
+"loop": true,
+"name": &"0",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_linqy")
+animation = &"0"
