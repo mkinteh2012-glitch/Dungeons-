@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://drcjwnfgschuo"]
+[gd_scene load_steps=14 format=3 uid="uid://drcjwnfgschuo"]
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_8a645"]
 [ext_resource type="Script" uid="uid://bnhqxwp63qmbw" path="res://Scripts/skitter.gd" id="1_kug7q"]
+[ext_resource type="PackedScene" uid="uid://ci38jjf03150f" path="res://Sprites/Projectile/skitter_projectile.tscn" id="2_0thfl"]
 [ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/SkitterHealth.gd" id="4_0thfl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qta1n"]
@@ -69,9 +70,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sl8p1"]
 size = Vector2(8, 13)
 
-[node name="Skitter" type="CharacterBody2D"]
+[node name="Skitter" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 2
 script = ExtResource("1_kug7q")
+base_speed = 70
+max_speed = 125
+projectile_scene = ExtResource("2_0thfl")
+shoot_cooldown = 1.0
+burst_chance = 0.06
 
 [node name="Timer" type="Timer" parent="."]
 

@@ -3,7 +3,7 @@ extends Node
 signal died
 signal health_changed(current_health)
 
-@export var max_health := 3        # 3 hearts
+@export var max_health := 6.0        # 3 hearts
 var current_health := max_health
 
 func _ready():
