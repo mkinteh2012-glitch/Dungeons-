@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_f8gr7"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_xfdtu"]
 [ext_resource type="PackedScene" uid="uid://drcjwnfgschuo" path="res://Sprites/Enemy/skitter.tscn" id="3_f8gr7"]
-[ext_resource type="PackedScene" uid="uid://ci38jjf03150f" path="res://Sprites/Projectile/skitter_projectile.tscn" id="4_xfdtu"]
+[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="4_xfdtu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iotdp"]
 texture = ExtResource("1_f8gr7")
@@ -475,9 +475,9 @@ position = Vector2(-45, -43)
 [node name="Skitter2" parent="." instance=ExtResource("3_f8gr7")]
 z_index = 1
 position = Vector2(65, 67)
-projectile_scene = ExtResource("4_xfdtu")
 
 [node name="Skitter" parent="." instance=ExtResource("3_f8gr7")]
 z_index = 1
 position = Vector2(218, -61)
-projectile_scene = ExtResource("4_xfdtu")
+
+[node name="HUD" parent="." instance=ExtResource("4_xfdtu")]

@@ -1,38 +1,42 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmhy8a5lishmo"]
+[gd_scene load_steps=11 format=3 uid="uid://bmhy8a5lishmo"]
 
 [ext_resource type="Texture2D" uid="uid://c6h7smd27gbiu" path="res://Images/HealthUI.png" id="1_0lx7c"]
+[ext_resource type="Script" uid="uid://dfhtxb5dwq3h1" path="res://Scripts/hearts.gd" id="1_56ksd"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_56ksd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lx7c"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 0, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_q7oqs"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_56ksd"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 11, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8kmf1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7oqs"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 22, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_eeble"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8kmf1"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 33, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4bpxh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_eeble"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 44, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j7a1o"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bpxh"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 55, 33, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_roiue"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_j7a1o"]
 atlas = ExtResource("1_0lx7c")
 region = Rect2(0, 66, 33, 11)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_linqy"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_roiue"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0lx7c")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_56ksd")
 }, {
@@ -50,17 +54,16 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_j7a1o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_roiue")
 }],
 "loop": true,
-"name": &"0",
+"name": &"default",
 "speed": 5.0
 }]
 
-[node name="Node2D" type="Node2D"]
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_56ksd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_linqy")
-animation = &"0"
+position = Vector2(35, 15)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_roiue")

@@ -15,10 +15,15 @@ func _ready():
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
 
 func _on_hitbox_body_entered(body: Node2D):
-	# Only damage if the hitbox is actually active (lunging)
+
 	if hitbox.monitoring and body.is_in_group("enemies"):
 		if body.has_method("take_damage"):
 			body.take_damage(damage)
+			
+			
+			var cam = get_viewport().get_camera_2d()
+			if cam and cam.has_method("apply_shake"):
+				cam.apply_shake(2.0)
 
 func attack(_direction: Vector2):
 	if not can_attack: return
