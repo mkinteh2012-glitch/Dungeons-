@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=4 uid="uid://85wsqpmigrem"]
+[gd_scene load_steps=10 format=4 uid="uid://dbvmoau2otyu1"]
 
-[ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_f8gr7"]
-[ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_xfdtu"]
-[ext_resource type="PackedScene" uid="uid://drcjwnfgschuo" path="res://Sprites/Enemy/skitter.tscn" id="3_f8gr7"]
-[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="4_xfdtu"]
+[ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_ssric"]
+[ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_kfwm1"]
+[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="4_eun7u"]
+[ext_resource type="PackedScene" uid="uid://dxhbiiulntc2x" path="res://Sprites/Enemy/Peon.tscn" id="4_ssric"]
+[ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_kfwm1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iotdp"]
-texture = ExtResource("1_f8gr7")
+texture = ExtResource("1_ssric")
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -76,7 +77,7 @@ texture = ExtResource("1_f8gr7")
 sources/0 = SubResource("TileSetAtlasSource_iotdp")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_05pb0"]
-texture = ExtResource("2_xfdtu")
+texture = ExtResource("2_kfwm1")
 2:0/0 = 0
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0 = 0
@@ -472,12 +473,23 @@ tile_set = SubResource("TileSet_dl8mf")
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(-45, -43)
 
-[node name="Skitter2" parent="." instance=ExtResource("3_f8gr7")]
-z_index = 1
-position = Vector2(65, 67)
+[node name="HUD" parent="." instance=ExtResource("4_eun7u")]
 
-[node name="Skitter" parent="." instance=ExtResource("3_f8gr7")]
-z_index = 1
-position = Vector2(218, -61)
+[node name="Peon" parent="." instance=ExtResource("4_ssric")]
+position = Vector2(223, -52)
 
-[node name="HUD" parent="." instance=ExtResource("4_xfdtu")]
+[node name="Peon2" parent="." instance=ExtResource("4_ssric")]
+position = Vector2(-58, 106)
+
+[node name="Peon3" parent="." instance=ExtResource("4_ssric")]
+position = Vector2(-76, 219)
+
+[node name="Peon4" parent="." instance=ExtResource("4_ssric")]
+position = Vector2(209, 210)
+
+[node name="Peon5" parent="." instance=ExtResource("4_ssric")]
+position = Vector2(57, 66)
+
+[node name="LevelManager" type="Node" parent="."]
+script = ExtResource("5_kfwm1")
+next_level_path = "uid://85wsqpmigrem"

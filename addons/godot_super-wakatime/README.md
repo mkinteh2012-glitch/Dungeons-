@@ -1,3 +1,4 @@
+
 <a id="readme-top"></a>
 
 <!-- SHIELDS -->
@@ -89,7 +90,7 @@ It required a lot of workarounds, but it was a pleasure to use it
 How to install and use this software? It's easy!
 
 ### Installation
-You can either download it from the [Godot Asset Library](https://godotengine.org/asset-library/asset/3484).
+You can either download it from asset lib (will provide a link, once it gets accepted)
 <br />Or you can manually install it, here's how to do it!
 1. Clone the repository
 	```sh

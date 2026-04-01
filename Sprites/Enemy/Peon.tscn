@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=3 uid="uid://dxhbiiulntc2x"]
+
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_77kwv"]
+[ext_resource type="Script" uid="uid://bl0dmo558edjb" path="res://Scripts/peon.gd" id="1_bx8h2"]
+[ext_resource type="Script" uid="uid://g4aone1eaiop" path="res://Scripts/PeonHealth.gd" id="3_br33p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qse7"]
+atlas = ExtResource("1_77kwv")
+region = Rect2(416, 155, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obuk1"]
+atlas = ExtResource("1_77kwv")
+region = Rect2(432, 155, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a85q0"]
+atlas = ExtResource("1_77kwv")
+region = Rect2(448, 155, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2a1he"]
+atlas = ExtResource("1_77kwv")
+region = Rect2(464, 155, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7rs0a"]
+atlas = ExtResource("1_77kwv")
+region = Rect2(480, 155, 16, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8xx76"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qse7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obuk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a85q0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2a1he")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rs0a")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c61ha"]
+size = Vector2(14, 13)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_br33p"]
+radius = 95.42536
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
+size = Vector2(14, 19)
+
+[node name="Peon" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_bx8h2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_8xx76")
+animation = &"walk"
+frame_progress = 0.4672587
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+z_index = 1
+position = Vector2(1, 0.5)
+shape = SubResource("RectangleShape2D_c61ha")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="AttackTimer" type="Timer" parent="Hurtbox"]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_br33p")
+
+[node name="DetectionRange" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange"]
+shape = SubResource("CircleShape2D_br33p")
+debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
+
+[node name="WanderTimer" type="Timer" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_20kgd")

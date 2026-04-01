@@ -21,6 +21,7 @@ var current_health: int
 @export var wall_bounce_duration := 0.5 
 @export var swarm_radius := 20
 @export var swarm_force := 2.0
+@export var accuracy_error : float = 15.0 # Degrees of possible error
 
 ## --- Internal Variables ---
 var time_since_shot := 0.0
@@ -129,6 +130,11 @@ func handle_wall_collision():
 func shoot(dir: Vector2) -> void:
 	if not projectile_scene: return
 	
+	# --- 1. APPLY INACCURACY ---
+	# This shifts the ENTIRE attack (single or burst) by a random amount
+	var error_deg = rng.randf_range(-accuracy_error, accuracy_error)
+	var aimed_dir = dir.rotated(deg_to_rad(error_deg))
+	
 	# Determine if this attack is a burst or a single shot
 	var is_burst = rng.randf() < burst_chance
 	var shots_to_fire = burst_count if is_burst else 1
@@ -136,13 +142,12 @@ func shoot(dir: Vector2) -> void:
 	for i in range(shots_to_fire):
 		var proj = projectile_scene.instantiate()
 		
-		# Small random spread (±4 degrees) so bullets don't overlap
+		# --- 2. APPLY SPREAD ---
+		# This is a TINY variation (±4) so burst bullets don't overlap
 		var spread = deg_to_rad(rng.randf_range(-4, 4))
-		var final_dir = dir.rotated(spread)
+		var final_dir = aimed_dir.rotated(spread)
 		
 		proj.global_position = global_position
-		
-		# Add to the main scene so projectiles don't move with the enemy
 		get_tree().current_scene.add_child(proj)
 		
 		if "direction" in proj:
@@ -150,6 +155,5 @@ func shoot(dir: Vector2) -> void:
 		
 		proj.rotation = final_dir.angle()
 		
-		# The 'await' creates the delay between shots in a burst
 		if shots_to_fire > 1 and i < shots_to_fire - 1:
 			await get_tree().create_timer(0.12).timeout
