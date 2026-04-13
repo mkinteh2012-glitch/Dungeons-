@@ -56,7 +56,8 @@ radius = 95.42536
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
 size = Vector2(14, 19)
 
-[node name="Peon" type="CharacterBody2D"]
+[node name="Peon" type="CharacterBody2D" groups=["enemy"]]
+z_index = 10
 collision_layer = 2
 script = ExtResource("1_bx8h2")
 

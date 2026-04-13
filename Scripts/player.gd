@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export var dodge_duration := 0.2
 @export var dodge_cooldown := 0.8
 
+var is_weakened: bool = false
 var can_dodge := true
 var is_dodging := false
 var is_moving_last_frame := false
@@ -106,8 +107,11 @@ func handle_hit(enemy_pos: Vector2):
 		await get_tree().create_timer(0.2).timeout
 		is_dodging = false
 
-	
-	sprite.modulate = Color.WHITE
+	if is_weakened:
+		sprite.modulate = Color(0.7, 0.2, 0.9, 1.0) # Stay Purple
+	else:
+		sprite.modulate = Color.WHITE
+		
 func dodge():
 	can_dodge = false
 	is_dodging = true
@@ -192,3 +196,22 @@ func _on_attack_timer_timeout():
 func _on_died():
 	# Resets the scene when health hits 0
 	get_tree().call_deferred("reload_current_scene")
+	
+func apply_weakness(duration: float):
+	# --- THE FIX ---
+	# If we are already weakened, IGNORE any new hits from Vex
+	if is_weakened:
+		return 
+	
+	is_weakened = true
+	sprite.modulate = Color(0.7, 0.2, 0.9, 1.0) # Purple
+	
+	# Simple countdown loop
+	for i in range(duration, 0, -1):
+		print("DEBUG: Weakness ending in... ", i)
+		await get_tree().create_timer(1.0).timeout
+	
+	# Reset after the first timer finishes
+	is_weakened = false
+	sprite.modulate = Color.WHITE
+	print("DEBUG: Weakness GONE")

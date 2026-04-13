@@ -2,8 +2,8 @@ extends Node
 
 signal died
 
-@export var max_health := 50
-var health := 50
+@export var max_health := 75
+var health := 75
 
 func _ready():
 	health = max_health
@@ -16,7 +16,7 @@ func take_damage(amount: int):
 		# 1. Camera Shake
 		var cam = get_viewport().get_camera_2d()
 		if cam and cam.has_method("apply_shake"):
-			cam.apply_shake(12.0)
+			cam.apply_shake(9.0)
 
 		# 2. The Poof Logic
 		var poof = get_parent().get_node_or_null("DeathPoof")

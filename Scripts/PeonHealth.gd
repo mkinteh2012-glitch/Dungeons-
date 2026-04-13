@@ -2,43 +2,38 @@ extends Node
 
 signal died
 
-@export var max_health := 25
-# This line is what the Peon is looking for:
-var current_health: int
+@export var max_health := 50
+var health := 50
 
 func _ready():
-	current_health = max_health
+	health = max_health
 	
 func take_damage(amount: int):
-	# FIX: Changed 'health' to 'current_health'
-	current_health -= amount
-	print("Enemy health: ", current_health)
+	health -= amount
+	print("Enemy health: ", health)
 	
-	# FIX: Changed 'health' to 'current_health'
-	if current_health <= 0:
+	if health <= 0:
 		# 1. Camera Shake
 		var cam = get_viewport().get_camera_2d()
 		if cam and cam.has_method("apply_shake"):
-			cam.apply_shake(6.0)
+			cam.apply_shake(2.0)
 
 		# 2. The Poof Logic
 		var poof = get_parent().get_node_or_null("DeathPoof")
 		if poof:
 			# Move to level root so it survives
 			var level = get_tree().current_scene
-			var global_pos = get_parent().global_position # Save pos before removing
-			
 			poof.get_parent().remove_child(poof)
 			level.add_child(poof)
 			
-			poof.global_position = global_pos
+			poof.global_position = get_parent().global_position
 			poof.z_index = 100
 			poof.emitting = true
 			
-			# TWEEN FOR CLEANUP
+			# USE A TWEEN FOR CLEANUP (Avoids the Lambda Error)
 			var cleanup_tween = get_tree().create_tween()
-			cleanup_tween.tween_interval(1.5)
+			cleanup_tween.tween_interval(1.5) # Wait 1.5 seconds
 			cleanup_tween.tween_callback(poof.queue_free)
 		
 		# 3. Final Signal
-		died.emit()
+		died.emit()		

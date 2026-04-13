@@ -71,13 +71,14 @@ animations = [{
 size = Vector2(10, 14)
 
 [node name="Skitter" type="CharacterBody2D" groups=["enemy"]]
+z_index = 10
 collision_layer = 2
 script = ExtResource("1_kug7q")
 base_speed = 70
 max_speed = 125
 projectile_scene = ExtResource("2_0thfl")
 shoot_cooldown = 1.0
-burst_chance = 0.06
+burst_chance = 0.05
 
 [node name="Timer" type="Timer" parent="."]
 

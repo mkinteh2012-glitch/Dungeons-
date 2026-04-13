@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://dvgfjuhvh0ttr"]
+
+[ext_resource type="Script" uid="uid://ysjeg2e37rwi" path="res://Scripts/Vex.gd" id="1_fiq1d"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_631ve"]
+[ext_resource type="Script" uid="uid://cq0jhljjrbsu3" path="res://Scripts/VexHealth.gd" id="3_631ve"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4kqf"]
+atlas = ExtResource("2_631ve")
+region = Rect2(416, 346, 16, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1eq8e"]
+atlas = ExtResource("2_631ve")
+region = Rect2(432, 346, 16, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbski"]
+atlas = ExtResource("2_631ve")
+region = Rect2(448, 346, 16, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g13ik"]
+atlas = ExtResource("2_631ve")
+region = Rect2(464, 346, 16, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2byu4"]
+atlas = ExtResource("2_631ve")
+region = Rect2(480, 346, 16, 26)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q6b28"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4kqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1eq8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kbski")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g13ik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2byu4")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fiq1d"]
+radius = 4.0
+height = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j5eei"]
+radius = 36.71512
+
+[node name="Vex" type="CharacterBody2D" groups=["enemy"]]
+z_index = 10
+position = Vector2(1, 0)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_fiq1d")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_q6b28")
+animation = &"walk"
+frame_progress = 0.8039939
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_fiq1d")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="Hurtbox" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_j5eei")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_631ve")

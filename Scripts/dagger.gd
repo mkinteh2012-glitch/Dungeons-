@@ -11,27 +11,40 @@ var can_attack := true
 
 func _ready():
 	hitbox.monitoring = false
-	# Connect the signal so it triggers every time it touches something NEW
+	# We use area_entered if your enemy hitboxes are Areas, 
+	# or body_entered if they are CharacterBodies.
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
 
 func _on_hitbox_body_entered(body: Node2D):
-
 	if hitbox.monitoring and body.is_in_group("enemies"):
-		if body.has_method("take_damage"):
-			body.take_damage(damage)
-			
-			
-			var cam = get_viewport().get_camera_2d()
-			if cam and cam.has_method("apply_shake"):
-				cam.apply_shake(2.0)
+		# 1. Find the player globally since Dagger isn't a child
+		var player = get_tree().get_first_node_in_group("player")
+		
+		# 2. Calculate Damage
+		var final_damage = damage
+		
+		# Check if player exists and if they are currently weakened
+		if player and player.get("is_weakened") == true:
+			final_damage = ceil(damage / 2.0)
+			print("Dagger detected Player Weakness! Dealing: ", final_damage)
+		else:
+			print("Dagger dealing FULL damage: ", final_damage)
 
+		# 3. Apply Damage to Enemy
+		if body.has_method("take_damage"):
+			body.take_damage(final_damage)
+		elif body.has_node("Health"):
+			body.get_node("Health").take_damage(final_damage)
+			
+		# 4. Effects
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.has_method("apply_shake"):
+			cam.apply_shake(2.0)
 func attack(_direction: Vector2):
 	if not can_attack: return
 	can_attack = false
 
 	# 1. Lunge out
-	# Since your sprite is drawn UP, we move it on the Y axis 
-	# (Negative Y is Up in Godot)
 	position = Vector2(0, -32) 
 	hitbox.monitoring = true
 	
@@ -42,4 +55,4 @@ func attack(_direction: Vector2):
 	position = Vector2(0, -12) 
 	
 	await get_tree().create_timer(cooldown).timeout
-	can_attack = true
+	can_attack = true	

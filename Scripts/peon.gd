@@ -46,6 +46,7 @@ func _connect_debug_signal(node_name: String, sig_name: String, callable: Callab
 		print("CRITICAL ERROR: Node '", node_name, "' not found in Peon scene!")
 
 func _physics_process(_delta):
+			
 	if is_chasing and player:
 		# Move toward player
 		velocity = global_position.direction_to(player.global_position) * speed_chase
@@ -53,14 +54,14 @@ func _physics_process(_delta):
 		# --- COMBAT CHECK ---
 		var dist = global_position.distance_to(player.global_position)
 		
-		if dist < 5: # Your requested 35px bite range
+		if dist < 12: # Your requested 35px bite range
 			# If we aren't already biting, start biting
 			if $Hurtbox/AttackTimer.is_stopped():
 				print("BITE: Distance is ", dist, ". Damage Dealt!")
 				target_in_range = player
 				attack_player()
 				$Hurtbox/AttackTimer.start()
-		elif dist > 7 : # Stop biting if the player runs away
+		elif dist > 15 : # Stop biting if the player runs away
 			if not $Hurtbox/AttackTimer.is_stopped():
 				print("BITE STOPPED: Player escaped.")
 				target_in_range = null
@@ -128,6 +129,3 @@ func attack_player():
 func take_damage(amount: int, _source_pos: Vector2 = Vector2.ZERO):
 	if has_node("Health"):
 		$Health.take_damage(amount)
-		print("Peon took ", amount, " damage! Health is: ", $Health.current_health)
-	else:
-		print("ERROR: Peon is missing its Health node!")

@@ -2,8 +2,8 @@ extends Node
 
 signal died
 
-@export var max_health := 50
-var health := 50
+@export var max_health := 500
+var health := 500
 
 func _ready():
 	health = max_health

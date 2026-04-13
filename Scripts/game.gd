@@ -35,7 +35,7 @@ func _process(_delta):
 		check_level_completion()
 
 func check_level_completion():
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var enemies = get_tree().get_nodes_in_group("enemy")
 	
 	# If the list is empty, the player won
 	if enemies.size() == 0:
@@ -55,21 +55,35 @@ func load_new_level(path: String):
 	
 	# 2. Instance the new level
 	var new_level_resource = load(path)
+	if not new_level_resource:
+		print("ERROR: Could not load level path: ", path)
+		return
+		
 	var new_level = new_level_resource.instantiate()
 	new_level.name = "ActiveLevel"
 	add_child(new_level)
 	
-	# --- 3. HEALTH RESET ---
-	# We find the player's health node and reset current to max
+	# 3. HEALTH RESET
 	var player_health = player.get_node_or_null("Health")
 	if player_health:
 		player_health.current_health = player_health.max_health
-		print("Player health restored for the new level!")
+		print("Player health restored!")
 	
 	# 4. Move Player to spawn
 	await get_tree().process_frame
-	var spawn = new_level.find_child("PlayerSpawn")
-	if spawn:
-		player.global_position = spawn.global_position
 	
-	transitioning = false		
+	# --- FIXED SECTION ---
+	if is_instance_valid(new_level):
+		var spawn = new_level.find_child("PlayerSpawn")
+		
+		if spawn:
+			player.global_position = spawn.global_position
+			print("Player moved to spawn.")
+		else:
+			print("ERROR: Could not find 'PlayerSpawn' in the new level!")
+			player.global_position = Vector2.ZERO # Fallback
+	else:
+		print("ERROR: new_level is null or freed!")
+	
+	# 5. Unlock the transition gate so check_level_completion works again
+	transitioning = false
