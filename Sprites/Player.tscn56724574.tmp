@@ -1,11 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://b7hddce26nu4x"]
+[gd_scene load_steps=16 format=3 uid="uid://b7hddce26nu4x"]
 
 [ext_resource type="Script" uid="uid://cdhnb3xfajp6p" path="res://Scripts/player.gd" id="1_7dks2"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_awwv4"]
 [ext_resource type="Script" uid="uid://cthwn6b8nqgt6" path="res://Scripts/Camera_Effects.gd" id="3_6cc16"]
 [ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/SkitterHealth.gd" id="3_c2xe1"]
 [ext_resource type="Script" uid="uid://cqrf8k3aw0537" path="res://Scripts/health.gd" id="4_fj2py"]
-[ext_resource type="AudioStream" uid="uid://87aw0w3231ml" path="res://Music/SFX/Restore_Player_Health.wav" id="6_kvt0k"]
 [ext_resource type="AudioStream" uid="uid://bnb4uitabu6hi" path="res://Music/SFX/Game_Over.mp3" id="6_lusjq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4daxp"]
@@ -78,6 +77,13 @@ z_index = 1
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_7dks2")
+speed = null
+attack_cooldown = null
+lunge_force = null
+lunge_duration = null
+dodge_speed = null
+dodge_duration = null
+dodge_cooldown = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -7.5)
@@ -99,8 +105,7 @@ script = ExtResource("3_c2xe1")
 [node name="Health" type="Node" parent="."]
 script = ExtResource("4_fj2py")
 
-[node name="HealSound" type="AudioStreamPlayer2D" parent="Health"]
-stream = ExtResource("6_kvt0k")
-
 [node name="GameOverSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_lusjq")
+
+[node name="HealSound" type="AudioStreamPlayer2D" parent="."]

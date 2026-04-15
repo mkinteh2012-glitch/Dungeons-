@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://drcjwnfgschuo"]
+[gd_scene load_steps=16 format=3 uid="uid://drcjwnfgschuo"]
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_8a645"]
 [ext_resource type="Script" uid="uid://bnhqxwp63qmbw" path="res://Scripts/skitter.gd" id="1_kug7q"]
 [ext_resource type="PackedScene" uid="uid://ci38jjf03150f" path="res://Sprites/Projectile/skitter_projectile.tscn" id="2_0thfl"]
 [ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/SkitterHealth.gd" id="4_0thfl"]
+[ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="5_37nh4"]
+[ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="5_mqonu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qta1n"]
 atlas = ExtResource("1_8a645")
@@ -77,7 +79,7 @@ script = ExtResource("1_kug7q")
 base_speed = 70
 max_speed = 125
 projectile_scene = ExtResource("2_0thfl")
-shoot_cooldown = 1.0
+shoot_cooldown = 2.25
 burst_chance = 0.05
 
 [node name="Timer" type="Timer" parent="."]
@@ -105,3 +107,7 @@ initial_velocity_min = 100.0
 initial_velocity_max = 200.0
 scale_amount_min = 8.0
 scale_amount_max = 12.0
+
+[node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_mqonu")
+script = ExtResource("5_37nh4")

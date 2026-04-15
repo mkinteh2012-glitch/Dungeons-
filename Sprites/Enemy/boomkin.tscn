@@ -1,7 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://p4hlabk5l43a"]
+[gd_scene load_steps=14 format=3 uid="uid://p4hlabk5l43a"]
 
 [ext_resource type="Script" uid="uid://bbxmflf7kahvf" path="res://Scripts/boomkin.gd" id="1_4vwbd"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_b0oqb"]
+[ext_resource type="AudioStream" uid="uid://b8lf748e84r46" path="res://Music/SFX/Boomkin_Explode.mp3" id="3_esc18"]
+[ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="4_2phkw"]
+[ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="5_q4v2m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4vwbd"]
 atlas = ExtResource("1_b0oqb")
@@ -84,3 +87,11 @@ spread = 180.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 200.0
 initial_velocity_max = 200.0
+
+[node name="ExplodeSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_esc18")
+
+[node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_2phkw")
+script = ExtResource("5_q4v2m")
+enemy_type = "boomkin"

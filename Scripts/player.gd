@@ -192,10 +192,6 @@ func attack():
 
 func _on_attack_timer_timeout():
 	can_attack = true
-
-func _on_died():
-	# Resets the scene when health hits 0
-	get_tree().call_deferred("reload_current_scene")
 	
 func apply_weakness(duration: float):
 	# --- THE FIX ---
@@ -215,3 +211,25 @@ func apply_weakness(duration: float):
 	is_weakened = false
 	sprite.modulate = Color.WHITE
 	print("DEBUG: Weakness GONE")
+
+func _on_died():
+	print("Player has died!")
+	
+	# 1. Play the Game Over sound
+	if has_node("GameOverSound"):
+		$GameOverSound.play()
+	
+	# 2. Stop player movement and hide them
+	set_physics_process(false) # Stops the FootstepController too!
+	visible = false
+	
+	# 3. Disable collisions so enemies stop attacking the "ghost"
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	# 4. Wait for the sound to finish a bit, then restart or show UI
+	await get_tree().create_timer(1.5).timeout
+	restart_game()
+
+func restart_game():
+	# For now, we just reload the scene
+	get_tree().reload_current_scene()

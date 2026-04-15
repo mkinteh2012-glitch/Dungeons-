@@ -106,6 +106,19 @@ func explode():
 			elif "health" in body:
 				body.health -= 50
 				print("Subtracted health variable directly from ", body.name)
+	
+	# 1. Hide the visuals so it looks "dead"
+	visible = false
+	set_physics_process(false)
+	$CollisionShape2D.disabled = true
+	
+	if has_node("ExplodeSound"):
+		var snd = $ExplodeSound
+		snd.play()
+		await get_tree().create_timer(1.0).timeout
+	queue_free()
+			
+	
+			
 
-		# 4. REMOVE PUMPKIN
-		queue_free()
+		

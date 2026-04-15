@@ -839,7 +839,7 @@ position = Vector2(218, -61)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_hwds3")
-next_level_path = "uid://dbvmoau2otyu1"
+next_level_path = "uid://cwonsgpv4vrdo"
 
 [node name="Walls" type="TileMapLayer" parent="."]
 position = Vector2(0, 1)
@@ -852,9 +852,11 @@ tile_set = SubResource("TileSet_nutv8")
 
 [node name="Boomkin" parent="." instance=ExtResource("6_uph8f")]
 position = Vector2(224, -8)
+speed = 180.0
 
 [node name="Boomkin2" parent="." instance=ExtResource("6_uph8f")]
 position = Vector2(215, 226)
+speed = 180.0
 
 [node name="Peon" parent="." instance=ExtResource("7_imj0a")]
 position = Vector2(64, 158)

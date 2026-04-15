@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://qi6aftb1rwh1"]
+[gd_scene load_steps=11 format=3 uid="uid://qi6aftb1rwh1"]
 
 [ext_resource type="Script" uid="uid://5an8ibova772" path="res://Scripts/spawner.gd" id="1_7h372"]
 [ext_resource type="Texture2D" uid="uid://dx7gg31oq8lmb" path="res://Images/Portal.png" id="1_wxi16"]
-[ext_resource type="Script" uid="uid://do36saxbuhlrp" path="res://Scripts/spawnerhealth.gd" id="3_clycb"]
+[ext_resource type="AudioStream" uid="uid://cejqcgh8snd76" path="res://Music/SFX/Portal_Spawn.mp3" id="2_w07fp"]
+[ext_resource type="AudioStream" uid="uid://do7ghu6mggfvp" path="res://Music/SFX/Portal_Low.mp3" id="4_4auox"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wxi16"]
 radius = 8.0
@@ -43,6 +44,10 @@ animations = [{
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_7h372")
+max_health = 750
+
+[node name="SpawnSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_w07fp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 light_mask = 3
@@ -79,5 +84,5 @@ position = Vector2(0, 0.03124994)
 scale = Vector2(0.563, 0.569)
 sprite_frames = SubResource("SpriteFrames_w07fp")
 
-[node name="Health" type="Node" parent="."]
-script = ExtResource("3_clycb")
+[node name="LowHealthSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_4auox")
