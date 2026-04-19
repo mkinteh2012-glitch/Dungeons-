@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://drjbnfs2b5mce"]
+
+[ext_resource type="Script" uid="uid://cdinns3n031qw" path="res://Scripts/slime_puddle.gd" id="1_264sq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_11teh"]
+radius = 5.0990195
+
+[node name="SlimePuddle" type="Area2D"]
+script = ExtResource("1_264sq")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.32108447, 0.6593212, 0.2969234, 1)
+polygon = PackedVector2Array(3, 4, 5, 1, 5, -1, 5, -3, 3, -4, 1, -4, -1, -4, -3, -4, -5, 0, -6, 2, -4, 4, -2, 5, 0, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_11teh")

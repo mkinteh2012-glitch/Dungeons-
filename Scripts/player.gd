@@ -87,6 +87,17 @@ func _physics_process(_delta):
 
 	move_and_slide()
 	
+		# --- FORCE PUSH ENEMIES ---
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var target = collision.get_collider()
+		
+		if target.is_in_group("enemy") and not target.is_in_group("spawner") and not target.is_in_group("boss"):
+			# Instead of just adding velocity, we 'teleport' them slightly
+			# away so they don't block the player's path
+			var push_dir = collision.get_normal() * -1.0
+			target.global_position += push_dir * 2.0 # Tiny 'nudge' out of the way
+	
 func handle_hit(enemy_pos: Vector2):
 
 	sprite.modulate = Color(10, 0, 0, 1)

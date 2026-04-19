@@ -14,10 +14,12 @@ var has_spawned_halfway_wave := false
 var is_flickering := false 
 
 var spawn_table = {
-	"res://Sprites/Enemy/boomkin.tscn": 18, 
-	"res://Sprites/Enemy/Vex.tscn": 12, 
+	"res://Sprites/Enemy/boomkin.tscn": 5, 
+	"res://Sprites/Enemy/Vex.tscn": 5, 
 	"res://Sprites/Enemy/skitter.tscn": 5, 
-	"res://Sprites/Enemy/Peon.tscn": 65
+	"res://Sprites/Enemy/Peon.tscn": 25,
+	"res://Sprites/Enemy/Mite.tscn": 45,
+	"res://Sprites/Enemy/Slime.tscn": 10
 }
 
 var on_screen_limit = 30

@@ -53,15 +53,30 @@ func attack(_direction: Vector2):
 	if not can_attack: return
 	can_attack = false
 
-	# 1. Lunge out
-	position = Vector2(0, -32) 
+	# 1. LUNGE OUT
+	# We turn the hitbox ON immediately
 	hitbox.monitoring = true
 	
-	await get_tree().create_timer(0.1).timeout
+	var tween = create_tween()
+	# Move to the far range quickly
+	tween.tween_property(self, "position", Vector2(0, -32), 0.05)
 	
-	# 2. RESET to the "Held" position
+	# Wait at the tip for a split second (The "Apex")
+	await get_tree().create_timer(0.05).timeout
+	
+	# 2. THE "ISAAC" RETURN (Stay dangerous while coming back)
+	# We DO NOT turn monitoring off yet.
+	var return_tween = create_tween()
+	# Move back to the held position slightly slower than the lunge
+	return_tween.tween_property(self, "position", Vector2(0, -12), 0.1)
+	
+	# Wait for the return move to finish
+	await return_tween.finished
+	
+	# 3. RESET
+	# Now that it's back at the player's hand, it's safe to turn off
 	hitbox.monitoring = false
-	position = Vector2(0, -12) 
 	
+	# Cooldown before the next stab
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true

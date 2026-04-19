@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=4 uid="uid://85wsqpmigrem"]
+[gd_scene load_steps=64 format=4 uid="uid://85wsqpmigrem"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_f8gr7"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_xfdtu"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_hwds3"]
 [ext_resource type="PackedScene" uid="uid://p4hlabk5l43a" path="res://Sprites/Enemy/boomkin.tscn" id="6_uph8f"]
 [ext_resource type="PackedScene" uid="uid://dxhbiiulntc2x" path="res://Sprites/Enemy/Peon.tscn" id="7_imj0a"]
+[ext_resource type="PackedScene" uid="uid://7y1xs1jiqn2y" path="res://Sprites/Enemy/Slime.tscn" id="8_ed1ma"]
+[ext_resource type="PackedScene" uid="uid://bxbr6jujykj75" path="res://Sprites/Enemy/Mite.tscn" id="9_m6p63"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_05pb0"]
 texture = ExtResource("2_xfdtu")
@@ -839,7 +841,7 @@ position = Vector2(218, -61)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_hwds3")
-next_level_path = "uid://cwonsgpv4vrdo"
+next_level_path = "uid://chbjs66lhxy2g"
 
 [node name="Walls" type="TileMapLayer" parent="."]
 position = Vector2(0, 1)
@@ -852,14 +854,17 @@ tile_set = SubResource("TileSet_nutv8")
 
 [node name="Boomkin" parent="." instance=ExtResource("6_uph8f")]
 position = Vector2(224, -8)
-speed = 180.0
 
 [node name="Boomkin2" parent="." instance=ExtResource("6_uph8f")]
 position = Vector2(215, 226)
-speed = 180.0
 
 [node name="Peon" parent="." instance=ExtResource("7_imj0a")]
 position = Vector2(64, 158)
 
 [node name="Peon2" parent="." instance=ExtResource("7_imj0a")]
 position = Vector2(-113, 241)
+
+[node name="Slime" parent="." instance=ExtResource("8_ed1ma")]
+position = Vector2(179.71246, 27.913807)
+
+[node name="Mite" parent="." instance=ExtResource("9_m6p63")]

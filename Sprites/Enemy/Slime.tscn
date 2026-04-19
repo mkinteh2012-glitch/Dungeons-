@@ -1,0 +1,89 @@
+[gd_scene load_steps=13 format=3 uid="uid://7y1xs1jiqn2y"]
+
+[ext_resource type="Script" uid="uid://cfrx2u3y2bk5b" path="res://Scripts/slime.gd" id="1_vl8at"]
+[ext_resource type="PackedScene" uid="uid://drjbnfs2b5mce" path="res://Sprites/slime_puddle.tscn" id="2_aprfv"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_h67l3"]
+[ext_resource type="Script" uid="uid://cef1jkw2gvh7q" path="res://Scripts/SlimeHealth.gd" id="3_vl8at"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vl8at"]
+atlas = ExtResource("2_h67l3")
+region = Rect2(432, 109, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aprfv"]
+atlas = ExtResource("2_h67l3")
+region = Rect2(448, 109, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kuuwu"]
+atlas = ExtResource("2_h67l3")
+region = Rect2(464, 109, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h67l3"]
+atlas = ExtResource("2_h67l3")
+region = Rect2(480, 109, 16, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8xx76"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vl8at")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aprfv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kuuwu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h67l3")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 3.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c61ha"]
+size = Vector2(14, 13)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_br33p"]
+radius = 139.01439
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
+size = Vector2(14, 14)
+
+[node name="Slime" type="CharacterBody2D" groups=["enemy"]]
+z_index = 10
+collision_layer = 2
+script = ExtResource("1_vl8at")
+puddle_scene = ExtResource("2_aprfv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_8xx76")
+animation = &"walk"
+frame_progress = 0.93478984
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+z_index = 1
+position = Vector2(1, 0.5)
+shape = SubResource("RectangleShape2D_c61ha")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="AttackTimer" type="Timer" parent="Hurtbox"]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_vl8at")
+
+[node name="DetectionRange" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange"]
+shape = SubResource("CircleShape2D_br33p")
+debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
+
+[node name="WanderTimer" type="Timer" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_20kgd")

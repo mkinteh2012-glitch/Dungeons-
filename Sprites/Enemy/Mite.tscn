@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=3 uid="uid://bxbr6jujykj75"]
+
+[ext_resource type="Script" uid="uid://dc6u1kgtslbdl" path="res://Scripts/mite.gd" id="1_5kl4w"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_qpi5x"]
+[ext_resource type="Script" uid="uid://bt5jmqp24k3ip" path="res://Scripts/MiteHealth.gd" id="3_5kl4w"]
+[ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="4_21vc7"]
+[ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="5_br02p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whyec"]
+atlas = ExtResource("2_qpi5x")
+region = Rect2(416, 59, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3psmk"]
+atlas = ExtResource("2_qpi5x")
+region = Rect2(432, 59, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvwra"]
+atlas = ExtResource("2_qpi5x")
+region = Rect2(448, 59, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyl7a"]
+atlas = ExtResource("2_qpi5x")
+region = Rect2(464, 59, 16, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhoi"]
+atlas = ExtResource("2_qpi5x")
+region = Rect2(480, 59, 16, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8xx76"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_whyec")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3psmk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gvwra")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyl7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arhoi")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c61ha"]
+size = Vector2(6, 6)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_br33p"]
+radius = 57.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
+size = Vector2(11, 17)
+
+[node name="Mite" type="CharacterBody2D" groups=["enemy"]]
+z_index = 10
+collision_layer = 2
+script = ExtResource("1_5kl4w")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_8xx76")
+animation = &"walk"
+frame_progress = 0.421948
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+z_index = 1
+position = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_c61ha")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="AttackTimer" type="Timer" parent="Hurtbox"]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_5kl4w")
+
+[node name="DetectionRange" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange"]
+shape = SubResource("CircleShape2D_br33p")
+debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
+
+[node name="WanderTimer" type="Timer" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_20kgd")
+
+[node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_21vc7")
+script = ExtResource("5_br02p")
+enemy_type = "mite"

@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqs8tn2073qw6"]
+
+[ext_resource type="Texture2D" uid="uid://b4mnqri6f3xrq" path="res://Images/Banana.png" id="1_bumjs"]
+[ext_resource type="Script" uid="uid://7c2rboj05uu7" path="res://Scripts/banana.gd" id="1_fh4wj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh4wj"]
+atlas = ExtResource("1_bumjs")
+region = Rect2(0, 0, 30, 37)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_212yo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fh4wj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v7vra"]
+radius = 8.098643
+height = 28.154053
+
+[node name="Banana" type="Area2D"]
+scale = Vector2(0.6, 0.6)
+script = ExtResource("1_fh4wj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_212yo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.6666664, 4.999999)
+rotation = -0.8813912
+shape = SubResource("CapsuleShape2D_v7vra")

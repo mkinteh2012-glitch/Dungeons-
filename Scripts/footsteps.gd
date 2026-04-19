@@ -3,10 +3,11 @@ extends AudioStreamPlayer2D
 # 1. Define the presets for different enemy types
 var footstep_presets = {
 	"default": {"pitch": 1.0, "volume": 0.0, "variation": 0.2, "threshold": 5.0},
-	"peon":    {"pitch": 0.8, "volume": 0.0, "variation": 0.1, "threshold": 5.0},
+	"peon":    {"pitch": 0.8, "volume": -5.0, "variation": 0.1, "threshold": 5.0},
 	"skitter": {"pitch": 1.5, "volume": -10.0, "variation": 0.4, "threshold": 10.0},
 	"boomkin": {"pitch": 1.5, "volume": -10.0, "variation": 0.4, "threshold": 10.0},
 	"vex":     {"pitch": 0.6, "volume": -15.0, "variation": 0.05, "threshold": 2.0},
+	"mite":    {"pitch": 0.6, "volume": -15.0, "variation": 0.05, "threshold": 2.0},
 }
 
 ## Type the name of the enemy here (peon, skitter, vex, etc.)
