@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://drcjwnfgschuo"]
+[gd_scene load_steps=17 format=3 uid="uid://drcjwnfgschuo"]
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_8a645"]
 [ext_resource type="Script" uid="uid://bnhqxwp63qmbw" path="res://Scripts/skitter.gd" id="1_kug7q"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/SkitterHealth.gd" id="4_0thfl"]
 [ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="5_37nh4"]
 [ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="5_mqonu"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="7_qta1n"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qta1n"]
 atlas = ExtResource("1_8a645")
@@ -111,3 +112,6 @@ scale_amount_max = 12.0
 [node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_mqonu")
 script = ExtResource("5_37nh4")
+
+[node name="Health_Bar" parent="." instance=ExtResource("7_qta1n")]
+position = Vector2(0, 10)

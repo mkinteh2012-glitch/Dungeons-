@@ -1,0 +1,136 @@
+[gd_scene load_steps=19 format=3 uid="uid://ddla5hexy4aqi"]
+
+[ext_resource type="Script" uid="uid://d3i8f275v0mv3" path="res://Scripts/mite_k.gd" id="1_ovqbg"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_v4sdt"]
+[ext_resource type="Script" uid="uid://brqy6g7of4lm5" path="res://Scripts/MiteKhealth.gd" id="3_57bve"]
+[ext_resource type="Texture2D" uid="uid://c7yjhvd2b8t1k" path="res://Images/Shield_MiteK.png" id="3_sdyki"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="5_44um7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s8ps"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(112, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrmbo"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(16, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bt2vs"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(48, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mqmyu"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(80, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovqbg"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(112, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sdyki"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(144, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57bve"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(176, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44um7"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(208, 430, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14idf"]
+atlas = ExtResource("1_v4sdt")
+region = Rect2(240, 430, 32, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5s8ps"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s8ps")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrmbo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bt2vs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mqmyu")
+}],
+"loop": true,
+"name": &"summon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovqbg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sdyki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57bve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44um7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14idf")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nrmbo"]
+size = Vector2(19, 24)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bt2vs"]
+radius = 28.539446
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_57bve"]
+size = Vector2(20.555557, 17.222221)
+
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["boss", "bosses", "enemy"]]
+scale = Vector2(1.8, 1.8)
+collision_layer = 3
+collision_mask = 3
+motion_mode = 1
+script = ExtResource("1_ovqbg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5s8ps")
+animation = &"idle"
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -1.5)
+shape = SubResource("RectangleShape2D_nrmbo")
+debug_color = Color(0.78897506, 0.3243282, 0.72163665, 0.41960785)
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_57bve")
+
+[node name="Shield" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("3_sdyki")
+
+[node name="Shieldbox" type="CollisionShape2D" parent="." groups=["boss", "bosses", "enemy"]]
+z_index = 2
+scale = Vector2(0.8400001, 0.8400001)
+shape = SubResource("CircleShape2D_bt2vs")
+
+[node name="BiteArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BiteArea"]
+position = Vector2(-0.27777815, 5.833333)
+shape = SubResource("RectangleShape2D_57bve")
+
+[node name="Health_Bar" parent="." groups=["boss", "bosses", "enemy"] instance=ExtResource("5_44um7")]
+position = Vector2(0, 20)
+
+[connection signal="body_entered" from="BiteArea" to="." method="_on_bite_area_body_entered"]

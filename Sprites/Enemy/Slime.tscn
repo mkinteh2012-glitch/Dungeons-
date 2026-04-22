@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://7y1xs1jiqn2y"]
+[gd_scene load_steps=14 format=3 uid="uid://7y1xs1jiqn2y"]
 
 [ext_resource type="Script" uid="uid://cfrx2u3y2bk5b" path="res://Scripts/slime.gd" id="1_vl8at"]
 [ext_resource type="PackedScene" uid="uid://drjbnfs2b5mce" path="res://Sprites/slime_puddle.tscn" id="2_aprfv"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_h67l3"]
 [ext_resource type="Script" uid="uid://cef1jkw2gvh7q" path="res://Scripts/SlimeHealth.gd" id="3_vl8at"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="5_kuuwu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vl8at"]
 atlas = ExtResource("2_h67l3")
@@ -45,7 +46,7 @@ animations = [{
 size = Vector2(14, 13)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_br33p"]
-radius = 139.01439
+radius = 213.02112
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
 size = Vector2(14, 14)
@@ -87,3 +88,6 @@ debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_20kgd")
+
+[node name="Health_Bar" parent="." instance=ExtResource("5_kuuwu")]
+position = Vector2(0, 10)

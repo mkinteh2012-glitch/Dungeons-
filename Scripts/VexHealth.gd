@@ -10,6 +10,7 @@ func _ready():
 	
 func take_damage(amount: int):
 	health -= amount
+	get_parent().get_node("Health_Bar").update_health(health, max_health)
 	print("Enemy health: ", health)
 	
 	if health <= 0:

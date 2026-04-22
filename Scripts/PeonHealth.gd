@@ -1,8 +1,9 @@
-extends Node
+extends Node2D
 
 signal died
 
 @export var max_health := 50
+@onready var health_bar = $Health_Bar
 var health := 50
 
 func _ready():
@@ -10,6 +11,8 @@ func _ready():
 	
 func take_damage(amount: int):
 	health -= amount
+	$Health_Bar.update_health(health, max_health)
+	print("Health Bar Frame is now: ", health_bar.frame) # Check your output log!
 	print("Enemy health: ", health)
 	
 	if health <= 0:

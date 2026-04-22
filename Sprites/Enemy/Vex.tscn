@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://dvgfjuhvh0ttr"]
+[gd_scene load_steps=15 format=3 uid="uid://dvgfjuhvh0ttr"]
 
 [ext_resource type="Script" uid="uid://ysjeg2e37rwi" path="res://Scripts/Vex.gd" id="1_fiq1d"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_631ve"]
 [ext_resource type="Script" uid="uid://cq0jhljjrbsu3" path="res://Scripts/VexHealth.gd" id="3_631ve"]
 [ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="4_aqf1q"]
 [ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="4_twbcs"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="6_eukfs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r4kqf"]
 atlas = ExtResource("2_631ve")
@@ -83,3 +84,6 @@ script = ExtResource("3_631ve")
 stream = ExtResource("4_twbcs")
 script = ExtResource("4_aqf1q")
 enemy_type = "vex"
+
+[node name="Health_Bar" parent="." instance=ExtResource("6_eukfs")]
+position = Vector2(0, 10)

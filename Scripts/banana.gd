@@ -1,8 +1,8 @@
 extends Area2D
 
 @export var speed := 200.0
-@export var return_delay := 2.5	
-@export var max_lifetime := 5.0 # New variable for self-destruction
+@export var return_delay := 2	
+@export var max_lifetime := 7.6 # New variable for self-destruction
 @export var damage := 1
 
 var direction := Vector2.ZERO
@@ -17,7 +17,6 @@ func _ready():
 func _physics_process(delta):
 	life_timer += delta
 	
-	# 1. KILL CHECK: If the banana has been alive for 9 seconds, delete it
 	if life_timer >= max_lifetime:
 		queue_free()
 		return # Stop processing the rest of the code for this frame
@@ -39,5 +38,4 @@ func _on_body_entered(body):
 		if body.has_method("take_damage"):
 			body.take_damage(damage, global_position)
 		queue_free()
-	elif body is TileMap or body is StaticBody2D:
-		queue_free()
+	

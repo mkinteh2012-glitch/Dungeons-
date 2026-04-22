@@ -6,10 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6yud1"]
 size = Vector2(4, 4)
 
-[node name="SkitterProjectile" type="Area2D"]
+[node name="SkitterProjectile" type="Area2D" groups=["projectiles"]]
 collision_mask = 2
 script = ExtResource("1_6yud1")
-speed = 275.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_6yud1")

@@ -1,0 +1,14 @@
+[gd_scene load_steps=6 format=3 uid="uid://r6pekvfc882i"]
+
+[ext_resource type="Script" uid="uid://bsrgufyb76q0s" path="res://Scripts/rory_music_manager.gd" id="1_lcail"]
+[ext_resource type="AudioStream" uid="uid://cup8uq5tesy8m" path="res://Music/Boss Battle Main.mp3" id="2_4litd"]
+[ext_resource type="AudioStream" uid="uid://bhq0p4njn52ak" path="res://Music/Boss Battle Prep.mp3" id="3_6pi72"]
+[ext_resource type="AudioStream" uid="uid://bxub3ryror4rh" path="res://Music/Boss Battle Attack.mp3" id="4_cd87t"]
+[ext_resource type="AudioStream" uid="uid://bp7bix2gauqty" path="res://Music/Boss Defeated.mp3" id="5_pxmq6"]
+
+[node name="RoryMusicManager" type="AudioStreamPlayer"]
+script = ExtResource("1_lcail")
+main_track = ExtResource("2_4litd")
+prep_stinger = ExtResource("3_6pi72")
+attack_stinger = ExtResource("4_cd87t")
+defeat_stinger = ExtResource("5_pxmq6")

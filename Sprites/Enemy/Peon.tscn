@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://dxhbiiulntc2x"]
+[gd_scene load_steps=16 format=3 uid="uid://dxhbiiulntc2x"]
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_77kwv"]
 [ext_resource type="Script" uid="uid://bl0dmo558edjb" path="res://Scripts/peon.gd" id="1_bx8h2"]
 [ext_resource type="Script" uid="uid://g4aone1eaiop" path="res://Scripts/PeonHealth.gd" id="3_br33p"]
 [ext_resource type="AudioStream" uid="uid://bu63luiux6evf" path="res://Music/SFX/footsteps.mp3" id="4_cb6ge"]
 [ext_resource type="Script" uid="uid://bcws7lvuq78h5" path="res://Scripts/footsteps.gd" id="5_j0egc"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="6_j0egc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7qse7"]
 atlas = ExtResource("1_77kwv")
@@ -78,8 +79,11 @@ debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="AttackTimer" type="Timer" parent="Hurtbox"]
 
-[node name="Health" type="Node" parent="."]
+[node name="Health" type="Node2D" parent="."]
 script = ExtResource("3_br33p")
+
+[node name="Health_Bar" parent="Health" instance=ExtResource("6_j0egc")]
+position = Vector2(0, 10)
 
 [node name="DetectionRange" type="Area2D" parent="."]
 collision_layer = 2

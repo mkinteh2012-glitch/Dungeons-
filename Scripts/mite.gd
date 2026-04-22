@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 @export_group("Mite Logic")
 # We use the path directly in the code now, but these exports stay for easy tweaking
-@export var duplicate_time: float = 15.0
-@export var max_enemies_allowed: int = 30
+@export var duplicate_time: float = 25.0
+@export var max_enemies_allowed: int = 15
 
 @export_group("Movement")
 @export var speed_wander := 70
@@ -83,22 +83,22 @@ func _on_duplicate_timer_timeout():
 		print("Duplication skipped: Already ", current_count, " enemies in 'enemy' group.")
 
 func duplicate_self(count: int):
-	# IMPORTANT: Change this path to match your actual file!
 	var mite_path = "res://Sprites/Enemy/Mite.tscn"
 	var scene_resource = load(mite_path)
 	
 	if scene_resource:
 		var new_mite = scene_resource.instantiate()
 		
-		# Spawning in the current scene root
+		# 1. Add to scene BEFORE setting position
 		get_tree().current_scene.add_child(new_mite)
 		
-		var offset = Vector2(randf_range(-30, 30), randf_range(-30, 30))
-		new_mite.global_position = global_position + offset
+		# 2. Spawn DIRECTLY on top of the current Mite
+		# No offset = No out-of-bounds spawning
+		new_mite.global_position = global_position
 		
-		print("SUCCESS: New Mite spawned via path. Total: ", count + 1)
+		print("SUCCESS: New Mite spawned at exact location. Total: ", count + 1)
 		
-		# Isaac-style Pop-in Effect
+		# 3. Isaac-style Pop-in Effect
 		new_mite.scale = Vector2.ZERO
 		var tw = create_tween()
 		tw.tween_property(new_mite, "scale", Vector2.ONE, 0.4).set_trans(Tween.TRANS_ELASTIC)

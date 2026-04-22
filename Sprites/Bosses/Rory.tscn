@@ -1,8 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://drklnfnc57b0f"]
+[gd_scene load_steps=18 format=3 uid="uid://drklnfnc57b0f"]
 
 [ext_resource type="Script" uid="uid://dbxrqho10gptj" path="res://Scripts/rory.gd" id="1_dahu4"]
 [ext_resource type="Texture2D" uid="uid://i05pov6vwth6" path="res://Images/Rory.png" id="1_umtey"]
+[ext_resource type="PackedScene" uid="uid://dqs8tn2073qw6" path="res://Sprites/Projectile/banana.tscn" id="2_ti2y2"]
 [ext_resource type="Script" uid="uid://diovxac760426" path="res://Scripts/roryhealth.gd" id="3_ij7n6"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="5_iiox5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dahu4"]
 atlas = ExtResource("1_umtey")
@@ -95,12 +97,13 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
 size = Vector2(8, 5)
 
-[node name="Rory" type="CharacterBody2D" groups=["boss", "enemy"]]
+[node name="Rory" type="CharacterBody2D" groups=["boss", "bosses", "enemy"]]
 z_index = 10
 position = Vector2(-4, 5)
 scale = Vector2(3, 3)
 collision_layer = 3
 script = ExtResource("1_dahu4")
+banana_scene = ExtResource("2_ti2y2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1.3333333, -1.6666667)
@@ -116,3 +119,7 @@ script = ExtResource("3_ij7n6")
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(1.3333334, -1.6666667)
 shape = SubResource("RectangleShape2D_20kgd")
+
+[node name="Health_Bar" parent="." instance=ExtResource("5_iiox5")]
+position = Vector2(1.3333334, 5)
+scale = Vector2(0.33333334, 0.33333334)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://qi6aftb1rwh1"]
 
-[ext_resource type="Script" uid="uid://5an8ibova772" path="res://Scripts/spawner.gd" id="1_7h372"]
+[ext_resource type="Script" uid="uid://xnuv22bfradi" path="res://Scripts/mitespawner.gd" id="1_w07fp"]
 [ext_resource type="Texture2D" uid="uid://dx7gg31oq8lmb" path="res://Images/Portal.png" id="1_wxi16"]
 [ext_resource type="AudioStream" uid="uid://cejqcgh8snd76" path="res://Music/SFX/Portal_Spawn.mp3" id="2_w07fp"]
 [ext_resource type="AudioStream" uid="uid://do7ghu6mggfvp" path="res://Music/SFX/Portal_Low.mp3" id="4_4auox"]
@@ -40,11 +40,10 @@ animations = [{
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_wxi16"]
 
-[node name="Spawner" type="StaticBody2D" groups=["enemy", "spawner"]]
+[node name="MiteSpawner" type="StaticBody2D"]
 collision_layer = 3
 collision_mask = 0
-script = ExtResource("1_7h372")
-max_health = 750
+script = ExtResource("1_w07fp")
 
 [node name="SpawnSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_w07fp")
@@ -68,9 +67,11 @@ scale_amount_max = 2.0
 color = Color(0.13725491, 0.627451, 0.27058825, 1)
 
 [node name="Pedestal" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 0.22000003, 0.22000003, 1)
 sprite_frames = SubResource("SpriteFrames_yrx5e")
 
 [node name="Portal" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.74, 0.1924, 0.1924, 1)
 z_index = 9
 scale = Vector2(0.375, 0.375)
 sprite_frames = SubResource("SpriteFrames_w07fp")

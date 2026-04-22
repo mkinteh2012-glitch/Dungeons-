@@ -22,7 +22,7 @@ animations = [{
 radius = 8.098643
 height = 28.154053
 
-[node name="Banana" type="Area2D"]
+[node name="Banana" type="Area2D" groups=["projectiles"]]
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_fh4wj")
 
