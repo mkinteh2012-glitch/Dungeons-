@@ -68,3 +68,7 @@ func play_regen_flash():
 			target_color = Color(0.7, 0.2, 0.9, 1.0)
 			
 		tween.tween_property(sprite, "modulate", target_color, 0.2)
+func heal(amount):
+	current_health += amount
+	# Make sure you don't go over max health
+	current_health = min(current_health, max_health) 

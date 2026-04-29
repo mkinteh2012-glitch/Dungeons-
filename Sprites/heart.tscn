@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://brjr7frnheg6l"]
+
+[ext_resource type="Script" uid="uid://bxjbxfuytyq8f" path="res://Scripts/heart.gd" id="1_2jdm0"]
+[ext_resource type="Texture2D" uid="uid://c6h7smd27gbiu" path="res://Images/HealthUI.png" id="2_0mju0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kc523"]
+atlas = ExtResource("2_0mju0")
+region = Rect2(0, 11, 11, 11)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8q3lc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kc523")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2jrn"]
+size = Vector2(8, 10)
+
+[node name="Heart" type="Area2D" groups=["coin"]]
+z_index = 2
+collision_layer = 3
+script = ExtResource("1_2jdm0")
+heal_amount = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_8q3lc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_j2jrn")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

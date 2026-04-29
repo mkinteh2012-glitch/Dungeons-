@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b2nsl3da64hht"
+path="res://.godot/imported/307 Frontier Cavern (Olimar, Battle) .mp3-3b9ae573d69de8386270dbfa9eeffc35.mp3str"
+
+[deps]
+
+source_file="res://Music/307 Frontier Cavern (Olimar, Battle) .mp3"
+dest_files=["res://.godot/imported/307 Frontier Cavern (Olimar, Battle) .mp3-3b9ae573d69de8386270dbfa9eeffc35.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

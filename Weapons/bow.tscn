@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://bspsoc5uwnho1"]
+
+[ext_resource type="Script" uid="uid://7atkyjdi8iag" path="res://Scripts/bow.gd" id="1_bepfo"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_qsk8x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bepfo"]
+atlas = ExtResource("1_qsk8x")
+region = Rect2(304, 196, 18, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgqs0"]
+atlas = ExtResource("1_qsk8x")
+region = Rect2(284, 196, 19, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wyonu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bepfo")
+}],
+"loop": true,
+"name": &"charge",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgqs0")
+}],
+"loop": true,
+"name": &"release",
+"speed": 5.0
+}]
+
+[node name="Bow" type="Node2D"]
+script = ExtResource("1_bepfo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(15, 0)
+sprite_frames = SubResource("SpriteFrames_wyonu")
+animation = &"release"
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(23, -2)

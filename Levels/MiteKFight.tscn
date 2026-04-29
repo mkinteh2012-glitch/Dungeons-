@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=4 uid="uid://chbjs66lhxy2g"]
+[gd_scene load_steps=10 format=4 uid="uid://chbjs66lhxy2g"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_cs2t3"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_vdh5i"]
-[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="3_yo7ev"]
 [ext_resource type="PackedScene" uid="uid://ddla5hexy4aqi" path="res://Sprites/Bosses/MiteK.tscn" id="5_05dbe"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_kyicq"]
 [ext_resource type="PackedScene" uid="uid://qi6aftb1rwh1" path="res://Sprites/spawner.tscn" id="6_q2rbw"]
@@ -473,8 +472,6 @@ tile_set = SubResource("TileSet_dl8mf")
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(-123, 49)
-
-[node name="HUD" parent="." instance=ExtResource("3_yo7ev")]
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_kyicq")

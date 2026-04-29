@@ -1,9 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://df6nh3ixle47n"]
+[gd_scene load_steps=12 format=3 uid="uid://df6nh3ixle47n"]
 
 [ext_resource type="Script" uid="uid://cxpqyvd3uvcyg" path="res://Scripts/game.gd" id="1_khbcx"]
 [ext_resource type="PackedScene" uid="uid://b7hddce26nu4x" path="res://Sprites/Player.tscn" id="2_ba1d1"]
 [ext_resource type="PackedScene" uid="uid://85wsqpmigrem" path="res://Levels/Test1.tscn" id="2_t8fus"]
 [ext_resource type="PackedScene" uid="uid://r6pekvfc882i" path="res://Sprites/RoryMusicManager.tscn" id="4_t8fus"]
+[ext_resource type="AudioStream" uid="uid://c81hnt4ld0lbh" path="res://Music/303 Frontier Cavern (Olimar) .mp3" id="5_upo3n"]
+[ext_resource type="AudioStream" uid="uid://dnmv4jv6ssmb2" path="res://Music/305 Frontier Cavern (Olimar, Near Enemy) .mp3" id="6_3d5iw"]
+[ext_resource type="AudioStream" uid="uid://b2nsl3da64hht" path="res://Music/307 Frontier Cavern (Olimar, Battle) .mp3" id="7_3ycj4"]
+[ext_resource type="Script" uid="uid://dd4y2fm8stnto" path="res://Scripts/loot_manager.gd" id="8_3d5iw"]
+[ext_resource type="PackedScene" uid="uid://cd1ibxbqhr5bk" path="res://UI/coin_counter.tscn" id="9_tonfl"]
+[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="10_ogycj"]
+
+[sub_resource type="Environment" id="Environment_upo3n"]
+background_mode = 3
+glow_enabled = true
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_khbcx")
@@ -11,4 +21,22 @@ level_scene = ExtResource("2_t8fus")
 
 [node name="Player" parent="." instance=ExtResource("2_ba1d1")]
 
-[node name="RoryMusicManager" parent="." instance=ExtResource("4_t8fus")]
+[node name="MusicManager" parent="." groups=["music_system"] instance=ExtResource("4_t8fus")]
+normal_louie = ExtResource("5_upo3n")
+near_louie = ExtResource("6_3d5iw")
+battle_louie = ExtResource("7_3ycj4")
+boost_volume = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_upo3n")
+
+[node name="LootManager" type="Node" parent="."]
+script = ExtResource("8_3d5iw")
+
+[node name="Coin_Counter" parent="." instance=ExtResource("9_tonfl")]
+offset = Vector2(55, 35)
+transform = Transform2D(1, 0, 0, 1, 55, 35)
+
+[node name="Hearts" parent="." instance=ExtResource("10_ogycj")]
+offset = Vector2(15, 0)
+transform = Transform2D(1, 0, 0, 1, 15, 0)

@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://bwj0cbu5tnrxw"]
+
+[ext_resource type="Script" uid="uid://b8aqw85ee8u2u" path="res://Scripts/bossring.gd" id="1_28yqn"]
+[ext_resource type="Texture2D" uid="uid://dt0l2d4paeq1g" path="res://Images/Wave.png" id="2_vw8yg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nyaac"]
+radius = 8.13941
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfvig"]
+atlas = ExtResource("2_vw8yg")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_krrxw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfvig")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Bossring" type="Area2D"]
+scale = Vector2(3, 3)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_28yqn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nyaac")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_krrxw")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

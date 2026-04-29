@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://b2b3fhotf0jvn"]
+
+[ext_resource type="Texture2D" uid="uid://c1p7bg4dsmvid" path="res://Images/Spark.png" id="1_sys6s"]
+[ext_resource type="Script" uid="uid://0f2llglhyn1d" path="res://Scripts/spark.gd" id="1_uwr5w"]
+[ext_resource type="PackedScene" uid="uid://bwj0cbu5tnrxw" path="res://Sprites/Bosses/bossring.tscn" id="2_4rvt7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_er0no"]
+atlas = ExtResource("1_sys6s")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwr5w"]
+atlas = ExtResource("1_sys6s")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rvt7"]
+atlas = ExtResource("1_sys6s")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n5ab5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_er0no")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwr5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rvt7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8ytw"]
+radius = 5.0990195
+
+[node name="Spark" type="CharacterBody2D" groups=["enemy", "spark"]]
+modulate = Color(1.3528494, 1.3528494, 0.99969536, 1)
+collision_layer = 3
+collision_mask = 3
+safe_margin = 0.15
+script = ExtResource("1_uwr5w")
+ring_scene = ExtResource("2_4rvt7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_n5ab5")
+frame_progress = 0.9976039
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 10
+speed_scale = 2.0
+randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 8.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+color = Color(1, 1, 0, 1)
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(-1, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_e8ytw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_e8ytw")
+debug_color = Color(0.9558386, 3.85046e-07, 0.5436661, 0.41960785)
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_body_entered"]

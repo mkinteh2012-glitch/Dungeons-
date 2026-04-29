@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxi556xtdmwn4"]
+
+[ext_resource type="Script" uid="uid://bi1ccbodkdmm" path="res://Scripts/arrow.gd" id="1_u175d"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_xm5rp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u175d"]
+atlas = ExtResource("1_xm5rp")
+region = Rect2(321, 196, 12, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rgjuh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u175d")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xm5rp"]
+size = Vector2(5.5, 20.5)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u175d"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 98, 0)
+
+[node name="Arrow" type="Area2D" groups=["projectiles"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_u175d")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["projectiles"]]
+sprite_frames = SubResource("SpriteFrames_rgjuh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.75, 1.75)
+shape = SubResource("RectangleShape2D_xm5rp")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_u175d")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

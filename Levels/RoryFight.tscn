@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=4 uid="uid://cial07k4um7wm"]
+[gd_scene load_steps=9 format=4 uid="uid://cial07k4um7wm"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_6gtck"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_q2rbw"]
-[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="3_0dkce"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="4_kast4"]
 [ext_resource type="PackedScene" uid="uid://drklnfnc57b0f" path="res://Sprites/Bosses/Rory.tscn" id="5_skpce"]
 
@@ -473,11 +472,9 @@ tile_set = SubResource("TileSet_dl8mf")
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(-123, 49)
 
-[node name="HUD" parent="." instance=ExtResource("3_0dkce")]
-
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("4_kast4")
-next_level_path = "uid://cwonsgpv4vrdo"
+next_level_path = "uid://dbvmoau2otyu1"
 
 [node name="Rory" parent="." instance=ExtResource("5_skpce")]
 position = Vector2(-70, 17)

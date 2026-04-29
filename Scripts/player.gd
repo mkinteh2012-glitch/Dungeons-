@@ -1,14 +1,23 @@
 extends CharacterBody2D
 
+
+var charge_time = 0.0
+var charging_arrow_instance = null
+signal coin_collected
+@export var max_charge = 2.0
+@export var min_speed = 200.0
+@export var max_speed = 600.0
 @export var speed := 150
 @export var attack_cooldown := 0.5 
 @export var lunge_force := 400.0  # How fast the lunge is
 @export var lunge_duration := 0.15 # How long the lunge lasts
-
+var has_bow_equipped = false # Starts with Dagger by default
+@export var arrow_scene: PackedScene
 @onready var weapon_holder = $WeaponHolder
 @onready var health = $Health
 @onready var sprite = $AnimatedSprite2D
-
+var can_shoot = true
+@export var shoot_speed = 0.25 # Seconds between shots
 @export var dodge_speed := 600.0
 @export var dodge_duration := 0.2
 @export var dodge_cooldown := 0.8
@@ -18,7 +27,12 @@ var can_dodge := true
 var is_dodging := false
 var is_moving_last_frame := false
 
-var dagger_scene = preload("res://Weapons/Dagger.tscn")
+@export var dagger_scene: PackedScene
+@export var bow_scene: PackedScene
+
+var current_dagger = null
+var current_bow = null
+
 var current_weapon
 var facing_direction := Vector2.RIGHT
 var can_attack := true
@@ -28,15 +42,28 @@ func _ready():
 	# 1. Connect health
 	health.died.connect(_on_died)
 	
-	# 2. Setup the dagger ONCE
-	current_weapon = dagger_scene.instantiate()
-	current_weapon.owner_player = self
-	weapon_holder.add_child(current_weapon)
+	# 2. Setup BOTH weapons
+	# Instantiate Dagger
+	current_dagger = dagger_scene.instantiate()
+	current_dagger.owner_player = self
+	weapon_holder.add_child(current_dagger)
+	current_dagger.position = Vector2(12, 0)
 	
-
-	current_weapon.position = Vector2( 12, 0)
+	# Instantiate Bow (using the bow_scene you exported)
+	current_bow = bow_scene.instantiate()
+	# If your bow needs an owner_player reference too:
+	if "owner_player" in current_bow:
+		current_bow.owner_player = self
+	weapon_holder.add_child(current_bow)
+	current_bow.position = Vector2(0, 0)
 	
-	# 3. Setup the attack timer ONCE
+	# 3. Initial Visibility State
+	# Start with dagger visible, bow hidden
+	has_bow_equipped = false
+	current_dagger.visible = true
+	current_bow.visible = false
+	
+	# 4. Setup the attack timer
 	var timer = Timer.new()
 	timer.name = "AttackTimer"
 	timer.wait_time = attack_cooldown
@@ -80,7 +107,13 @@ func _physics_process(_delta):
 		if weapon_holder:
 			# Use the angle of the movement vector
 			# We add PI/2 (90 degrees) because your sprite faces DOWN by default
-			weapon_holder.rotation = facing_direction.angle() + PI/2
+			# ONLY rotate the holder automatically if we are using the dagger
+			# This lets the Bow handle its own mouse-aiming logic
+			if weapon_holder and not has_bow_equipped:
+				weapon_holder.rotation = facing_direction.angle() + PI/2
+			else:
+				weapon_holder.rotation = 0
+
 	else:
 		velocity = Vector2.ZERO
 		sprite.play("Idle")
@@ -174,12 +207,102 @@ func spawn_ghost():
 	await get_tree().create_timer(dodge_cooldown).timeout
 	can_dodge = true
 	
-func _process(_delta):
-	if Input.is_action_just_pressed("attack") and can_attack:
-		attack()
-		
+func _process(delta):
+	# 1. Weapon Logic
+	if has_bow_equipped:
+		_handle_bow_logic(delta)
+	else:
+		_handle_dagger_logic()
+	
+	# 2. Movement & Utility Logic
+	if Input.is_action_just_pressed("switch_weapon"):
+		_switch_weapon()
+
 	if Input.is_action_just_pressed("dodge") and can_dodge and not is_dodging:
 		dodge()
+
+# Helper function to keep _process clean
+func _handle_bow_logic(delta):
+	if not can_shoot: return
+	
+	var bow_sprite = current_bow.get_node("AnimatedSprite2D")
+	
+	# 1. START CHARGING
+	if Input.is_action_just_pressed("attack"):
+		charging_arrow_instance = arrow_scene.instantiate()
+		get_tree().current_scene.add_child(charging_arrow_instance)
+		bow_sprite.play("charge")
+
+	# 2. HOLDING CHARGE
+	if Input.is_action_pressed("attack"):
+		if is_instance_valid(charging_arrow_instance):
+			charge_time += delta
+			charge_time = min(charge_time, max_charge)
+			
+			# Stick arrow to muzzle
+			var muzzle = current_bow.get_node("Muzzle")
+			charging_arrow_instance.global_position = muzzle.global_position
+			charging_arrow_instance.global_rotation = current_bow.global_rotation + PI/2
+			
+			# Visual frame syncing
+			var frame_count = bow_sprite.sprite_frames.get_frame_count("charge")
+			var target_frame = int((charge_time / max_charge) * (frame_count - 1))
+			bow_sprite.frame = target_frame
+			bow_sprite.pause() 
+
+	# 3. RELEASE / LAUNCH (The Fix is here!)
+	if Input.is_action_just_released("attack"):
+		if is_instance_valid(charging_arrow_instance):
+			bow_sprite.play("release")
+			
+			var charge_pct = clamp(charge_time / max_charge, 0.0, 1.0)
+			
+			# --- APPLY ALL STATS TO THE ARROW ---
+			charging_arrow_instance.speed = lerp(min_speed, max_speed, charge_pct)
+			charging_arrow_instance.damage = 20.0 + (50.0 * charge_pct) # Now it scales!
+			charging_arrow_instance.max_lifetime = lerp(0.5, 2.0, charge_pct)
+			charging_arrow_instance.direction = Vector2.RIGHT.rotated(current_bow.global_rotation)
+			
+			# Handle Super Shot visuals
+			if charge_pct >= 1.0:
+				charging_arrow_instance.is_max_power = true
+				charging_arrow_instance.modulate = Color(2.0, 2.0, 2.0)
+				charging_arrow_instance.scale = Vector2(1.2, 1.2)
+			
+			# Launch it
+			if charging_arrow_instance.has_method("launch"):
+				charging_arrow_instance.launch()
+			
+			# Clean up references
+			charging_arrow_instance = null
+			charge_time = 0.0
+			_start_shoot_cooldown()
+
+func _start_shoot_cooldown():
+	can_shoot = false
+	await get_tree().create_timer(shoot_speed).timeout
+	can_shoot = true
+
+func _handle_dagger_logic():
+	if Input.is_action_just_pressed("attack"):
+		_perform_dagger_stab()
+
+func _switch_weapon():
+	has_bow_equipped = !has_bow_equipped
+	charge_time = 0.0 # Reset charge
+	
+	# This part actually makes them disappear/reappear
+	if current_dagger and current_bow:
+		current_dagger.visible = !has_bow_equipped
+		current_bow.visible = has_bow_equipped
+		
+		# Optional: Debug check to see if code is running
+		if has_bow_equipped:
+			print("Visuals: Bow Shown")
+		else:
+			print("Visuals: Dagger Shown")
+	else:
+		print("Error: Weapons not found in weapon_holder!")
 
 func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
 	if health:
@@ -189,17 +312,12 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
 	else:
 		print("Warning: Player has no Health node assigned!")
 
-func attack():
-	can_attack = false
-	is_lunging = true
-	
-	velocity = facing_direction * lunge_force
-	
-	current_weapon.attack(facing_direction)
-	$AttackTimer.start()
-	
-	await get_tree().create_timer(lunge_duration).timeout
-	is_lunging = false
+func _perform_dagger_stab():
+	# Use the variable you assigned in _ready()
+	if current_dagger != null:
+		current_dagger.attack(facing_direction)
+	else:
+		print("Error: Dagger is missing!")
 
 func _on_attack_timer_timeout():
 	can_attack = true
@@ -244,3 +362,58 @@ func _on_died():
 func restart_game():
 	# For now, we just reload the scene
 	get_tree().reload_current_scene()
+	
+func _shoot_arrow():
+	can_shoot = false
+	var arrow = arrow_scene.instantiate()
+	
+	# 1. Calculate direction and power
+	var dir = (get_global_mouse_position() - global_position).normalized()
+	var charge_pct = charge_time / max_charge
+	if charge_pct > 1:
+		charge_pct = 1
+	
+	# 2. Apply stats to the arrow instance
+	arrow.direction = dir
+	arrow.speed = lerp(min_speed, max_speed, charge_pct)
+	arrow.damage = 10 + (10 * charge_pct)
+	arrow.max_lifetime = arrow.max_lifetime
+	
+	
+	# 3. Handle 100% Power (Super Shot)
+	if charge_pct >= 1.0:
+		arrow.is_max_power = true
+		# Make the arrow glow or look more intense
+		arrow.modulate = Color(2.0, 2.0, 2.0) 
+		# Optional: make the super arrow slightly larger
+		arrow.scale = Vector2(1.2, 1.2)
+	
+	# 4. Position and Rotation
+	# If your bow has a 'Muzzle' Marker2D, use that position instead
+	arrow.global_position = global_position
+	
+	# 5. Spawn and Launch
+	get_tree().current_scene.add_child(arrow)
+	arrow.launch() # Ensure the arrow starts moving
+	
+	# 6. Reset charge and start cooldown
+	charge_time = 0.0
+	await get_tree().create_timer(attack_cooldown * 2).timeout
+	can_shoot = true
+# Inside Player.gd
+
+func heal(amount):
+	# Look for the child node
+	var health_node = get_node_or_null("Health")
+	
+	if health_node:
+		# Call the heal function on THAT node instead
+		health_node.heal(amount)
+	else:
+		print("Error: Player can't find HealthNode!")
+		
+var coins: int = 0
+
+func add_money(amount):
+	coins += amount
+	print("Coins collected: ", coins)

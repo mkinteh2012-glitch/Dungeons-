@@ -132,10 +132,6 @@ func start_rollout():
 	color_tween.tween_property(anim, "modulate", Color(4, 1, 0), 5.0) # Intense Orange Glow
 	
 	# TRIGGER PIKMIN MUSIC: "Preparing an Attack"
-	var music = get_tree().current_scene.get_node_or_null("MusicManager")
-	if music:
-		music.play_stinger("prepare")
-		
 	# Wait exactly 5 seconds for the charge to build
 	await get_tree().create_timer(5.0).timeout
 	# --- END CHARGE UP ---

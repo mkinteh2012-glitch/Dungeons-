@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3 uid="uid://crg6hfp3vgjdy"]
+
+[ext_resource type="Script" uid="uid://ccshlwb6q8fsh" path="res://Scripts/orge.gd" id="1_cyntq"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_nkgbu"]
+[ext_resource type="PackedScene" uid="uid://bwj0cbu5tnrxw" path="res://Sprites/Bosses/bossring.tscn" id="2_7b2qe"]
+[ext_resource type="Script" uid="uid://dbndykj0qb5ob" path="res://Scripts/OrgeHealth.gd" id="2_cyntq"]
+[ext_resource type="PackedScene" uid="uid://4u8fgui48hwq" path="res://UI/Health_Bar.tscn" id="3_7b2qe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5phb"]
+atlas = ExtResource("1_nkgbu")
+region = Rect2(110, 388, 33, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jstjs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k5phb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nkgbu"]
+size = Vector2(14, 24)
+
+[node name="Orge" type="CharacterBody2D" groups=["boss", "bosses", "enemy"]]
+scale = Vector2(2, 2)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_cyntq")
+ring_scene = ExtResource("2_7b2qe")
+metadata/_edit_vertical_guides_ = [-146.0]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jstjs")
+frame_progress = 0.55024475
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.6666667, 1.3333335)
+shape = SubResource("RectangleShape2D_nkgbu")
+
+[node name="DecisionTimer" type="Timer" parent="."]
+
+[node name="Center" type="Marker2D" parent="."]
+position = Vector2(-0.33333337, 0.6666641)
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_cyntq")
+
+[node name="Health_Bar" parent="." instance=ExtResource("3_7b2qe")]
+position = Vector2(1, 19)
+scale = Vector2(1.5, 1.5)
+
+[connection signal="timeout" from="DecisionTimer" to="." method="_on_decision_timer_timeout"]
