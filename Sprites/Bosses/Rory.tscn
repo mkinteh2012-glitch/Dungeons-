@@ -104,6 +104,8 @@ scale = Vector2(3, 3)
 collision_layer = 3
 script = ExtResource("1_dahu4")
 banana_scene = ExtResource("2_ti2y2")
+metadata/is_boss = true
+metadata/Boss = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1.3333333, -1.6666667)

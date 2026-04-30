@@ -1,21 +1,21 @@
 extends Node
 
-
 var heart_scene = preload("res://Sprites/Heart.tscn")
-
+var BADGE_SCENE = preload("res://Sprites/badge.tscn")
 func _ready():
 	
 	print("!!! LOOT MANAGER IS ALIVE !!!")
 	get_tree().node_removed.connect(_on_node_removed)
 
 func _on_node_removed(node):
-	print("Something was removed: ", node.name) 
 	
 	if node.is_in_group("enemy"):
 		print("An ENEMY died! Spawning loot at: ", node.global_position)
 		spawn_loot(node.global_position)
-	else:
-		print("Not an enemy, skipping loot.")
+		if node.has_meta("Boss"): 
+			print("BOSS")
+			spawn_boss_badge(node.global_position)
+
 
 var coin_scene = preload("res://sprites/Coin.tscn")
 
@@ -63,3 +63,15 @@ func _create_item(scene: PackedScene, pos: Vector2):
 	tween.tween_property(item, "global_position", target_pos, 0.4)\
 		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_OUT)
+
+func spawn_boss_badge(pos: Vector2):
+	var instance = BADGE_SCENE.instantiate()
+	
+	# Logic stays in GameStats! 
+	# We ask GameStats for the "Speed" animation name
+	var anim_name = GameStats.get_badge_info("speed")
+	
+	instance.global_position = pos
+	instance.badge_type = anim_name 
+	
+	get_tree().current_scene.add_child(instance)

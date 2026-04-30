@@ -1,0 +1,72 @@
+[gd_scene load_steps=9 format=3 uid="uid://divyttohinn3n"]
+
+[ext_resource type="Texture2D" uid="uid://cq2km4kygh8s3" path="res://Images/Badges.png" id="1_85h0q"]
+[ext_resource type="Script" uid="uid://csedaxjdvaniw" path="res://Scripts/badge.gd" id="1_qkohk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qkohk"]
+radius = 8.246211
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqyww"]
+atlas = ExtResource("1_85h0q")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fssn4"]
+atlas = ExtResource("1_85h0q")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hoxv8"]
+atlas = ExtResource("1_85h0q")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_514vx"]
+atlas = ExtResource("1_85h0q")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a0kvr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sqyww")
+}],
+"loop": true,
+"name": &"Attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fssn4")
+}],
+"loop": true,
+"name": &"Defense",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hoxv8")
+}],
+"loop": true,
+"name": &"Health",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_514vx")
+}],
+"loop": true,
+"name": &"Speed",
+"speed": 5.0
+}]
+
+[node name="Badge" type="Area2D"]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_qkohk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qkohk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_a0kvr")
+animation = &"Speed"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

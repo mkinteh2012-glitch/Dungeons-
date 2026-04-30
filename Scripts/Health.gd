@@ -5,7 +5,7 @@ signal health_changed(new_health)
 
 var regen_timer: float = 0.0
 const REGEN_WAIT_TIME: float = 20.0
-
+var nor_max_health = 6
 @export var max_health: int = 6
 @onready var sprite = get_parent().get_node_or_null("AnimatedSprite2D")
 

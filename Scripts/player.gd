@@ -3,11 +3,11 @@ extends CharacterBody2D
 
 var charge_time = 0.0
 var charging_arrow_instance = null
-signal coin_collected
 @export var max_charge = 2.0
 @export var min_speed = 200.0
 @export var max_speed = 600.0
 @export var speed := 150
+@export var current_speed = 150
 @export var attack_cooldown := 0.5 
 @export var lunge_force := 400.0  # How fast the lunge is
 @export var lunge_duration := 0.15 # How long the lunge lasts
@@ -40,6 +40,7 @@ var is_lunging := false
 
 func _ready():
 	# 1. Connect health
+	update_stats()
 	health.died.connect(_on_died)
 	
 	# 2. Setup BOTH weapons
@@ -72,7 +73,7 @@ func _ready():
 	add_child(timer)
 	
 func _physics_process(_delta):
-	
+	update_stats()
 	var is_moving_now = velocity.length() > 10.0 # Using 10.0 to avoid tiny jitters
 	
 	if is_moving_now and not is_moving_last_frame:
@@ -95,7 +96,7 @@ func _physics_process(_delta):
 	if input_vector != Vector2.ZERO:
 		# 1. Normalize ensures diagonal speed isn't faster than straight speed
 		facing_direction = input_vector.normalized()
-		velocity = facing_direction * speed
+		velocity = facing_direction * current_speed
 		
 		# 2. Animation logic
 		sprite.play("Run")
@@ -417,3 +418,13 @@ var coins: int = 0
 func add_money(amount):
 	coins += amount
 	print("Coins collected: ", coins)
+func update_stats():
+	if GameStats.unlocked_abilities.get("speed") == true:
+		current_speed = speed + 35
+	else:
+		current_speed = speed
+	if GameStats.unlocked_abilities.get("health") == true:
+		health.max_health =+ health.nor_max_health + 2
+		print(health.max_health)
+	else:
+		health.max_health = health.max_health
