@@ -69,8 +69,9 @@ func spawn_boss_badge(pos: Vector2):
 	
 	# Logic stays in GameStats! 
 	# We ask GameStats for the "Speed" animation name
-	var anim_name = GameStats.get_badge_info("speed")
-	
+	var type = GameStats.get_random_locked_ability()
+	var anim_name = GameStats.get_badge_info(type)
+
 	instance.global_position = pos
 	instance.badge_type = anim_name 
 	

@@ -420,11 +420,10 @@ func add_money(amount):
 	print("Coins collected: ", coins)
 func update_stats():
 	if GameStats.unlocked_abilities.get("speed") == true:
-		current_speed = speed + 35
+		current_speed = speed + 40
 	else:
 		current_speed = speed
 	if GameStats.unlocked_abilities.get("health") == true:
 		health.max_health =+ health.nor_max_health + 2
-		print(health.max_health)
 	else:
-		health.max_health = health.max_health
+		health.max_health = health.nor_max_health

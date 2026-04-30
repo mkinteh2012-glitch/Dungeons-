@@ -67,6 +67,6 @@ shape = SubResource("CircleShape2D_qkohk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_a0kvr")
-animation = &"Speed"
+animation = &"Health"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
