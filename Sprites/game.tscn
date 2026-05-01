@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://b2nsl3da64hht" path="res://Music/307 Frontier Cavern (Olimar, Battle) .mp3" id="7_3ycj4"]
 [ext_resource type="Script" uid="uid://dd4y2fm8stnto" path="res://Scripts/loot_manager.gd" id="8_3d5iw"]
 [ext_resource type="PackedScene" uid="uid://cd1ibxbqhr5bk" path="res://UI/coin_counter.tscn" id="9_tonfl"]
-[ext_resource type="PackedScene" uid="uid://bmhy8a5lishmo" path="res://UI/Hearts.tscn" id="10_ogycj"]
+[ext_resource type="PackedScene" uid="uid://dk5etkc1ypq8" path="res://UI/Heart_GUI.tscn" id="10_tonfl"]
 
 [sub_resource type="Environment" id="Environment_upo3n"]
 background_mode = 3
@@ -37,6 +37,4 @@ script = ExtResource("8_3d5iw")
 offset = Vector2(55, 35)
 transform = Transform2D(1, 0, 0, 1, 55, 35)
 
-[node name="Hearts" parent="." instance=ExtResource("10_ogycj")]
-offset = Vector2(15, 0)
-transform = Transform2D(1, 0, 0, 1, 15, 0)
+[node name="heart_gui" parent="." instance=ExtResource("10_tonfl")]

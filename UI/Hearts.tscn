@@ -1,69 +1,54 @@
-[gd_scene load_steps=11 format=3 uid="uid://bmhy8a5lishmo"]
+[gd_scene load_steps=7 format=3 uid="uid://bmhy8a5lishmo"]
 
 [ext_resource type="Texture2D" uid="uid://c6h7smd27gbiu" path="res://Images/HealthUI.png" id="1_0lx7c"]
-[ext_resource type="Script" uid="uid://dfhtxb5dwq3h1" path="res://Scripts/hearts.gd" id="1_56ksd"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0lx7c"]
-atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 0, 33, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_56ksd"]
-atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 11, 33, 11)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0lx7c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q7oqs"]
 atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 22, 33, 11)
+region = Rect2(22, 66, 11, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56ksd"]
+atlas = ExtResource("1_0lx7c")
+region = Rect2(0, 44, 11, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8kmf1"]
 atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 33, 33, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eeble"]
-atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 44, 33, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4bpxh"]
-atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 55, 33, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j7a1o"]
-atlas = ExtResource("1_0lx7c")
-region = Rect2(0, 66, 33, 11)
+region = Rect2(11, 33, 11, 11)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_roiue"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0lx7c")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_56ksd")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_q7oqs")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8kmf1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eeble")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4bpxh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j7a1o")
 }],
 "loop": true,
-"name": &"default",
+"name": &"empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56ksd")
+}],
+"loop": true,
+"name": &"full",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8kmf1")
+}],
+"loop": true,
+"name": &"half",
 "speed": 5.0
 }]
 
-[node name="HUD" type="CanvasLayer"]
-script = ExtResource("1_56ksd")
+[node name="HUD" type="PanelContainer"]
+custom_minimum_size = Vector2(18, 18)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0lx7c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(35, 15)
+position = Vector2(9, 10)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_roiue")
+animation = &"half"

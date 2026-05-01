@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk5etkc1ypq8"]
+
+[ext_resource type="Script" uid="uid://dfhtxb5dwq3h1" path="res://Scripts/hearts.gd" id="1_0p6ml"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_0p6ml")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0

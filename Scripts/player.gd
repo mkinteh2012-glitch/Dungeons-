@@ -19,8 +19,8 @@ var has_bow_equipped = false # Starts with Dagger by default
 var can_shoot = true
 @export var shoot_speed = 0.25 # Seconds between shots
 @export var dodge_speed := 600.0
-@export var dodge_duration := 0.2
-@export var dodge_cooldown := 0.8
+@export var dodge_duration := 0.15
+@export var dodge_cooldown := 2.0
 
 var is_weakened: bool = false
 var can_dodge := true
@@ -39,7 +39,7 @@ var can_attack := true
 var is_lunging := false
 
 func _ready():
-	# 1. Connect health
+	var dodge_speed: float =  current_speed * 3
 	update_stats()
 	health.died.connect(_on_died)
 	
@@ -420,7 +420,7 @@ func add_money(amount):
 	print("Coins collected: ", coins)
 func update_stats():
 	if GameStats.unlocked_abilities.get("speed") == true:
-		current_speed = speed + 40
+		current_speed = speed + 50
 	else:
 		current_speed = speed
 	if GameStats.unlocked_abilities.get("health") == true:

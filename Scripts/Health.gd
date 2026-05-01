@@ -13,6 +13,7 @@ var current_health: int = 0:
 	set(value):
 		current_health = clampi(value, 0, max_health)
 		health_changed.emit(current_health)
+		sync_health_to_ui()
 		
 		if current_health <= 0:	
 			# We use a callable inside the timer to be safer
@@ -22,17 +23,7 @@ var is_invincible := false
 
 func _ready():
 	current_health = max_health
-
-func _process(delta):
-	if current_health < max_health:
-		regen_timer += delta
-		if regen_timer >= REGEN_WAIT_TIME:
-			current_health += 1 
-			regen_timer = 0.0
-			print("Natural Regen: +1 Heart")
-			play_regen_flash()
-	else:
-		regen_timer = 0.0
+	sync_health_to_ui()
 
 func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
 	if is_invincible or current_health <= 0:
@@ -41,7 +32,7 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
 	regen_timer = 0.0 
 	is_invincible = true
 	current_health -= amount
-	
+	sync_health_to_ui()
 	var player = get_parent()
 	if player.has_method("handle_hit"):
 		player.handle_hit(source_pos)
@@ -72,3 +63,14 @@ func heal(amount):
 	current_health += amount
 	# Make sure you don't go over max health
 	current_health = min(current_health, max_health) 
+	
+func sync_health_to_ui():
+	# 1. Look for the HUD in the game scene
+	# We use find_child so it works even if the HUD is deep in the tree
+	
+	var hud = get_tree().current_scene.find_child("heart_gui", true, false)
+	if hud:
+		# 2. Send the player's variables to the HUD's function
+		hud.update_hearts(current_health, max_health)
+	else:
+		print("Error: Could not find the heart_gui!")
