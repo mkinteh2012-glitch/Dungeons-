@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://divyttohinn3n"]
+[gd_scene load_steps=13 format=3 uid="uid://divyttohinn3n"]
 
 [ext_resource type="Texture2D" uid="uid://cq2km4kygh8s3" path="res://Images/Badges.png" id="1_85h0q"]
 [ext_resource type="Script" uid="uid://csedaxjdvaniw" path="res://Scripts/badge.gd" id="1_qkohk"]
+[ext_resource type="Texture2D" uid="uid://mjpltkwgvfab" path="res://Images/More Badges.png" id="3_sqyww"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qkohk"]
 radius = 8.246211
@@ -9,6 +10,10 @@ radius = 8.246211
 [sub_resource type="AtlasTexture" id="AtlasTexture_sqyww"]
 atlas = ExtResource("1_85h0q")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a0kvr"]
+atlas = ExtResource("3_sqyww")
+region = Rect2(0, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fssn4"]
 atlas = ExtResource("1_85h0q")
@@ -18,9 +23,17 @@ region = Rect2(16, 16, 16, 16)
 atlas = ExtResource("1_85h0q")
 region = Rect2(16, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_oixrx"]
+atlas = ExtResource("3_sqyww")
+region = Rect2(16, 0, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_514vx"]
 atlas = ExtResource("1_85h0q")
 region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7a2hv"]
+atlas = ExtResource("3_sqyww")
+region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a0kvr"]
 animations = [{
@@ -30,6 +43,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"Attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a0kvr")
+}],
+"loop": true,
+"name": &"Cooldown",
 "speed": 5.0
 }, {
 "frames": [{
@@ -50,10 +71,26 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_oixrx")
+}],
+"loop": true,
+"name": &"Size",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_514vx")
 }],
 "loop": true,
 "name": &"Speed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7a2hv")
+}],
+"loop": true,
+"name": &"Wave",
 "speed": 5.0
 }]
 
@@ -67,6 +104,6 @@ shape = SubResource("CircleShape2D_qkohk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_a0kvr")
-animation = &"Health"
+animation = &"Cooldown"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

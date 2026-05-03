@@ -1,46 +1,58 @@
 extends Node
 
-signal coins_changed(new_amount) # 1. Make sure this exists at the top
+signal coins_changed(new_amount)
 
 var coins: int = 0
 
 func add_coins(amount: int):
 	coins += amount
-	print("Coins in terminal: ", coins) # This is working for you!
+	print("Coins in terminal: ", coins)
 	coins_changed.emit(coins)	
+
+# 1. Lookup for your Animations
 var badge_lookup = {
-	"speed": "Speed",
+	"attack": "Attack",
+	"defense": "Defense",
 	"health": "Health",
-	"attack": "Attack"
+	"size": "Size",
+	"speed": "Speed",
+	"wave": "Wave",
+	"cooldown": "Cooldown" # Matches the name in your animation list
 }
 
+# 2. Ability States
+# Set to 'false' so they show up in your "selection" pool
 var unlocked_abilities = {
-	"speed": false,
-	"health": false,
-	"attack": true
+	"attack": false, #done
+	"defense": false,#done
+	"health": false,#done
+	"size": false,#done
+	"speed": false,#done
+	"wave": false,#done
+	"cooldown": false#done
 }
 
-# This is the function the LootManager or Boss calls
+# Fetch the Animation name for the UI
 func get_badge_info(type: String):
-	if badge_lookup.has(type):
-		return badge_lookup[type] # Returns the animation name (e.g. "Speed")
-	return "Health" # Default fallback
+	var key = type.to_lower()
+	if badge_lookup.has(key):
+		return badge_lookup[key]
+	return "Health"
 
 func unlock_ability(type: String):
-	unlocked_abilities[type.to_lower()] = true
-	print("Ability unlocked in GameStats: ", type)
+	var key = type.to_lower()
+	if unlocked_abilities.has(key):
+		unlocked_abilities[key] = true
+		print("Ability unlocked in GameStats: ", key)
 	
 func get_random_locked_ability() -> String:
 	var locked_list = []
 	
-	# Find everything the player DOESN'T have yet
 	for ability in unlocked_abilities:
 		if unlocked_abilities[ability] == false:
 			locked_list.append(ability)
 	
-	# If the player has everything, just default to "health" or a coin bonus
 	if locked_list.size() == 0:
-		return "health"
+		return "health" # Fallback if everything is unlocked
 	
-	# Pick a random one from the locked list
-	return locked_list.pick_random() 
+	return locked_list.pick_random()

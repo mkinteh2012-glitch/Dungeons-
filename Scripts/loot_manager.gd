@@ -75,4 +75,4 @@ func spawn_boss_badge(pos: Vector2):
 	instance.global_position = pos
 	instance.badge_type = anim_name 
 	
-	get_tree().current_scene.add_child(instance)
+	get_tree().current_scene.add_child.call_deferred(instance)

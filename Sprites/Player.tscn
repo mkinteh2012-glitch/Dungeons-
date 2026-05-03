@@ -1,8 +1,9 @@
-[gd_scene load_steps=20 format=3 uid="uid://b7hddce26nu4x"]
+[gd_scene load_steps=21 format=3 uid="uid://b7hddce26nu4x"]
 
 [ext_resource type="Script" uid="uid://cdhnb3xfajp6p" path="res://Scripts/player.gd" id="1_7dks2"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_awwv4"]
 [ext_resource type="PackedScene" uid="uid://dxi556xtdmwn4" path="res://Sprites/Projectile/arrow.tscn" id="2_aifjq"]
+[ext_resource type="PackedScene" uid="uid://w4t5ounagoo8" path="res://Sprites/Projectile/playerwave.tscn" id="2_c75wo"]
 [ext_resource type="Script" uid="uid://cthwn6b8nqgt6" path="res://Scripts/Camera_Effects.gd" id="3_6cc16"]
 [ext_resource type="Script" uid="uid://dh3hgrq7pmdre" path="res://Scripts/SkitterHealth.gd" id="3_c2xe1"]
 [ext_resource type="PackedScene" uid="uid://c65dujcux116t" path="res://Weapons/Dagger.tscn" id="3_qbn8d"]
@@ -82,6 +83,7 @@ collision_layer = 3
 collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_7dks2")
+wave_scene = ExtResource("2_c75wo")
 arrow_scene = ExtResource("2_aifjq")
 dagger_scene = ExtResource("3_qbn8d")
 bow_scene = ExtResource("4_bag8p")

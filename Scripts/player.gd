@@ -1,14 +1,20 @@
 extends CharacterBody2D
 
-
+var cooldown_modifier: float = 1.0
 var charge_time = 0.0
 var charging_arrow_instance = null
+var damage_boost = 0
+var size_boost = 0
+var can_block: bool = false
+var block_chance: float = 0
+var can_wave = false
+@export var wave_scene: PackedScene
 @export var max_charge = 2.0
 @export var min_speed = 200.0
 @export var max_speed = 600.0
 @export var speed := 150
 @export var current_speed = 150
-@export var attack_cooldown := 0.5 
+@export var attack_cooldown := 0.5 * cooldown_modifier
 @export var lunge_force := 400.0  # How fast the lunge is
 @export var lunge_duration := 0.15 # How long the lunge lasts
 var has_bow_equipped = false # Starts with Dagger by default
@@ -17,7 +23,7 @@ var has_bow_equipped = false # Starts with Dagger by default
 @onready var health = $Health
 @onready var sprite = $AnimatedSprite2D
 var can_shoot = true
-@export var shoot_speed = 0.25 # Seconds between shots
+@export var shoot_speed = 0.25 * cooldown_modifier
 @export var dodge_speed := 600.0
 @export var dodge_duration := 0.15
 @export var dodge_cooldown := 2.0
@@ -48,7 +54,7 @@ func _ready():
 	current_dagger = dagger_scene.instantiate()
 	current_dagger.owner_player = self
 	weapon_holder.add_child(current_dagger)
-	current_dagger.position = Vector2(12, 0)
+	current_dagger.position = Vector2(12 * (1 + size_boost), 0)
 	
 	# Instantiate Bow (using the bow_scene you exported)
 	current_bow = bow_scene.instantiate()
@@ -281,7 +287,7 @@ func _handle_bow_logic(delta):
 
 func _start_shoot_cooldown():
 	can_shoot = false
-	await get_tree().create_timer(shoot_speed).timeout
+	await get_tree().create_timer(shoot_speed * cooldown_modifier).timeout
 	can_shoot = true
 
 func _handle_dagger_logic():
@@ -306,6 +312,9 @@ func _switch_weapon():
 		print("Error: Weapons not found in weapon_holder!")
 
 func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
+	if randf() < block_chance:
+		_trigger_shield_effect()
+		return
 	if health:
 	
 		health.take_damage(amount, source_pos)
@@ -367,6 +376,7 @@ func restart_game():
 func _shoot_arrow():
 	can_shoot = false
 	var arrow = arrow_scene.instantiate()
+
 	
 	# 1. Calculate direction and power
 	var dir = (get_global_mouse_position() - global_position).normalized()
@@ -377,17 +387,15 @@ func _shoot_arrow():
 	# 2. Apply stats to the arrow instance
 	arrow.direction = dir
 	arrow.speed = lerp(min_speed, max_speed, charge_pct)
-	arrow.damage = 10 + (10 * charge_pct)
+	arrow.damage = 10 + (15 * charge_pct) + damage_boost
 	arrow.max_lifetime = arrow.max_lifetime
 	
 	
 	# 3. Handle 100% Power (Super Shot)
 	if charge_pct >= 1.0:
 		arrow.is_max_power = true
-		# Make the arrow glow or look more intense
-		arrow.modulate = Color(2.0, 2.0, 2.0) 
-		# Optional: make the super arrow slightly larger
-		arrow.scale = Vector2(1.2, 1.2)
+		spawn_wave()
+		arrow.modulate = Color(2.0, 2.0, 2.0) 	
 	
 	# 4. Position and Rotation
 	# If your bow has a 'Muzzle' Marker2D, use that position instead
@@ -418,7 +426,21 @@ var coins: int = 0
 func add_money(amount):
 	coins += amount
 	print("Coins collected: ", coins)
+	
+func _trigger_shield_effect():
+	print("SHIELD BLOCKED!")
+	
+	# 1. Visual Flash
+	var tw = create_tween()
+	# Flash the player purple/blue
+	modulate = Color(0.5, 0.5, 5.0) 
+	tw.tween_property(self, "modulate", Color(1, 1, 1), 0.2)
+	
+	# 2. Small "Armor" sound or effect
+	# If you have a Shield Sprite, you can make it visible here for 0.2 seconds
+	
 func update_stats():
+	await get_tree().process_frame
 	if GameStats.unlocked_abilities.get("speed") == true:
 		current_speed = speed + 50
 	else:
@@ -427,3 +449,45 @@ func update_stats():
 		health.max_health =+ health.nor_max_health + 2
 	else:
 		health.max_health = health.nor_max_health
+		
+	if GameStats.unlocked_abilities.get("attack") == true:
+		damage_boost = 15
+	else:
+		damage_boost = 0
+	if GameStats.unlocked_abilities.get("size") == true:
+		size_boost = 1
+		current_dagger.scale = Vector2( 1 + size_boost,  1 + size_boost)
+	else:
+		size_boost = 0	
+	if GameStats.unlocked_abilities.get("defense") == true:
+		size_boost = 0.1
+		can_block = true
+		block_chance = 0.1
+	else:
+		can_block = false
+		block_chance = 0
+	if GameStats.unlocked_abilities.get("cooldown") == true:
+		cooldown_modifier = 1
+		current_dagger.cooldown = 0.3 * cooldown_modifier
+	else:
+		cooldown_modifier = 1.0
+	if GameStats.unlocked_abilities.get("cooldown") == true:
+		can_wave = true
+	else:
+		can_wave = false
+		
+func spawn_wave():
+	if not GameStats.unlocked_abilities.get("wave"): return
+	
+	# 1. Create the instance (the actual object)
+	var wave_instance = wave_scene.instantiate()
+	
+	# 2. Set the position BEFORE adding it to the tree
+	wave_instance.global_position = global_position
+	
+	# 3. Use call_deferred on the PARENT node, passing the INSTANCE as an argument
+	# This tells Godot: "At the end of this frame, add this wave to the scene."
+	get_tree().current_scene.add_child.call_deferred(wave_instance)
+	
+	print("WAVE SPAWNED SAFELY")
+		

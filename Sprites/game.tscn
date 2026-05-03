@@ -34,7 +34,22 @@ environment = SubResource("Environment_upo3n")
 script = ExtResource("8_3d5iw")
 
 [node name="Coin_Counter" parent="." instance=ExtResource("9_tonfl")]
-offset = Vector2(55, 35)
-transform = Transform2D(1, 0, 0, 1, 55, 35)
+offset = Vector2(35, 30)
+transform = Transform2D(1, 0, 0, 1, 35, 30)
 
 [node name="heart_gui" parent="." instance=ExtResource("10_tonfl")]
+
+[node name="BG" type="CanvasLayer" parent="."]
+layer = -100
+
+[node name="ColorRect" type="ColorRect" parent="BG"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -62427.0
+offset_top = -22894.0
+offset_right = 75197.0
+offset_bottom = 39882.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.14117648, 0.105882354, 0.13333334, 1)

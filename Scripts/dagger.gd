@@ -6,6 +6,8 @@ extends Node2D
 
 var owner_player: CharacterBody2D
 var can_attack := true
+@onready var player = get_tree().get_first_node_in_group("player")
+@onready var damage_boost_ref = player.damage_boost
 
 @onready var hitbox = $Hitbox 
 @onready var impact_sound = $Hit # Make sure the node name matches!
@@ -23,15 +25,18 @@ func _on_hitbox_body_entered(body: Node2D):
 			impact_sound.play()
 		
 		# 2. Find the player globally
-		var player = get_tree().get_first_node_in_group("player")
+		
 		
 		# 3. Calculate Damage
-		var final_damage = damage
+		var damage_boost_ref = player.damage_boost
+		var final_damage = damage + damage_boost_ref
 		if player and player.get("is_weakened") == true:
 			final_damage = ceil(damage / 2.0)
 			print("Dagger Weakened Hit: ", final_damage)
 		else:
 			print("Dagger Full Hit: ", final_damage)
+		
+		player.spawn_wave()
 
 		# 4. Apply Damage to Enemy
 		if body.has_method("take_damage"):

@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://w4t5ounagoo8"]
+
+[ext_resource type="Script" uid="uid://ndkf0i6c7nye" path="res://Scripts/playerwave.gd" id="1_0hj4b"]
+[ext_resource type="Texture2D" uid="uid://dt0l2d4paeq1g" path="res://Images/Wave.png" id="1_t60qj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0hj4b"]
+radius = 8.5440035
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6brcj"]
+atlas = ExtResource("1_t60qj")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0u5b7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6brcj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="playerwave" type="Area2D"]
+scale = Vector2(2, 2)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_0hj4b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0hj4b")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_0u5b7")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
