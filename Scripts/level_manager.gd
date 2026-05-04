@@ -1,48 +1,55 @@
 extends Node
 
-@export_file("*.tscn") var next_level_path: String
-signal level_completed # Define the signal here
-signal transition_finished # Emitted when the new level is actually ready
+signal level_completed 
 
 func _ready():
-	# Wait for the scene tree to settle
 	await get_tree().process_frame
-	
 	var game_node = get_tree().current_scene
 	
-	# Connect to the win signal
 	if game_node.has_signal("all_enemies_defeated"):
 		if not game_node.all_enemies_defeated.is_connected(_on_objective_met):
 			game_node.all_enemies_defeated.connect(_on_objective_met)
-			print("LevelManager: Ready!")
+			print("LevelManager: Linked!")
 
 func _on_objective_met():
-	print("LevelManager: Objective met. Cleaning up...")
+	print("LevelManager: Level Finished.")
 	
-	# 1. Delay for the 'Victory' feel
+	# 1. Victory delay
 	var music_node = get_tree().get_first_node_in_group("music_system")
-	music_node.play_level_cleared()
-	await get_tree().create_timer(4).timeout
+	if music_node:
+		music_node.play_level_cleared()
+	
+	await get_tree().create_timer(4.0).timeout
 
-	# 2. EMERGENCY CLEANUP
-	# Manually kill enemies and bananas so their scripts stop running immediately
-	for n in get_tree().get_nodes_in_group("enemy"): 
-		n.queue_free()
-	for n in get_tree().get_nodes_in_group("projectiles"): 
-		n.queue_free()
-	for n in get_tree().get_nodes_in_group("coin"): 
-		n.queue_free()
+	# 2. Add Money and Progress BEFORE cleanup
+	# We look at the root of the current scene (Game.tscn) to find the ActiveLevel
+	var game_scene = get_tree().current_scene
+	var active_level = game_scene.get_node_or_null("ActiveLevel")
 	
-	# 3. THE SWAP
-	var current_scene = get_tree().current_scene
-	
-	if current_scene.has_method("load_new_level"):
-		# If using a Master/Main script, it MUST handle the queue_free of the old level child
-		current_scene.load_new_level(next_level_path)
-	else:
-		# If using Godot's built-in switcher, call_deferred is mandatory
-		get_tree().call_deferred("change_scene_to_file", next_level_path)
+	if active_level:
+		var reward = active_level.get("level_reward")
+		if reward == null: reward = 0 # Failsafe if variable is missing
 		
-	print("LevelManager: Transition started.")
+		# Use the correct math += and the correct Global variable
+		GameStats.coins += reward
+		Global.levels_completed += 1 
+		print("Paid player: ", reward, ". Total Gold: ", GameStats.coins)
+	else:
+		# If it can't find 'ActiveLevel', it might just be the parent
+		# Let's try to check the parent node just in case
+		var reward = get_parent().get("level_reward")
+		if reward:
+			Global.total_gold += reward
+			Global.levels_completed += 1
+	
+	# 3. Cleanup
+	var groups_to_clear = ["enemy", "projectiles", "coin", "loot"]
+	for group in groups_to_clear:
+		for n in get_tree().get_nodes_in_group(group):
+			n.queue_free()
+	
+	# 4. Redirect
+	get_tree().call_deferred("change_scene_to_file", "res://UI/LevelSelectMenu.tscn")
+	
 	if music_node:
 		music_node.reset_music_system()

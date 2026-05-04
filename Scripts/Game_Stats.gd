@@ -3,6 +3,9 @@ extends Node
 signal coins_changed(new_amount)
 
 var coins: int = 0
+var current_objective: String = "Exterminate" 
+var current_reward_coins: int = 0
+var current_difficulty: String = "Normal"
 
 func add_coins(amount: int):
 	coins += amount

@@ -1,6 +1,7 @@
-[gd_scene load_steps=64 format=4 uid="uid://85wsqpmigrem"]
+[gd_scene load_steps=65 format=4 uid="uid://85wsqpmigrem"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_f8gr7"]
+[ext_resource type="Script" uid="uid://drd5yy7hrahrh" path="res://Scripts/test_1.gd" id="1_niq1d"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_xfdtu"]
 [ext_resource type="PackedScene" uid="uid://drcjwnfgschuo" path="res://Sprites/Enemy/skitter.tscn" id="3_f8gr7"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_hwds3"]
@@ -829,6 +830,7 @@ navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_iotdp")
 
 [node name="Test_level" type="Node2D"]
+script = ExtResource("1_niq1d")
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(-45, -43)

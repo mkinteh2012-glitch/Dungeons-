@@ -8,12 +8,16 @@ signal all_enemies_defeated
 var transitioning := false
 
 func _ready():
-	# Initial level load
-	if level_scene:
-		_setup_level(level_scene.instantiate())
+	# As soon as Game.tscn loads, check if the Global script has a path
+	if Global.selected_level_path != "":
+		load_new_level(Global.selected_level_path)
+		
+		# Optional: Clear the path so it doesn't reload on a restart
+		# Global.selected_level_path = "" 
 	else:
-		print("Error: No level_scene assigned!")
-
+		print("No level selected! Sending back to menu...")
+		get_tree().call_deferred("change_scene_to_file", "res://UI/LevelSelectMenu.tscn")
+		
 func _process(_delta):
 	# Only check if we aren't already switching levels
 	if not transitioning:

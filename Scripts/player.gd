@@ -9,7 +9,7 @@ var can_block: bool = false
 var block_chance: float = 0
 var can_wave = false
 @export var wave_scene: PackedScene
-@export var max_charge = 2.0
+@export var max_charge = 2.0 * cooldown_modifier
 @export var min_speed = 200.0
 @export var max_speed = 600.0
 @export var speed := 150
@@ -455,7 +455,7 @@ func update_stats():
 	else:
 		damage_boost = 0
 	if GameStats.unlocked_abilities.get("size") == true:
-		size_boost = 1
+		size_boost = 0.1
 		current_dagger.scale = Vector2( 1 + size_boost,  1 + size_boost)
 	else:
 		size_boost = 0	
@@ -471,7 +471,8 @@ func update_stats():
 		current_dagger.cooldown = 0.3 * cooldown_modifier
 	else:
 		cooldown_modifier = 1.0
-	if GameStats.unlocked_abilities.get("cooldown") == true:
+		
+	if GameStats.unlocked_abilities.get("wave") == true:
 		can_wave = true
 	else:
 		can_wave = false

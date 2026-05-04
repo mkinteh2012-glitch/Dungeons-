@@ -2,7 +2,7 @@ extends Node
 
 signal died
 
-@export var max_health := 50
+@export var max_health := 2000
 @onready var health := max_health # Sets health to 10 immediately
 
 func take_damage(amount):

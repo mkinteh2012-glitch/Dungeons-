@@ -1,0 +1,104 @@
+[gd_scene load_steps=11 format=3 uid="uid://sn2xqxxjfny"]
+
+[ext_resource type="Texture2D" uid="uid://cdr66cr3vqxst" path="res://Images/Levelmenu.png" id="1_u44cv"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="2_gwk0v"]
+[ext_resource type="Script" uid="uid://hktxksnmglwt" path="res://Scripts/buttonmenugd.gd" id="2_w3xxq"]
+[ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="3_w3xxq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u44cv"]
+atlas = ExtResource("1_u44cv")
+region = Rect2(0, 6, 0, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kn2rf"]
+atlas = ExtResource("2_gwk0v")
+region = Rect2(288, 384, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8pr4"]
+atlas = ExtResource("2_gwk0v")
+region = Rect2(296, 384, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wd8kw"]
+atlas = ExtResource("2_gwk0v")
+region = Rect2(304, 384, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl5xt"]
+atlas = ExtResource("2_gwk0v")
+region = Rect2(312, 384, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_70ley"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kn2rf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8pr4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wd8kw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl5xt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="TextureButton" type="TextureButton"]
+texture_filter = 1
+custom_minimum_size = Vector2(128, 64)
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 179.0
+offset_bottom = 110.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("AtlasTexture_u44cv")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("2_w3xxq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(328.00006, 24.5)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_70ley")
+autoplay = "default"
+frame_progress = 0.034889095
+
+[node name="Reward" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -86.0
+offset_top = 19.0
+offset_right = -54.0
+offset_bottom = 27.0
+grow_horizontal = 0
+scale = Vector2(1.5, 1.5)
+theme_override_fonts/font = ExtResource("3_w3xxq")
+theme_override_font_sizes/font_size = 8
+text = "100x"
+
+[node name="Levelname" type="Label" parent="."]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 14.0
+offset_right = 101.0
+offset_bottom = 37.0
+theme_override_fonts/font = ExtResource("3_w3xxq")
+theme_override_font_sizes/font_size = 16
+text = "level"
+
+[node name="Difflabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 70.0
+offset_right = 89.0
+offset_bottom = 93.0
+theme_override_fonts/font = ExtResource("3_w3xxq")
+theme_override_font_sizes/font_size = 8
+text = "diff"
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
