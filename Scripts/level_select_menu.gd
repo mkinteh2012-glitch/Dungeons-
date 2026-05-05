@@ -3,8 +3,18 @@ extends Control
 @export var card_scene: PackedScene
 @onready var list = $VBoxContainer
 
+# --- NEW STUFF ---
+@onready var shop_menu = $UpgradeMenu
+@onready var shop_button = $ShopButtom # Using your 'Buttom' spelling from the scene tree
+# -----------------
+
 func _ready():
 	print("--- DEBUG START: LevelSelectMenu Ready ---")
+	
+	# --- NEW STUFF ---
+	if shop_menu:
+		shop_menu.visible = false # Hide shop on start
+	# -----------------
 	
 	# 1. Check if the VBoxContainer exists
 	if list == null:
@@ -44,7 +54,6 @@ func load_all_levels(path: String):
 		var file_name = dir.get_next()
 		
 		while file_name != "":
-			# Print every file found to see what the extension actually is
 			print("Found file: ", file_name)
 			
 			if file_name.ends_with(".tscn") or file_name.ends_with(".tscn.remap"):
@@ -86,14 +95,13 @@ func create_card_from_level(path: String):
 	var new_card = card_scene.instantiate()
 	list.add_child(new_card)
 	
-	# Difficulty color logic
 	var diff_raw = temp_node.get("level_difficulty")
 	var diff = str(diff_raw).to_lower() if diff_raw else "normal"
 	
 	var color_easy = Color(0.3, 0.36, 0.94) 
 	var color_boss = Color(0.35, 0.02, 0.35) 
 	
-	var weight := 0.3 # Default
+	var weight := 0.3 
 	match diff:
 		"easy": weight = 0.0
 		"normal": weight = 0.2
@@ -110,3 +118,29 @@ func create_card_from_level(path: String):
 	})
 	
 	temp_node.queue_free()
+
+# --- NEW STUFF ---
+# --- UPDATED TOGGLE LOGIC ---
+func _on_shop_buttom_pressed():
+	if shop_menu == null:
+		print("ERROR: shop_menu is not linked!")
+		return
+		
+	# Toggle visibility: if it was true, it becomes false; if false, it becomes true.
+	shop_menu.visible = !shop_menu.visible
+	
+	if shop_menu.visible:
+		# ENTERING SHOP
+		shop_button.text = "Levels"
+		list.visible = false
+		if shop_menu.has_method("refresh_shop"):
+			shop_menu.refresh_shop()
+	else:
+		# EXITING SHOP (Back to Levels)
+		shop_button.text = "Shop"
+		list.visible = true
+
+# Add this to handle coming back from the shop
+func _on_upgrade_menu_hidden():
+	list.visible = true
+# -----------------

@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcj7jpdomgbwr"]
+
+[ext_resource type="Script" uid="uid://cse1414choy8e" path="res://Scripts/badge_slot.gd" id="1_501s0"]
+[ext_resource type="Texture2D" uid="uid://2vtox2m4hnlu" path="res://Images/Upgrade Button.png" id="1_eamyv"]
+[ext_resource type="FontFile" uid="uid://bcyw07r2te15m" path="res://Images/PressStart2P-Regular.ttf" id="2_501s0"]
+[ext_resource type="PackedScene" uid="uid://divyttohinn3n" path="res://Sprites/badge.tscn" id="4_idt14"]
+[ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="5_q3wm3"]
+
+[node name="BadgeSlot" type="TextureButton"]
+custom_minimum_size = Vector2(90, 100)
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_501s0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(51, 80)
+scale = Vector2(3, 3)
+texture = ExtResource("1_eamyv")
+
+[node name="PriceLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 17.333332
+offset_top = 100.66668
+offset_right = 65.33333
+offset_bottom = 123.66668
+scale = Vector2(1.5, 1.5)
+theme_override_fonts/font = ExtResource("2_501s0")
+theme_override_font_sizes/font_size = 8
+text = "500"
+
+[node name="Badge" parent="." instance=ExtResource("4_idt14")]
+position = Vector2(51, 70)
+scale = Vector2(2, 2)
+
+[node name="BuyButton" type="Label" parent="."]
+layout_mode = 0
+offset_left = 38.66668
+offset_top = 89.33331
+offset_right = 78.66668
+offset_bottom = 112.33331
+theme_override_fonts/font = ExtResource("5_q3wm3")
+theme_override_font_sizes/font_size = 8
+text = "lvl10"
+
+[node name="DescriptionLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = -5.999998
+offset_top = 4.0
+offset_right = 150.0
+offset_bottom = 37.0
+theme_override_fonts/font = ExtResource("2_501s0")
+theme_override_font_sizes/font_size = 8
+text = "Reduces arrow launch times, does not affect dagger"
+autowrap_mode = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]

@@ -1,5 +1,11 @@
 extends CharacterBody2D
 
+var attack_level = GameStats.ability_levels.get("attack", 0)
+var speed_level = GameStats.ability_levels.get("speed", 0)
+var health_level = GameStats.ability_levels.get("health", 0)
+var size_level = GameStats.ability_levels.get("size", 0)
+var defense_level = GameStats.ability_levels.get("defense", 0)
+var cooldown_level = GameStats.ability_levels.get("cooldown", 0)
 var cooldown_modifier: float = 1.0
 var charge_time = 0.0
 var charging_arrow_instance = null
@@ -442,33 +448,32 @@ func _trigger_shield_effect():
 func update_stats():
 	await get_tree().process_frame
 	if GameStats.unlocked_abilities.get("speed") == true:
-		current_speed = speed + 50
+		current_speed = (speed_level * 10) + speed 
 	else:
 		current_speed = speed
 	if GameStats.unlocked_abilities.get("health") == true:
-		health.max_health =+ health.nor_max_health + 2
+		health.max_health =+ health.nor_max_health + (2 * health_level)
 	else:
 		health.max_health = health.nor_max_health
 		
 	if GameStats.unlocked_abilities.get("attack") == true:
-		damage_boost = 15
+		damage_boost = 10 * attack_level
 	else:
 		damage_boost = 0
 	if GameStats.unlocked_abilities.get("size") == true:
-		size_boost = 0.1
+		size_boost = size_level * 0.1
 		current_dagger.scale = Vector2( 1 + size_boost,  1 + size_boost)
 	else:
 		size_boost = 0	
 	if GameStats.unlocked_abilities.get("defense") == true:
 		size_boost = 0.1
 		can_block = true
-		block_chance = 0.1
+		block_chance = defense_level * 0.1
 	else:
 		can_block = false
 		block_chance = 0
 	if GameStats.unlocked_abilities.get("cooldown") == true:
-		cooldown_modifier = 1
-		current_dagger.cooldown = 0.3 * cooldown_modifier
+		cooldown_modifier = 1 -  (cooldown_level * 0.1)
 	else:
 		cooldown_modifier = 1.0
 		

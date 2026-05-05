@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://co7pui0aibrvh"]
+[gd_scene load_steps=6 format=3 uid="uid://co7pui0aibrvh"]
 
 [ext_resource type="Script" uid="uid://hmki1rx4ms5c" path="res://Scripts/level_select_menu.gd" id="1_1md54"]
 [ext_resource type="PackedScene" uid="uid://cd1ibxbqhr5bk" path="res://UI/coin_counter.tscn" id="1_vh17i"]
 [ext_resource type="PackedScene" uid="uid://sn2xqxxjfny" path="res://UI/ButtonMenu.tscn" id="2_vh17i"]
+[ext_resource type="PackedScene" uid="uid://csmcta88beqid" path="res://UI/upgrade_menu.tscn" id="4_re5ic"]
+[ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="5_k6w35"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -12,16 +14,12 @@ offset_bottom = 40.0
 script = ExtResource("1_1md54")
 card_scene = ExtResource("2_vh17i")
 
-[node name="Coin_Counter" parent="." instance=ExtResource("1_vh17i")]
-offset = Vector2(35, 10)
-transform = Transform2D(1, 0, 0, 1, 35, 10)
-
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 30.0
-offset_top = 30.0
+offset_top = 40.0
 offset_right = 390.0
-offset_bottom = 330.0
+offset_bottom = 340.0
 theme_override_constants/separation = 15
 
 [node name="TextureButton" parent="VBoxContainer" instance=ExtResource("2_vh17i")]
@@ -47,3 +45,27 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.14117648, 0.105882354, 0.13333334, 1)
+
+[node name="UpgradeMenu" parent="." instance=ExtResource("4_re5ic")]
+visible = false
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 760.0
+offset_bottom = 460.0
+
+[node name="ShopButtom" type="Button" parent="."]
+layout_mode = 0
+offset_left = 519.0
+offset_top = 3.0
+offset_right = 591.0
+offset_bottom = 34.0
+theme_override_fonts/font = ExtResource("5_k6w35")
+text = "Shop"
+
+[node name="Coin_Counter2" parent="." instance=ExtResource("1_vh17i")]
+offset = Vector2(70, 20)
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 70, 20)
+
+[connection signal="pressed" from="ShopButtom" to="." method="_on_shop_buttom_pressed"]

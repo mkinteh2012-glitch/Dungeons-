@@ -5,8 +5,11 @@ signal health_changed(new_health)
 
 var regen_timer: float = 0.0
 const REGEN_WAIT_TIME: float = 20.0
-var nor_max_health = 6
-@export var max_health: int = 6
+
+# --- UPDATED HEALTH LOGIC ---
+@export var base_max_health: int = 6  # Your original starting health
+var max_health: int = 6              # This will be calculated dynamically
+var nor_max_health: int = 6  # Kept this to stop the error
 @onready var sprite = get_parent().get_node_or_null("AnimatedSprite2D")
 
 var current_health: int = 0:
@@ -16,15 +19,22 @@ var current_health: int = 0:
 		sync_health_to_ui()
 		
 		if current_health <= 0:	
-			# We use a callable inside the timer to be safer
 			get_tree().create_timer(1.0).timeout.connect(func(): died.emit())
 
 var is_invincible := false
 
 func _ready():
+	# 1. Calculate the new max health based on the shop level
+	var health_level = GameStats.ability_levels.get("health", 0)
+	
+	# Formula: Starting health (6) + 2 extra hearts per level
+	max_health = base_max_health + (health_level * 2)
+	
+	# 2. Start the player at full (upgraded) health
 	current_health = max_health
+	
 	sync_health_to_ui()
-
+	
 func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
 	if is_invincible or current_health <= 0:
 		return
