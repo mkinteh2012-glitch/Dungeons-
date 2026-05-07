@@ -54,7 +54,6 @@ func take_damage(_amount):
 func die():
 	# Spawn the electric death ring
 	$AnimatedSprite2D.set_deferred("visible", false)
-	$CollisionShape2D.set_deferred("disabled", true)
 	await get_tree().create_timer(1.0).timeout
 	if ring_scene:
 		var ring = ring_scene.instantiate()

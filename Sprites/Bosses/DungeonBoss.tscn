@@ -1,0 +1,112 @@
+[gd_scene load_steps=14 format=3 uid="uid://ca7l0cjrgyuwx"]
+
+[ext_resource type="Script" uid="uid://t6tl4ttyhoqh" path="res://Scripts/dungeon_boss.gd" id="1_sch0v"]
+[ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_xyte5"]
+[ext_resource type="Texture2D" uid="uid://dt0l2d4paeq1g" path="res://Images/Wave.png" id="3_ksdes"]
+[ext_resource type="PackedScene" uid="uid://bydc8etspk6wm" path="res://Sprites/bossbadge.tscn" id="8_xwl1f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7kuh"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(367, 230, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mcgq"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(415, 230, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwl1f"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(367, 230, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3h1s"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(383, 230, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bijfp"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(399, 230, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sql3e"]
+atlas = ExtResource("1_xyte5")
+region = Rect2(415, 230, 16, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sr4w7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7kuh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1mcgq")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwl1f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3h1s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bijfp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sql3e")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jdcb1"]
+radius = 6.0
+height = 18.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h0d3v"]
+radius = 29.068884
+
+[node name="FinalBoss" type="CharacterBody2D" groups=["boss", "enemy"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_sch0v")
+metadata/is_boss = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sr4w7")
+animation = &"Idle"
+frame_progress = 0.3959295
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_jdcb1")
+
+[node name="DecisionTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="SheieldBox" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_h0d3v")
+
+[node name="Shield" type="Sprite2D" parent="."]
+scale = Vector2(3.75, 3.75)
+texture = ExtResource("3_ksdes")
+
+[node name="Badge" parent="." instance=ExtResource("8_xwl1f")]
+position = Vector2(41, -1)
+
+[node name="Badge2" parent="." instance=ExtResource("8_xwl1f")]
+position = Vector2(-1, 41)
+badge_type = "poison"
+
+[node name="Badge3" parent="." instance=ExtResource("8_xwl1f")]
+position = Vector2(-41, -3)
+badge_type = "electric"
+
+[node name="Badge4" parent="." instance=ExtResource("8_xwl1f")]
+position = Vector2(-1, -41)
+badge_type = "bomb"
+
+[connection signal="timeout" from="DecisionTimer" to="." method="_on_decision_timer_timeout"]

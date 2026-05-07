@@ -1,17 +1,17 @@
 extends CharacterBody2D
 
 @export var speed_walk := 60.0 
-@export var speed_roll := 450.0 
+@export var speed_roll := 500.0 
 @export var attack_range := 180.0
 @export var roll_duration := 7.6
-@export var roll_cooldown := 9.0	
+@export var roll_cooldown := 2.0	
 @export var banana_scene: PackedScene
 
 
 @onready var anim = $AnimatedSprite2D
 @onready var player = get_tree().get_first_node_in_group("player")
 
-@export var battle_start_delay := 4.5 # How long he stays still
+@export var battle_start_delay := 0.5 # How long he stays still
 var is_active := false # The "lock" that keeps him still
 
 enum State { WALKING, TRANSITIONING, ROLLING, COOLDOWN, THROWING, MOVING_TO_CENTER }
@@ -133,7 +133,7 @@ func start_rollout():
 	
 	# TRIGGER PIKMIN MUSIC: "Preparing an Attack"
 	# Wait exactly 5 seconds for the charge to build
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(4.0).timeout
 	# --- END CHARGE UP ---
 
 	if player:

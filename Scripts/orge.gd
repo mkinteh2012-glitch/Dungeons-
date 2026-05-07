@@ -2,11 +2,11 @@ extends CharacterBody2D
 
 var target_position = Vector2.ZERO
 var can_attack = true
-@export var min_dist = 60.0 # Don't get closer than this
-@export var max_dist = 150.0 # Don't wander further than this
+@export var min_dist = 40.0 # Don't get closer than this
+@export var max_dist = 80.0 # Don't wander further than this
 enum State { WALK, RUSH, SLAM, STUNNED }
 var current_state = State.WALK
-@export var cooldown_time = 4.0 # Seconds between attacks
+@export var cooldown_time = 2.0 # Seconds between attacks
 @export var ring_scene: PackedScene
 @export var speed: float = 120.0 # Make sure ': float = 120.0' is there
 @export var rush_speed = 400.0
@@ -102,15 +102,15 @@ func _enter_state(new_state):
 			
 		State.STUNNED:
 			velocity = Vector2.ZERO
-			await get_tree().create_timer(2.0).timeout
+			await get_tree().create_timer(5.0).timeout
 			_enter_state(State.WALK)
 
 func _perform_earthquake():
 	print("DEBUG: Slamming ground!")
 	# Spawn 3 rings
-	for i in range(3):
+	for i in range(5):
 		_spawn_ring()
-		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.2).timeout
 	
 	_enter_state(State.WALK)
 
@@ -130,11 +130,11 @@ func _on_decision_timer_timeout():
 		can_attack = false # Close the gate
 		
 		# Pick Move
-		if randf() > 0.5: _enter_state(State.RUSH)
+		if randf() > 0.8: _enter_state(State.RUSH)
 		else: _enter_state(State.SLAM)
 		
 		# Start Cooldown Timer (3 seconds until he can attack again)
-		await get_tree().create_timer(4.0).timeout
+		await get_tree().create_timer(1.0).timeout
 		can_attack = true
 
 func _start_cooldown():

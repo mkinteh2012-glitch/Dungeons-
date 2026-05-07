@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://co7pui0aibrvh"]
+[gd_scene load_steps=7 format=3 uid="uid://co7pui0aibrvh"]
 
 [ext_resource type="Script" uid="uid://hmki1rx4ms5c" path="res://Scripts/level_select_menu.gd" id="1_1md54"]
 [ext_resource type="PackedScene" uid="uid://cd1ibxbqhr5bk" path="res://UI/coin_counter.tscn" id="1_vh17i"]
 [ext_resource type="PackedScene" uid="uid://sn2xqxxjfny" path="res://UI/ButtonMenu.tscn" id="2_vh17i"]
 [ext_resource type="PackedScene" uid="uid://csmcta88beqid" path="res://UI/upgrade_menu.tscn" id="4_re5ic"]
 [ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="5_k6w35"]
+[ext_resource type="AudioStream" uid="uid://b6sse2v6rudcc" path="res://Music/08. Rogueport.mp3" id="6_k6w35"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -67,5 +68,20 @@ text = "Shop"
 offset = Vector2(70, 20)
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 70, 20)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_k6w35")
+autoplay = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FloorDisplay" type="Label" parent="CanvasLayer"]
+offset_left = 235.0
+offset_top = 7.0
+offset_right = 363.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("5_k6w35")
+theme_override_font_sizes/font_size = 16
+text = "FLOOR ##"
 
 [connection signal="pressed" from="ShopButtom" to="." method="_on_shop_buttom_pressed"]

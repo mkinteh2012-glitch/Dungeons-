@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://bydc8etspk6wm"]
+
+[ext_resource type="Texture2D" uid="uid://hnv2hg656vwy" path="res://Images/More More Badges.png" id="1_54bpm"]
+[ext_resource type="Script" uid="uid://d05hab2uh74b3" path="res://Scripts/bossbadgecode.gd" id="1_hbffw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hbffw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0eeh"]
+atlas = ExtResource("1_54bpm")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbjis"]
+atlas = ExtResource("1_54bpm")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jt75c"]
+atlas = ExtResource("1_54bpm")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gl4vb"]
+atlas = ExtResource("1_54bpm")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qsneq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0eeh")
+}],
+"loop": true,
+"name": &"bomb",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbjis")
+}],
+"loop": true,
+"name": &"electric",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jt75c")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gl4vb")
+}],
+"loop": true,
+"name": &"poison",
+"speed": 5.0
+}]
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_hbffw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hbffw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qsneq")
+animation = &"poison"

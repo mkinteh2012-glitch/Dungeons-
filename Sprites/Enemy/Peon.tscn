@@ -56,8 +56,9 @@ size = Vector2(14, 13)
 [sub_resource type="CircleShape2D" id="CircleShape2D_br33p"]
 radius = 95.42536
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_20kgd"]
-size = Vector2(14, 19)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j0egc"]
+radius = 6.0
+height = 14.0
 
 [node name="Peon" type="CharacterBody2D" groups=["enemy"]]
 z_index = 10
@@ -96,9 +97,21 @@ debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
 [node name="WanderTimer" type="Timer" parent="."]
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_20kgd")
+position = Vector2(1, 2)
+shape = SubResource("CapsuleShape2D_j0egc")
 
 [node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_cb6ge")
 script = ExtResource("5_j0egc")
 enemy_type = "peon"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+target_desired_distance = 20.0
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 30.0
+debug_enabled = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true

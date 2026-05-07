@@ -49,8 +49,9 @@ animations = [{
 "speed": 7.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b0oqb"]
-size = Vector2(10, 15)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2phkw"]
+radius = 5.0
+height = 19.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4vwbd"]
 radius = 76.655075
@@ -68,7 +69,7 @@ frame_progress = 0.93856925
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -0.5)
-shape = SubResource("RectangleShape2D_b0oqb")
+shape = SubResource("CapsuleShape2D_2phkw")
 
 [node name="Area2D" type="Area2D" parent="."]
 z_index = 10
@@ -95,3 +96,16 @@ stream = ExtResource("3_esc18")
 stream = ExtResource("4_2phkw")
 script = ExtResource("5_q4v2m")
 enemy_type = "boomkin"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+target_desired_distance = 20.0
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 30.0
+debug_enabled = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

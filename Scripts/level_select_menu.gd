@@ -2,50 +2,39 @@ extends Control
 
 @export var card_scene: PackedScene
 @onready var list = $VBoxContainer
+@onready var floor_label = $CanvasLayer/FloorDisplay # Adjust path to your Label
 
 # --- NEW STUFF ---
 @onready var shop_menu = $UpgradeMenu
-@onready var shop_button = $ShopButtom # Using your 'Buttom' spelling from the scene tree
+@onready var shop_button = $ShopButtom 
 # -----------------
 
 func _ready():
 	print("--- DEBUG START: LevelSelectMenu Ready ---")
-	
-	# --- NEW STUFF ---
+	update_floor_display()
 	if shop_menu:
-		shop_menu.visible = false # Hide shop on start
-	# -----------------
+		shop_menu.visible = false 
 	
-	# 1. Check if the VBoxContainer exists
 	if list == null:
-		print("ERROR: VBoxContainer not found! Check your node path at the top of the script.")
 		return
-	else:
-		print("SUCCESS: VBoxContainer linked correctly.")
 
-	# 2. Check if the Card Scene is assigned in the Inspector
 	if card_scene == null:
-		print("ERROR: Card Scene is EMPTY! Drag ButtonMenu.tscn into the Inspector slot.")
 		return
 
-	# 3. Clear the UI list
+	# Clear the UI list
 	for child in list.get_children():
 		child.queue_free()
 
-	# 4. Determine path
 	var path_to_load = ""
 	if Global.levels_completed >= Global.levels_until_boss:
 		path_to_load = "res://levels/boss/"
-		print("STATUS: Loading BOSS levels. Current completed: ", Global.levels_completed)
 		Global.levels_completed = 0
 	else:
 		path_to_load = "res://levels/"
-		print("STATUS: Loading NORMAL levels. Current completed: ", Global.levels_completed)
 
 	load_all_levels(path_to_load)
 
 func load_all_levels(path: String):
-	print("DEBUG: Opening directory: ", path)
 	var dir = DirAccess.open(path)
 	
 	if dir:
@@ -54,42 +43,45 @@ func load_all_levels(path: String):
 		var file_name = dir.get_next()
 		
 		while file_name != "":
-			print("Found file: ", file_name)
-			
 			if file_name.ends_with(".tscn") or file_name.ends_with(".tscn.remap"):
 				file_names.append(file_name.replace(".remap", ""))
 			file_name = dir.get_next()
 		
-		print("DEBUG: Total valid levels found: ", file_names.size())
-		
-		if file_names.size() == 0:
-			print("CRITICAL: No .tscn files found in ", path, " - Check your folder structure!")
+		# --- BOSS RESET LOGIC ---
+		if "boss" in path:
+			# Count how many boss files actually exist
+			var total_boss_files = file_names.size()
+			# If all bosses have been used, reset the list
+			if Global.used_bosses.size() >= total_boss_files:
+				print("STATUS: All bosses defeated. Resetting Boss List!")
+				Global.used_bosses.clear()
 
+		# Shuffle the entire list of found levels
 		file_names.shuffle()
 
+		# --- LIMIT TO 3 RANDOM LEVELS ---
+		var random_selection = file_names.slice(0, 3)
+		
 		var levels_added = 0
-		for f in file_names:
+		for f in random_selection:
 			var full_path = path + f
 			
-			if "boss" in path:
-				if Global.used_bosses.has(full_path):
-					print("Skipping boss (already used): ", f)
-					continue 
+			# Skip specifically if it's a boss we already fought this cycle
+			if "boss" in path and Global.used_bosses.has(full_path):
+				continue 
 			
 			create_card_from_level(full_path)
 			levels_added += 1
 		
-		print("DEBUG: Successfully instantiated ", levels_added, " cards.")
+		# If the filter made the list too small (e.g. only 1 boss left), 
+		# we already have the reset logic above to handle the next run.
 
 	else:
-		print("ERROR: Could not open directory! Does ", path, " exist?")
+		print("ERROR: Could not open directory! ", path)
 
 func create_card_from_level(path: String):
-	print("Creating card for: ", path)
 	var level_scene = load(path)
-	if not level_scene: 
-		print("ERROR: Failed to load scene at: ", path)
-		return
+	if not level_scene: return
 	
 	var temp_node = level_scene.instantiate()
 	var new_card = card_scene.instantiate()
@@ -119,28 +111,25 @@ func create_card_from_level(path: String):
 	
 	temp_node.queue_free()
 
-# --- NEW STUFF ---
-# --- UPDATED TOGGLE LOGIC ---
 func _on_shop_buttom_pressed():
-	if shop_menu == null:
-		print("ERROR: shop_menu is not linked!")
-		return
-		
-	# Toggle visibility: if it was true, it becomes false; if false, it becomes true.
+	if shop_menu == null: return
 	shop_menu.visible = !shop_menu.visible
-	
 	if shop_menu.visible:
-		# ENTERING SHOP
 		shop_button.text = "Levels"
 		list.visible = false
 		if shop_menu.has_method("refresh_shop"):
 			shop_menu.refresh_shop()
 	else:
-		# EXITING SHOP (Back to Levels)
 		shop_button.text = "Shop"
 		list.visible = true
 
-# Add this to handle coming back from the shop
 func _on_upgrade_menu_hidden():
 	list.visible = true
-# -----------------
+	
+func update_floor_display():
+	if floor_label:
+		# Option A: Simple text
+		floor_label.text = "FLOOR: " + str(GameStats.current_floor)
+		
+		# Option B: If using RichTextLabel for "Juicy" looks
+		# floor_label.bbcode_text = "[center]FLOOR [color=yellow]" + str(GameStats.current_floor) + "[/color][/center]"

@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj4u5nx62oqds"]
+
+[ext_resource type="Script" uid="uid://c6l8dyhpe2857" path="res://Scripts/tesla_grid.gd" id="1_x0xwi"]
+[ext_resource type="PackedScene" uid="uid://bb03mp0fktg70" path="res://Sprites/electric.tscn" id="2_0dgkd"]
+
+[node name="TeslaGrid" type="Node2D"]
+script = ExtResource("1_x0xwi")
+elec_scene = ExtResource("2_0dgkd")

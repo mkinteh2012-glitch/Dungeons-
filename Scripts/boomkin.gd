@@ -1,33 +1,63 @@
 extends CharacterBody2D
 
-@export var speed := 180.0
+@export var speed := 120.0
 @export var explosion_damage := 2
-@onready var area_2d = $Area2D
 @export var prime_distance = 40
-# 1. ADD THESE for the effect
-@export var explosion_texture: Texture2D # Drag your explosion sprite here in Inspector
-@export var explosion_color: Color = Color(1.0, 0.7, 0.3, 1.0) # Orange/Yellow glow
 
-var player = null
+# Navigation & References
+@onready var nav_agent := $NavigationAgent2D as NavigationAgent2D
+@onready var area_2d = $Area2D
+@onready var sprite = $AnimatedSprite2D
+
+@export_group("Visual Effects")
+@export var explosion_texture: Texture2D 
+@export var explosion_color: Color = Color(1.0, 0.7, 0.3, 1.0)
+
+var player: Node2D = null
 var is_primed := false
 
 func _ready():
-	add_to_group("enemies")
+	add_to_group("enemy")
 	player = get_tree().get_first_node_in_group("player")
+	
+	# --- ANTI-STUCK SETTINGS ---
+	nav_agent.path_desired_distance = 10.0 # Give it more room to breathe
+	nav_agent.target_desired_distance = 10.0
+	nav_agent.path_max_distance = 100.0 # Prevents it from getting lost
+	
+	# Make the physics engine more forgiving with wall gaps
+	motion_mode = MOTION_MODE_FLOATING # Prevents "floor" snapping logic
+	wall_min_slide_angle = 0.0 # Allows sliding at any angle
+	
+	makepath()
 
 func _physics_process(_delta):
 	if player and not is_primed:
-		var direction = global_position.direction_to(player.global_position)
-		velocity = direction * speed
-		move_and_slide()
+		# Always update the path to the player
+		makepath()
 		
-		# If we get close to player, start the fuse
+		# Get pathfinding direction
+		var next_path_pos = nav_agent.get_next_path_position()
+		var direction = global_position.direction_to(next_path_pos)
+		
+		velocity = direction * speed
+		
+		# Flip sprite based on movement
+		if velocity.x != 0:
+			sprite.flip_h = velocity.x < 0
+			
+		move_and_slide() # Handles wall sliding
+		
+		# Check distance to player for the fuse
 		if global_position.distance_to(player.global_position) < prime_distance:
 			start_explosion_sequence()
 
+func makepath() -> void:
+	if player:
+		nav_agent.target_position = player.global_position
+
 # --- THE IMMORTALITY / CHAIN REACTION LOGIC ---
 func take_damage(amount: int):
-	# Dagger hit just primes the fuse, it doesn't kill it
 	if not is_primed:
 		print("Boomkin hit! Priming...")
 		start_explosion_sequence()
@@ -35,13 +65,12 @@ func take_damage(amount: int):
 func start_explosion_sequence():
 	if is_primed: return
 	is_primed = true
-	velocity = Vector2.ZERO # Stop moving when primed
+	velocity = Vector2.ZERO 
 	
-	# Visual countdown (flashing red)
 	var tween = create_tween()
-	tween.tween_property($AnimatedSprite2D, "modulate", Color.RED, 0.1)
-	tween.tween_property($AnimatedSprite2D, "modulate", Color.WHITE, 0.1)
-	tween.set_loops(3) # Flash 3 times
+	tween.tween_property(sprite, "modulate", Color.RED, 0.1)
+	tween.tween_property(sprite, "modulate", Color.WHITE, 0.1)
+	tween.set_loops(3) 
 	tween.finished.connect(explode)
 
 func explode():
@@ -61,7 +90,8 @@ func explode():
 	var particles = $ExplosionParticles 
 	if particles:
 		var global_pos = particles.global_position
-		remove_child(particles)
+		if particles.get_parent():
+			particles.get_parent().remove_child(particles)
 		get_parent().add_child(particles)
 		particles.global_position = global_pos
 		particles.emitting = true
@@ -69,56 +99,29 @@ func explode():
 
 	# 3. DAMAGE LOGIC
 	var targets = area_2d.get_overlapping_bodies()
-	
 	for body in targets:
 		if body == self: continue
-		
 		var health_node = body.get_node_or_null("Health")
-		if not health_node: continue
-
-		# --- TARGET: PLAYER (Directly modify health to bypass i-frames) ---
-		if body.is_in_group("player"):
+		
+		if body.is_in_group("player") and health_node:
 			if "current_health" in health_node:
-				health_node.current_health -= 2
-				print("Explosion forced 2 damage to Player. HP: ", health_node.current_health)
-				
-				# If your Health.gd has a function to update the heart UI, call it here
-				if health_node.has_method("update_ui"):
-					health_node.update_ui()
-				
-				# Manual check for player death since we bypassed take_damage
+				health_node.current_health -= explosion_damage
+				if health_node.has_method("update_ui"): health_node.update_ui()
 				if health_node.current_health <= 0 and health_node.has_method("die"):
 					health_node.die()
-			# --- TARGET: ENEMY ---
+		
 		elif body.is_in_group("enemy"):
-			print("Detected Enemy: ", body.name) # Debug: See if Skitter is even detected
-			
-			if health_node:
-				health_node.take_damage(50)
-				print("Hit Health Node on ", body.name)
-			
-			# 2. Try calling take_damage on the Skitter body itself
-			elif body.has_method("take_damage"):
-				body.take_damage(50)
-				print("Hit method on ", body.name)
-				
-			# 3. Last resort: Direct health subtraction (if Skitter has a health var)
-			elif "health" in body:
-				body.health -= 50
-				print("Subtracted health variable directly from ", body.name)
+			if health_node: health_node.take_damage(50)
+			elif body.has_method("take_damage"): body.take_damage(50)
 	
-	# 1. Hide the visuals so it looks "dead"
 	visible = false
 	set_physics_process(false)
 	$CollisionShape2D.disabled = true
 	
 	if has_node("ExplodeSound"):
-		var snd = $ExplodeSound
-		snd.play()
+		$ExplodeSound.play()
 		await get_tree().create_timer(1.0).timeout
 	queue_free()
-			
-	
-			
 
-		
+func _on_timer_timeout():
+	makepath()

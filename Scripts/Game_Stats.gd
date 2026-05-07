@@ -3,10 +3,11 @@ extends Node
 signal coins_changed(new_amount)
 
 # --- CURRENCY & PROGRESS ---
-var coins: int = 100 # Starting coins for testing
+var coins: int = 50 # Starting coins for testing
 var current_objective: String = "Exterminate" 
 var current_reward_coins: int = 0
 var current_difficulty: String = "Normal"
+var current_floor: int = 1
 
 # --- SHOP & BADGE DATA ---
 var badge_lookup = {
@@ -59,11 +60,11 @@ var ability_levels = {
 
 # The Max Level Cap (Set to -1 for infinite)
 var max_levels = {
-	"attack": -1,
+	"attack": 10,
 	"defense": 3,
 	"health": 3, 
 	"size": 5,
-	"speed": -1,
+	"speed": 10,
 	"wave": 10,
 	"cooldown": 10
 }
@@ -112,3 +113,51 @@ var unlocked_abilities:
 		for key in ability_levels:
 			dict[key] = ability_levels[key] > 0
 		return dict
+		
+func get_random_locked_ability() -> String:
+	# 1. Create a list of keys that are currently at level 0
+	var locked_abilities = []
+	
+	for key in ability_levels.keys():
+		if ability_levels[key] == 0:
+			locked_abilities.append(key)
+	
+	# 2. Check if there are any locked abilities left
+	if locked_abilities.size() == 0:
+		print("DEBUG: All abilities are already unlocked!")
+		return "attack" # Return empty string if everything is unlocked
+	
+	# 3. Pick a random one from the list
+	locked_abilities.shuffle()
+	var chosen = locked_abilities[0]
+	
+	print("DEBUG: Random locked ability chosen: ", chosen)
+	return chosen
+	
+func collect_badge_upgrade(type: String):
+	var key = type.to_lower()
+	if not ability_levels.has(key):
+		print("Error: Ability type ", key, " not found in GameStats.")
+		return
+
+	var current_lvl = ability_levels[key]
+	var max_lvl = max_levels.get(key, -1)
+
+	if current_lvl == 0:
+		# If locked, set to Level 1
+		ability_levels[key] = 1
+		print("Badge: UNLOCKED ", key)
+	else:
+		# If already owned, add 5 levels
+		var new_lvl = current_lvl + 5
+		
+		# Check against Max Level (if max_lvl isn't -1)
+		if max_lvl != -1 and new_lvl > max_lvl:
+			ability_levels[key] = max_lvl
+			print("Badge: ", key, " reached MAX LEVEL (", max_lvl, ")")
+		else:
+			ability_levels[key] = new_lvl
+			print("Badge: ", key, " upgraded to Level ", ability_levels[key])
+	
+	# Always emit the coin change or a custom signal to refresh UI
+	coins_changed.emit(coins)

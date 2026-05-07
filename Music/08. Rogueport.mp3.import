@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b6sse2v6rudcc"
+path="res://.godot/imported/08. Rogueport.mp3-0727632b4f8bdf20d1f9be761772a0b7.mp3str"
+
+[deps]
+
+source_file="res://Music/08. Rogueport.mp3"
+dest_files=["res://.godot/imported/08. Rogueport.mp3-0727632b4f8bdf20d1f9be761772a0b7.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

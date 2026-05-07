@@ -1,7 +1,7 @@
-[gd_scene load_steps=65 format=4 uid="uid://85wsqpmigrem"]
+[gd_scene load_steps=66 format=4 uid="uid://85wsqpmigrem"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_f8gr7"]
-[ext_resource type="Script" uid="uid://drd5yy7hrahrh" path="res://Scripts/test_1.gd" id="1_niq1d"]
+[ext_resource type="Script" uid="uid://drd5yy7hrahrh" path="res://Scripts/LevelScript/test_1.gd" id="1_niq1d"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_xfdtu"]
 [ext_resource type="PackedScene" uid="uid://drcjwnfgschuo" path="res://Sprites/Enemy/skitter.tscn" id="3_f8gr7"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_hwds3"]
@@ -829,6 +829,10 @@ texture = ExtResource("1_f8gr7")
 navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_iotdp")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_lusow"]
+parsed_geometry_type = 1
+agent_radius = 14.0
+
 [node name="Test_level" type="Node2D"]
 script = ExtResource("1_niq1d")
 
@@ -841,7 +845,6 @@ position = Vector2(218, -61)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_hwds3")
-next_level_path = "uid://cwonsgpv4vrdo"
 
 [node name="Walls" type="TileMapLayer" parent="."]
 position = Vector2(0, 1)
@@ -872,3 +875,6 @@ position = Vector2(-12, 60)
 
 [node name="Heart" parent="." instance=ExtResource("10_niq1d")]
 position = Vector2(-81, 156)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_lusow")

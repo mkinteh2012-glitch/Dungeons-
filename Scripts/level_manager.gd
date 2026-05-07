@@ -33,6 +33,7 @@ func _on_objective_met():
 		# Use the correct math += and the correct Global variable
 		GameStats.coins += reward
 		Global.levels_completed += 1 
+		GameStats.current_floor += 1
 		print("Paid player: ", reward, ". Total Gold: ", GameStats.coins)
 	else:
 		# If it can't find 'ActiveLevel', it might just be the parent

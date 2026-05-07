@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=4 uid="uid://dbvmoau2otyu1"]
+[gd_scene load_steps=12 format=4 uid="uid://dbvmoau2otyu1"]
 
-[ext_resource type="Script" uid="uid://bdjf08wqt4mom" path="res://Scripts/test_2.gd" id="1_7hc6d"]
+[ext_resource type="Script" uid="uid://bdjf08wqt4mom" path="res://Scripts/LevelScript/test_2.gd" id="1_7hc6d"]
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_ssric"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_kfwm1"]
 [ext_resource type="PackedScene" uid="uid://dxhbiiulntc2x" path="res://Sprites/Enemy/Peon.tscn" id="4_ssric"]
@@ -460,6 +460,10 @@ texture = ExtResource("2_kfwm1")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_05pb0")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_7hc6d"]
+parsed_geometry_type = 1
+agent_radius = 14.0
+
 [node name="Test_level" type="Node2D"]
 script = ExtResource("1_7hc6d")
 
@@ -492,7 +496,9 @@ position = Vector2(57, 66)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_kfwm1")
-next_level_path = "uid://85wsqpmigrem"
 
 [node name="Vex" parent="." instance=ExtResource("6_7hc6d")]
 position = Vector2(57, 192)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_7hc6d")

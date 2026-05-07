@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=4 uid="uid://cwonsgpv4vrdo"]
+[gd_scene load_steps=12 format=4 uid="uid://cwonsgpv4vrdo"]
 
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="1_cl1j5"]
-[ext_resource type="Script" uid="uid://d3l3gwca5w2wi" path="res://Scripts/test_3.gd" id="1_swfao"]
+[ext_resource type="Script" uid="uid://d3l3gwca5w2wi" path="res://Scripts/LevelScript/test_3.gd" id="1_swfao"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="2_swfao"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="5_3ldjf"]
 [ext_resource type="PackedScene" uid="uid://b2b3fhotf0jvn" path="res://Sprites/Enemy/Spark.tscn" id="5_5gw8i"]
@@ -460,6 +460,10 @@ texture = ExtResource("2_swfao")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_05pb0")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_cl1j5"]
+parsed_geometry_type = 1
+agent_radius = 14.0
+
 [node name="Test_level" type="Node2D"]
 script = ExtResource("1_swfao")
 
@@ -477,7 +481,6 @@ position = Vector2(-45, -43)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("5_3ldjf")
-next_level_path = "uid://dyxds1g1lsadf"
 
 [node name="Spark" parent="." instance=ExtResource("5_5gw8i")]
 position = Vector2(224, 202)
@@ -493,3 +496,6 @@ position = Vector2(61, 52)
 
 [node name="Mossmaw" parent="." instance=ExtResource("6_cl1j5")]
 position = Vector2(-90, 180)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_cl1j5")

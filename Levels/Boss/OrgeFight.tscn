@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=4 uid="uid://dyxds1g1lsadf"]
 
-[ext_resource type="Script" uid="uid://deu4yq0fqu3ie" path="res://Scripts/Boss_level.gd" id="1_k6q12"]
+[ext_resource type="Script" uid="uid://deu4yq0fqu3ie" path="res://Scripts/LevelScript/Boss_level.gd" id="1_k6q12"]
 [ext_resource type="Texture2D" uid="uid://cvw86en08fxam" path="res://Images/37033d6e-0c40-44a3-857b-0192add29fc7.png" id="2_f5fqd"]
 [ext_resource type="Texture2D" uid="uid://burjsmcxgm5c6" path="res://Images/0f6a29db-2521-4e60-899f-1795dfa4906e.png" id="3_7n0pr"]
 [ext_resource type="Script" uid="uid://coqncig1udyxk" path="res://Scripts/level_manager.gd" id="4_4x6xd"]
