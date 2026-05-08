@@ -138,7 +138,7 @@ func _physics_process(_delta):
 		var collision = get_slide_collision(i)
 		var target = collision.get_collider()
 		
-		if target.is_in_group("enemy") and not target.is_in_group("spawner") and not target.is_in_group("boss"):
+		if target.is_in_group("enemy") and not target.is_in_group("spawner") and not target.is_in_group("boss") and not target.is_in_group("badge"):
 			# Instead of just adding velocity, we 'teleport' them slightly
 			# away so they don't block the player's path
 			var push_dir = collision.get_normal() * -1.0

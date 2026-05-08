@@ -1,34 +1,48 @@
-extends Area2D
+extends CharacterBody2D
 
 signal badge_destroyed(type)
 
-@export_enum("fire", "poison", "electric", "bomb") var badge_type: String = "fire"
-@export var health: int = 20
+@export var health: int = 750
+var badge_type: String = "fire" # Default
 
-@onready var sprite = $AnimatedSprite2D
+@onready var anim_sprite = $AnimatedSprite2D
 
 func _ready():
-	# Automatically play the correct animation based on the type set in Inspector
-	if sprite:
-		sprite.play(badge_type)
+	add_to_group("BossBadges")
+	# Set metadata here just to be safe
+	set_meta("bossbadge", true)
 
+# The Boss calls this right after instantiating
+func setup_badge(type: String):
+	badge_type = type
+	
+	# We wait for the sprite to be ready if it's not yet
+	if not is_node_ready():
+		await ready
+		
+	if anim_sprite:
+		if anim_sprite.sprite_frames.has_animation(type):
+			anim_sprite.play(type)
+			print("DEBUG: Badge sprite playing: ", type)
+		else:
+			print("ERROR: Animation '%s' not found in AnimatedSprite2D!" % type)
 
 func take_damage(amount: int):
 	health -= amount
-	
-	# Hit Flash Animation
 	var t = get_tree().create_tween()
 	t.tween_property(self, "modulate", Color(10, 10, 10), 0.05)
 	t.tween_property(self, "modulate", Color.WHITE, 0.05)
 	
-	# Little "juice" effect: scale down and back up when hit
-	t.parallel().tween_property(self, "scale", Vector2(0.8, 0.8), 0.05)
-	t.tween_property(self, "scale", Vector2(1, 1), 0.05)
-
 	if health <= 0:
-		_die()
+		_notify_boss_and_die()
 
-func _die():
+func _notify_boss_and_die():
 	badge_destroyed.emit(badge_type)
-	# You could play a "death" animation here before queue_free
+	for node in get_tree().get_nodes_in_group("BossGroup"):
+		if node.has_meta("finalboss"):
+			node._on_badge_destroyed(badge_type)
+			break
 	queue_free()
+
+func get_badge_type() -> String:
+	return badge_type

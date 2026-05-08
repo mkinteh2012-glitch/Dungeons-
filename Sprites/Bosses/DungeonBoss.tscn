@@ -1,8 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://ca7l0cjrgyuwx"]
+[gd_scene load_steps=18 format=3 uid="uid://ca7l0cjrgyuwx"]
 
 [ext_resource type="Script" uid="uid://t6tl4ttyhoqh" path="res://Scripts/dungeon_boss.gd" id="1_sch0v"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_xyte5"]
 [ext_resource type="Texture2D" uid="uid://dt0l2d4paeq1g" path="res://Images/Wave.png" id="3_ksdes"]
+[ext_resource type="PackedScene" uid="uid://to32thfygyad" path="res://Sprites/Projectile/fireball.tscn" id="3_xwl1f"]
+[ext_resource type="PackedScene" uid="uid://drjbnfs2b5mce" path="res://Sprites/slime_puddle.tscn" id="4_d3h1s"]
+[ext_resource type="PackedScene" uid="uid://bb03mp0fktg70" path="res://Sprites/electric.tscn" id="5_bijfp"]
+[ext_resource type="PackedScene" uid="uid://dfb0jb6vowddv" path="res://Sprites/bomb.tscn" id="6_sql3e"]
 [ext_resource type="PackedScene" uid="uid://bydc8etspk6wm" path="res://Sprites/bossbadge.tscn" id="8_xwl1f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m7kuh"]
@@ -71,7 +75,14 @@ radius = 29.068884
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_sch0v")
+badge_scene = ExtResource("8_xwl1f")
+fire_projectile = ExtResource("3_xwl1f")
+slime_puddle = ExtResource("4_d3h1s")
+electricity_scene = ExtResource("5_bijfp")
+bomb_scene = ExtResource("6_sql3e")
+boss_health = 1000
 metadata/is_boss = true
+metadata/finalboss = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sr4w7")
@@ -93,20 +104,5 @@ shape = SubResource("CircleShape2D_h0d3v")
 [node name="Shield" type="Sprite2D" parent="."]
 scale = Vector2(3.75, 3.75)
 texture = ExtResource("3_ksdes")
-
-[node name="Badge" parent="." instance=ExtResource("8_xwl1f")]
-position = Vector2(41, -1)
-
-[node name="Badge2" parent="." instance=ExtResource("8_xwl1f")]
-position = Vector2(-1, 41)
-badge_type = "poison"
-
-[node name="Badge3" parent="." instance=ExtResource("8_xwl1f")]
-position = Vector2(-41, -3)
-badge_type = "electric"
-
-[node name="Badge4" parent="." instance=ExtResource("8_xwl1f")]
-position = Vector2(-1, -41)
-badge_type = "bomb"
 
 [connection signal="timeout" from="DecisionTimer" to="." method="_on_decision_timer_timeout"]

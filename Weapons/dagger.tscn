@@ -23,10 +23,11 @@ animations = [{
 radius = 4.0
 height = 20.0
 
-[node name="Dagger" type="Node2D"]
+[node name="Dagger" type="Node2D" groups=["weapon"]]
 position = Vector2(0, -1)
 rotation = 0.0023882622
 script = ExtResource("1_fees6")
+metadata/weapon = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -5)
