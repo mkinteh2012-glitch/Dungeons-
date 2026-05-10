@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ca7l0cjrgyuwx"]
+[gd_scene load_steps=26 format=3 uid="uid://ca7l0cjrgyuwx"]
 
 [ext_resource type="Script" uid="uid://t6tl4ttyhoqh" path="res://Scripts/dungeon_boss.gd" id="1_sch0v"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_xyte5"]
@@ -7,7 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://drjbnfs2b5mce" path="res://Sprites/slime_puddle.tscn" id="4_d3h1s"]
 [ext_resource type="PackedScene" uid="uid://bb03mp0fktg70" path="res://Sprites/electric.tscn" id="5_bijfp"]
 [ext_resource type="PackedScene" uid="uid://dfb0jb6vowddv" path="res://Sprites/bomb.tscn" id="6_sql3e"]
+[ext_resource type="AudioStream" uid="uid://b6dlcv5ik5hca" path="res://Music/392 Fighting the Titan Dweevil (4 Weapons) .mp3" id="7_n2d85"]
+[ext_resource type="AudioStream" uid="uid://dg0e15o4ffaki" path="res://Music/393 Fighting the Titan Dweevil (3 Weapons) .mp3" id="8_do2k3"]
 [ext_resource type="PackedScene" uid="uid://bydc8etspk6wm" path="res://Sprites/bossbadge.tscn" id="8_xwl1f"]
+[ext_resource type="AudioStream" uid="uid://bjxro77k1i84t" path="res://Music/394 Fighting the Titan Dweevil (2 Weapons) .mp3" id="9_hyx7x"]
+[ext_resource type="AudioStream" uid="uid://d2gt4rhslpaup" path="res://Music/395 Fighting the Titan Dweevil (1 Weapon) .mp3" id="10_ck2fs"]
+[ext_resource type="AudioStream" uid="uid://d3qm7ix1qbdb4" path="res://Music/401 Fighting the Titan Dweevil (No Weapons) .mp3" id="11_g0cdu"]
+[ext_resource type="AudioStream" uid="uid://bw66dp802ynq1" path="res://Music/396 Fighting the Titan Dweevil (Preparing a Weapon) .mp3" id="12_d5cwl"]
+[ext_resource type="AudioStream" uid="uid://4j1nv5digsv5" path="res://Music/399 Fighting the Titan Dweevil (Comedy Bomb Attack) .mp3" id="13_ny3oq"]
+[ext_resource type="AudioStream" uid="uid://c8h2mae5csbrk" path="res://Music/397 Fighting the Titan Dweevil (Monster Pump Attack) .mp3" id="14_h0d3v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m7kuh"]
 atlas = ExtResource("1_xyte5")
@@ -80,7 +88,14 @@ fire_projectile = ExtResource("3_xwl1f")
 slime_puddle = ExtResource("4_d3h1s")
 electricity_scene = ExtResource("5_bijfp")
 bomb_scene = ExtResource("6_sql3e")
-boss_health = 1000
+music_4_weapons = ExtResource("7_n2d85")
+music_3_weapons = ExtResource("8_do2k3")
+music_2_weapons = ExtResource("9_hyx7x")
+music_1_weapon = ExtResource("10_ck2fs")
+music_no_weapons = ExtResource("11_g0cdu")
+stinger_preparing = ExtResource("12_d5cwl")
+stinger_A = ExtResource("13_ny3oq")
+stinger_B = ExtResource("14_h0d3v")
 metadata/is_boss = true
 metadata/finalboss = true
 
@@ -105,4 +120,16 @@ shape = SubResource("CircleShape2D_h0d3v")
 scale = Vector2(3.75, 3.75)
 texture = ExtResource("3_ksdes")
 
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
+
+[node name="StingerPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = 2.0
+bus = &"SFX"
+
+[node name="DiscoveryTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
 [connection signal="timeout" from="DecisionTimer" to="." method="_on_decision_timer_timeout"]
+[connection signal="timeout" from="DiscoveryTimer" to="." method="_on_discovery_timer_timeout"]

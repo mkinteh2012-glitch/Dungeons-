@@ -21,15 +21,21 @@ extends CharacterBody2D
 @export_group("Boss Stats")
 @export var boss_health: int = 100
 @export var fire_cooldown: float = 4.0
-@export var poison_cooldown: float = 3.0
-@export var electric_cooldown: float = 3.0
-@export var bomb_cooldown: float = 3.0
+@export var poison_cooldown: float = 3.5
+@export var electric_cooldown: float = 4.0
+@export var bomb_cooldown: float = 5.0
 
 @onready var marker = $Marker2D
 @onready var timer = $DecisionTimer 
 @onready var shield_visual = $Shield
 @onready var shield_hitbox = $SheieldBox # This should be the Area2D/StaticBody
 
+@export_group("Discovery Settings")
+@export var trigger_distance: float = 75.0
+@export var reveal_time: float = 1.2 # How fast badges fly to their spots
+
+var is_discovered: bool = false
+var badge_nodes: Array[Node2D] = []
 
 var can_attack := true
 var is_invincible := true
@@ -46,7 +52,27 @@ var panic_direction: Vector2 = Vector2.ONE.normalized()
 # Assuming you have an AnimatedSprite2D or Sprite2D with an AnimationPlayer
 @onready var sprite = $AnimatedSprite2D 
 
+@export_group("Music - Phases")
+@export var music_4_weapons: AudioStream
+@export var music_3_weapons: AudioStream
+@export var music_2_weapons: AudioStream
+@export var music_1_weapon: AudioStream
+@export var music_no_weapons: AudioStream # The Panic Theme
+
+@export_group("Music - Stingers")
+@export var stinger_preparing: AudioStream
+@export var stinger_A: AudioStream # For physical/monster attacks
+@export var stinger_B: AudioStream  # For "silly" or chemical attacks
+
+@onready var music_player = $MusicPlayer
+@onready var stinger_player = $StingerPlayer
+
 func _physics_process(delta):
+	_check_for_player_discovery()	
+	if not is_discovered: 
+		print("NOT FOUND")
+		return
+	_update_boss_music()
 	player = get_tree().root.find_child("Player", true, false)
 	if not is_invincible:
 		# Disable shield once
@@ -99,18 +125,149 @@ func _play_animation(anim_name: String):
 	
 
 func _ready():
+	print("--- DEBUG START ---")
 	add_to_group("BossGroup")
-	set_meta("finalboss", true) # Ensure metadata is set for badges to find you
+	add_to_group("FinalBossGroup")
+	set_meta("finalboss", true)
+	
+	visible = false
+	is_discovered = false
+	can_attack = false
+	
+	# We leave process ON so the debug loop can run
+	set_process(true) 
+	set_physics_process(false)
+	
+	_spawn_badges_in_pile()
+	print("Boss: Ready. Visible: ", visible, " | is_discovered: ", is_discovered)
+	
+func _process(_delta):
+	if is_discovered: 
+		return # Stop checking once found
+
+	# DEBUG CHECK 1: Search for player
+	var p = get_tree().get_first_node_in_group("Player")
+	if not p:
+		p = get_tree().root.find_child("Player", true, false)
+	
+	if not p:
+		# If you see this in console, your Player is missing or named wrong
+		printerr("CRITICAL: Boss cannot find Player node anywhere!")
+		return
+
+	# DEBUG CHECK 2: Distance calculation
+	var dist = global_position.distance_to(p.global_position)
+	
+	# Print distance once every 60 frames so it doesn't spam too hard
+	if Engine.get_frames_drawn() % 60 == 0:
+		print("DEBUG: Player found. Distance: ", dist, " | Trigger at: ", trigger_distance)
+
+	if dist < trigger_distance:
+		print("SUCCESS: Player reached trigger distance!")
+		_reveal_and_start_battle()
+	
+func _spawn_badges_in_pile():
+	if not badge_scene: return
+
+	for i in range(4):
+		var new_badge = badge_scene.instantiate()
+		get_parent().add_child.call_deferred(new_badge) # Add to world, not boss
 		
-	_spawn_badges()
+		# Put them in a messy pile at our position
+		var pile_offset = Vector2(randf_range(-15, 15), randf_range(-15, 15))
+		new_badge.global_position = global_position + pile_offset
+		new_badge.rotation = randf_range(0, TAU)
+		
+		badge_nodes.append(new_badge)
+		
+		# Initialize them so they look like treasure but don't function yet
+		await get_tree().process_frame
+		if new_badge.has_method("setup_badge"):
+			new_badge.setup_badge(badge_types[i])
+			
+func _check_for_player_discovery():
+	while not is_discovered:
+		# Use a slightly longer timer to ensure we don't lag the game
+		await get_tree().create_timer(0.2).timeout
+			
+		if player:
+			var dist = global_position.distance_to(player.global_position)
+			print("Player found! Distance: ", dist)
+			
+			if dist < trigger_distance:
+				print("Boss: Player within range! Triggering reveal...")
+				_reveal_and_start_battle()
+				break # Exit the loop once found
+
+func _on_discovery_timer_timeout():
+	# If we already found them, stop checking
+	if is_discovered: 
+		$DiscoveryTimer.stop()
+		return
+
+	var p = get_tree().get_first_node_in_group("Player")
+	if not p: p = get_tree().root.find_child("Player", true, false)
+	
+	if p:
+		var dist = global_position.distance_to(p.global_position)
+		if dist < trigger_distance:
+			print("Boss: TRIGGERED at distance: ", dist)
+			$DiscoveryTimer.stop() # Kill the heartbeat
+			_reveal_and_start_battle()
+
+func _reveal_and_start_battle():
+	print("ACTION: Starting Reveal Sequence")
+	is_discovered = true
+	show()
+	visible = true
+	
+	var barrier = get_tree().root.find_child("BossBarrier", true, false)
+	
+	if barrier:
+		print("ARENA: Barrier found! Closing hallway.")
+		barrier.show()
+		barrier.visible = true
+		
+		# Find the collision shape inside the barrier and enable it
+		var collision = barrier.find_child("CollisionShape2D", true, false)
+		if not collision: 
+			collision = barrier.find_child("CollisionPolygon2D", true, false)
+			
+		if collision:
+			collision.set_deferred("disabled", false)
+	else:
+		printerr("ERROR: Could not find a node named 'BossBarrier' in the scene!")
+
+	# Badge Logic
+	var rotation_angle = deg_to_rad(45)
+	for i in range(badge_nodes.size()):
+		var badge = badge_nodes[i]
+		if is_instance_valid(badge):
+			print("ACTION: Moving Badge ", i)
+			if badge.get_parent() != self:
+				var global_pos = badge.global_position
+				badge.get_parent().remove_child(badge)
+				add_child(badge)
+				badge.global_position = global_pos
+			
+			var tw = create_tween().set_parallel(true)
+			tw.tween_property(badge, "position", badge_offsets[i].rotated(rotation_angle), reveal_time)
+			tw.tween_property(badge, "rotation", 0, reveal_time)
+
+	# Turn on physics for movement
+	set_physics_process(true)
+	
+	await get_tree().create_timer(reveal_time).timeout
+	await get_tree().create_timer(4.0).timeout
 	
 	if timer:
-		timer.timeout.connect(_on_decision_timer_timeout)
 		timer.start()
+		print("ACTION: Decision Timer Started")
 	
 	_update_shield_logic()
-
-
+	can_attack = true 
+	print("--- BATTLE IS LIVE ---")	
+	
 	
 func _spawn_badges():
 	if not badge_scene:
@@ -211,12 +368,16 @@ func _execute_fire_sequence():
 		can_attack = true
 		return
 
+	if stinger_preparing:
+		stinger_player.stream = stinger_preparing
+		stinger_player.play()
+
 	var charge_tween = get_tree().create_tween().set_loops(4)
 	charge_tween.tween_property(badge, "modulate", Color(5, 1, 0.5), 0.5)
 	charge_tween.tween_property(badge, "modulate", Color.WHITE, 0.5)
 	
 	await get_tree().create_timer(charge_duration).timeout
-	
+	_play_attack_music("B")
 	badge = _get_badge_node("fire")
 	if is_instance_valid(badge):
 		badge.modulate = Color(5, 1, 0.5)
@@ -252,13 +413,17 @@ func _execute_poison_spiral():
 	if not is_instance_valid(badge):
 		can_attack = true
 		return
-
+		
+	if stinger_preparing:
+		stinger_player.stream = stinger_preparing
+		stinger_player.play()
+		
 	var charge_tween = get_tree().create_tween().set_loops(4)
 	charge_tween.tween_property(badge, "modulate", Color(0, 5, 0), 0.5)
 	charge_tween.tween_property(badge, "modulate", Color.WHITE, 0.5)
 	
 	await get_tree().create_timer(charge_duration).timeout
-	
+	_play_attack_music("A")
 	badge = _get_badge_node("poison")
 	if is_instance_valid(badge):
 		badge.modulate = Color(0, 5, 0)
@@ -293,13 +458,17 @@ func _execute_electric_sequence():
 	if not is_instance_valid(badge):
 		can_attack = true
 		return
+		
+	if stinger_preparing:
+		stinger_player.stream = stinger_preparing
+		stinger_player.play()
 
 	var charge_tween = get_tree().create_tween().set_loops(4)
 	charge_tween.tween_property(badge, "modulate", Color(0, 4, 10), 0.5)
 	charge_tween.tween_property(badge, "modulate", Color.WHITE, 0.5)
 	
 	await get_tree().create_timer(charge_duration).timeout
-
+	_play_attack_music("A")
 	badge = _get_badge_node("electric")
 	if is_instance_valid(badge):
 		var cage_node = Node2D.new() 
@@ -339,7 +508,9 @@ func _execute_bomb_sequence():
 	if not is_instance_valid(badge):
 		can_attack = true
 		return
-
+	if stinger_preparing:
+		stinger_player.stream = stinger_preparing
+		stinger_player.play()
 	# Violent red warning flash
 	var charge_tween = get_tree().create_tween().set_loops(6)
 	charge_tween.tween_property(badge, "modulate", Color(20, 0, 0), 0.2)
@@ -350,8 +521,9 @@ func _execute_bomb_sequence():
 	badge = _get_badge_node("bomb")
 	if is_instance_valid(badge):
 		var player = get_tree().get_first_node_in_group("Player")
-		var total_bombs = 30 # High volume for massive spread
+		var total_bombs = 45 # High volume for massive spread
 		
+		_play_attack_music("B")
 		for i in range(total_bombs):
 			if not is_instance_valid(badge): break
 			if bomb_scene:
@@ -383,7 +555,41 @@ func _execute_bomb_sequence():
 				stw.tween_property(bomb, "scale", Vector2(2.0, 2.0), travel_time / 2.0)
 				
 			# High speed "Machine Gun" firing
-			await get_tree().create_timer(0.07).timeout 
+			await get_tree().create_timer(0.03).timeout 
 	
 	await get_tree().create_timer(bomb_cooldown).timeout
 	can_attack = true
+
+func _update_boss_music():
+	var badges = get_tree().get_nodes_in_group("BossBadges")
+	var count = badges.size()
+	var next_track: AudioStream
+	
+	# Determine track based on badge count
+	match count:
+		4: next_track = music_4_weapons
+		3: next_track = music_3_weapons
+		2: next_track = music_2_weapons
+		1: next_track = music_1_weapon
+		0: next_track = music_no_weapons
+
+	if next_track and music_player.stream != next_track:
+		var current_pos = music_player.get_playback_position()
+		music_player.stream = next_track
+		music_player.play(current_pos)
+
+# Call this inside your existing _update_shield_logic() function
+func _play_attack_music(type: String):
+	if type == "A" and stinger_A:
+		$StingerPlayer.stream = stinger_A
+	elif type == "B" and stinger_B:
+		$StingerPlayer.stream = stinger_B
+	else:
+		return
+		
+	$StingerPlayer.play()
+	
+	# Create a one-shot timer to stop the music after 'duration' seconds
+	get_tree().create_timer(5.4).timeout.connect(func():
+		$StingerPlayer.stop()
+	)

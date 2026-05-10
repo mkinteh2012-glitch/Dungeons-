@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://4j1nv5digsv5"
+path="res://.godot/imported/399 Fighting the Titan Dweevil (Comedy Bomb Attack) .mp3-927a0a8f4cce61a7ea7cf4be89d19168.mp3str"
+
+[deps]
+
+source_file="res://Music/399 Fighting the Titan Dweevil (Comedy Bomb Attack) .mp3"
+dest_files=["res://.godot/imported/399 Fighting the Titan Dweevil (Comedy Bomb Attack) .mp3-927a0a8f4cce61a7ea7cf4be89d19168.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

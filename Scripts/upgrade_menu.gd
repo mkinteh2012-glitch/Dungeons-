@@ -41,8 +41,9 @@ func refresh_shop():
 	
 	# 3. Get the list of badges from the new levels dictionary
 	var badge_keys = GameStats.ability_levels.keys()
-	
+	print("Keys in GameStats: ", GameStats.ability_levels.keys())
 	for b_id in badge_keys:
+		
 		var new_card = badge_card_scene.instantiate()
 		grid.add_child(new_card)
 		

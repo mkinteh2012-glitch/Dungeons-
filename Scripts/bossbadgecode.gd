@@ -2,8 +2,10 @@ extends CharacterBody2D
 
 signal badge_destroyed(type)
 
-@export var health: int = 750
+@export var health: int = 1000
 var badge_type: String = "fire" # Default
+var is_flickering: bool = false
+var max_health: int = health
 
 @onready var anim_sprite = $AnimatedSprite2D
 
@@ -33,8 +35,19 @@ func take_damage(amount: int):
 	t.tween_property(self, "modulate", Color(10, 10, 10), 0.05)
 	t.tween_property(self, "modulate", Color.WHITE, 0.05)
 	
+	# Flicker check (50% health)
+	if health <= (max_health / 2.0) and not is_flickering:
+		_start_low_health_flicker()
+	
+	
 	if health <= 0:
 		_notify_boss_and_die()
+
+func _start_low_health_flicker():
+	is_flickering = true
+	var flicker = create_tween().set_loops()
+	flicker.tween_property(self, "modulate:a", 0.3, 0.2)
+	flicker.tween_property(self, "modulate:a", 1.0, 0.2)
 
 func _notify_boss_and_die():
 	badge_destroyed.emit(badge_type)

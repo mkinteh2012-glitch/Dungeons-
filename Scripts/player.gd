@@ -6,6 +6,7 @@ var health_level = GameStats.ability_levels.get("health", 0)
 var size_level = GameStats.ability_levels.get("size", 0)
 var defense_level = GameStats.ability_levels.get("defense", 0)
 var cooldown_level = GameStats.ability_levels.get("cooldown", 0)
+var redo_level = GameStats.ability_levels.get("redo", 0)
 var cooldown_modifier: float = 1.0
 var charge_time = 0.0
 var charging_arrow_instance = null
@@ -360,24 +361,54 @@ func apply_weakness(duration: float):
 func _on_died():
 	print("Player has died!")
 	
-	# 1. Play the Game Over sound
-	if has_node("GameOverSound"):
-		$GameOverSound.play()
-	
-	# 2. Stop player movement and hide them
-	set_physics_process(false) # Stops the FootstepController too!
-	visible = false
-	
-	# 3. Disable collisions so enemies stop attacking the "ghost"
-	$CollisionShape2D.set_deferred("disabled", true)
-	
-	# 4. Wait for the sound to finish a bit, then restart or show UI
-	await get_tree().create_timer(1.5).timeout
-	restart_game()
+	# 1. Check for 'Redo' lives
+	print(redo_level)
+	if redo_level > 0:
+		redo_level -= 1
+		print("Redo used! Lives left this floor: ", redo_level)
+		
+			# 2. NO LIVES LEFT: The full Game Over sequence
+		if has_node("GameOverSound"):
+			$GameOverSound.play()
+		
+		set_physics_process(false)
+		visible = false
+		$CollisionShape2D.set_deferred("disabled", true)
+		
+		await get_tree().create_timer(1.5).timeout
+		
+		# RESTART THE LEVEL
+		get_tree().reload_current_scene()
+		
+	else:
+		restart_game() # Your existing function that clears stats and goes to menu
+		
 
 func restart_game():
-	# For now, we just reload the scene
-	get_tree().reload_current_scene()
+	GameStats.coins = 0
+	Global.levels_completed = 0
+	Global.selected_level_path = ""
+	Global.levels_completed = 0
+	Global.used_bosses = []
+	GameStats.coins = 50
+	GameStats.current_floor = 1
+	GameStats.ability_levels = {
+	"attack": 0,
+	"defense": 0,
+	"health": 0,
+	"size": 0,
+	"speed": 0,
+	"wave": 0,
+	"cooldown": 0
+}
+	var master_bus_index = AudioServer.get_bus_index("SFX")
+	AudioServer.set_bus_mute(master_bus_index, true)
+	$GameOver.play()
+	var fade_tween = create_tween()
+	$CanvasLayer/DeathFade.show()
+	fade_tween.tween_property($CanvasLayer/DeathFade, "modulate:a", 1.0, 2.0)
+	await get_tree().create_timer(5).timeout
+	get_tree().change_scene_to_file("res://UI/LevelSelectMenu.tscn")
 	
 func _shoot_arrow():
 	can_shoot = false
@@ -496,4 +527,3 @@ func spawn_wave():
 	get_tree().current_scene.add_child.call_deferred(wave_instance)
 	
 	print("WAVE SPAWNED SAFELY")
-		

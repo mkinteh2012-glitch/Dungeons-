@@ -60,11 +60,17 @@ func reset_music_system():
 	boss_node = null
 	is_boss_mode = false
 	intro_played = false
-	is_victory_playing = false
+	is_victory_playing =	 false
 	set_process(true)
 
 func _process(_delta):
 	if is_victory_playing: return # Block everything if we won
+
+	var final_bosses = get_tree().get_nodes_in_group("FinalBossGroup")
+	if final_bosses.size() > 0:
+		if not is_boss_mode:
+			_silence_for_final_boss()
+		return
 
 	# 1. BOSS DETECTION
 	var bosses = get_tree().get_nodes_in_group("bosses")
@@ -203,3 +209,13 @@ func play_level_cleared():
 		stream = win_sfx
 		if stream is AudioStreamMP3: stream.loop = false
 		play()
+
+func _silence_for_final_boss():
+	is_boss_mode = true
+	# Stop the Normal/Louie layers
+	normal_player.stop()
+	near_player.stop()
+	battle_player.stop()
+	# Stop the Main AudioStreamPlayer (this script's node)
+	stop() 
+	print("Global Music Manager: Silencing for Final Boss music system.")

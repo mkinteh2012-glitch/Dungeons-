@@ -9,7 +9,7 @@ func _ready():
 
 func _on_node_removed(node):
 	
-	if node.is_in_group("enemy"):
+	if node.is_in_group("enemy") and not node.is_in_group("badge"):
 		print("An ENEMY died! Spawning loot at: ", node.global_position)
 		spawn_loot(node.global_position)
 		if node.has_meta("Boss"): 

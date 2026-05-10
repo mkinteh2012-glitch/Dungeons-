@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://divyttohinn3n"]
+[gd_scene load_steps=15 format=3 uid="uid://divyttohinn3n"]
 
 [ext_resource type="Texture2D" uid="uid://cq2km4kygh8s3" path="res://Images/Badges.png" id="1_85h0q"]
 [ext_resource type="Script" uid="uid://csedaxjdvaniw" path="res://Scripts/badge.gd" id="1_qkohk"]
 [ext_resource type="Texture2D" uid="uid://mjpltkwgvfab" path="res://Images/More Badges.png" id="3_sqyww"]
+[ext_resource type="Texture2D" uid="uid://hnv2hg656vwy" path="res://Images/More More Badges.png" id="4_fssn4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qkohk"]
 radius = 8.246211
@@ -22,6 +23,10 @@ region = Rect2(16, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_hoxv8"]
 atlas = ExtResource("1_85h0q")
 region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0q2oe"]
+atlas = ExtResource("4_fssn4")
+region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oixrx"]
 atlas = ExtResource("3_sqyww")
@@ -71,6 +76,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_0q2oe")
+}],
+"loop": true,
+"name": &"Redo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_oixrx")
 }],
 "loop": true,
@@ -104,6 +117,6 @@ shape = SubResource("CircleShape2D_qkohk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_a0kvr")
-animation = &"Cooldown"
+animation = &"Redo"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

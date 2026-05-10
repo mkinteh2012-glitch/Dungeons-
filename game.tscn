@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://df6nh3ixle47n"]
+[gd_scene load_steps=14 format=3 uid="uid://df6nh3ixle47n"]
 
 [ext_resource type="Script" uid="uid://cxpqyvd3uvcyg" path="res://Scripts/game.gd" id="1_khbcx"]
 [ext_resource type="PackedScene" uid="uid://b7hddce26nu4x" path="res://Sprites/Player.tscn" id="2_ba1d1"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://dd4y2fm8stnto" path="res://Scripts/loot_manager.gd" id="8_3d5iw"]
 [ext_resource type="PackedScene" uid="uid://cd1ibxbqhr5bk" path="res://UI/coin_counter.tscn" id="9_tonfl"]
 [ext_resource type="PackedScene" uid="uid://dk5etkc1ypq8" path="res://UI/Heart_GUI.tscn" id="10_tonfl"]
+[ext_resource type="Script" uid="uid://bgm2bukjd7wm5" path="res://Scripts/redo_label.gd" id="11_mfdv2"]
+[ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="12_iotsf"]
 
 [sub_resource type="Environment" id="Environment_upo3n"]
 background_mode = 3
@@ -22,6 +24,7 @@ level_scene = ExtResource("2_t8fus")
 [node name="Player" parent="." instance=ExtResource("2_ba1d1")]
 
 [node name="MusicManager" parent="." groups=["music_system"] instance=ExtResource("4_t8fus")]
+bus = &"SFX"
 normal_louie = ExtResource("5_upo3n")
 near_louie = ExtResource("6_3d5iw")
 battle_louie = ExtResource("7_3ycj4")
@@ -53,3 +56,15 @@ offset_bottom = 39882.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.14117648, 0.105882354, 0.13333334, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="BG"]
+script = ExtResource("11_mfdv2")
+
+[node name="RedoLabel" type="Label" parent="BG/CanvasLayer"]
+offset_left = 3.0
+offset_top = 37.0
+offset_right = 43.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("12_iotsf")
+theme_override_font_sizes/font_size = 8
+text = "x1"

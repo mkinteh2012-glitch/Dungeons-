@@ -3,7 +3,7 @@ extends Node
 signal coins_changed(new_amount)
 
 # --- CURRENCY & PROGRESS ---
-var coins: int = 50 # Starting coins for testing
+var coins: int = 500 # Starting coins for testing
 var current_objective: String = "Exterminate" 
 var current_reward_coins: int = 0
 var current_difficulty: String = "Normal"
@@ -17,6 +17,7 @@ var badge_lookup = {
 	"size": "Size",
 	"speed": "Speed",
 	"wave": "Wave",
+	"redo": "Redo",
 	"cooldown": "Cooldown"
 }
 
@@ -29,6 +30,7 @@ var badge_descriptions = {
 	"size": "Increases dagger size, does not affect arrow",
 	"speed": "Move faster per upgrade.",
 	"wave": "Bigger, stronger shockwaves.",
+	"redo": "Restart the floor if you die, levels give more chances",
 	"cooldown": "Reduces arrow launch times, does not affect dagger"
 }
 
@@ -44,7 +46,8 @@ var base_prices = {
 	"health": 250,   
 	"defense": 100,   
 	"size": 100,      
-	"wave": 150,      
+	"wave": 150,
+	"redo": 200,
 	"cooldown": 100   
 }
 # Current Level (0 = Locked/Unbought)
@@ -55,6 +58,7 @@ var ability_levels = {
 	"size": 0,
 	"speed": 0,
 	"wave": 0,
+	"redo": 0,
 	"cooldown": 0
 }
 
@@ -66,6 +70,7 @@ var max_levels = {
 	"size": 5,
 	"speed": 10,
 	"wave": 10,
+	"redo": 5,
 	"cooldown": 10
 }
 
@@ -161,3 +166,10 @@ func collect_badge_upgrade(type: String):
 	
 	# Always emit the coin change or a custom signal to refresh UI
 	coins_changed.emit(coins)
+
+var current_floor_lives: int = 0 # Lives available for the current level
+
+func refresh_lives_for_new_level():
+	# If they bought 'Redo' levels, they get that many lives back
+	current_floor_lives = ability_levels["redo"]
+	print("Lives refreshed for floor: ", current_floor_lives)

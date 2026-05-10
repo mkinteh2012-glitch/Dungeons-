@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bjxro77k1i84t"
+path="res://.godot/imported/394 Fighting the Titan Dweevil (2 Weapons) .mp3-b69e2db43239e3316fc6e9bfb3074e17.mp3str"
+
+[deps]
+
+source_file="res://Music/394 Fighting the Titan Dweevil (2 Weapons) .mp3"
+dest_files=["res://.godot/imported/394 Fighting the Titan Dweevil (2 Weapons) .mp3-b69e2db43239e3316fc6e9bfb3074e17.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
