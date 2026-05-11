@@ -50,7 +50,6 @@ var current_weapon
 var facing_direction := Vector2.RIGHT
 var can_attack := true
 var is_lunging := false
-
 func _ready():
 	var dodge_speed: float =  current_speed * 3
 	update_stats()
@@ -357,31 +356,30 @@ func apply_weakness(duration: float):
 	is_weakened = false
 	sprite.modulate = Color.WHITE
 	print("DEBUG: Weakness GONE")
-
+var is_dead = false
 func _on_died():
-	print("Player has died!")
+	if is_dead: return
+	is_dead = true
 	
-	# 1. Check for 'Redo' lives
-	print(redo_level)
-	if redo_level > 0:
-		redo_level -= 1
-		print("Redo used! Lives left this floor: ", redo_level)
+	if GameStats.current_floor_lives > 0:
+		# 1. Subtract the life from the GLOBAL script (stays saved)
+		GameStats.current_floor_lives -= 1
+		print("Redo used. Lives remaining: ", GameStats.current_floor_lives)
 		
-			# 2. NO LIVES LEFT: The full Game Over sequence
+		# 2. Drama (Sound/Delay)
 		if has_node("GameOverSound"):
 			$GameOverSound.play()
 		
 		set_physics_process(false)
 		visible = false
-		$CollisionShape2D.set_deferred("disabled", true)
 		
 		await get_tree().create_timer(1.5).timeout
 		
-		# RESTART THE LEVEL
+		# 3. Reload the whole scene
 		get_tree().reload_current_scene()
 		
 	else:
-		restart_game() # Your existing function that clears stats and goes to menu
+		restart_game() # Full Game Over
 		
 
 func restart_game():
@@ -399,8 +397,10 @@ func restart_game():
 	"size": 0,
 	"speed": 0,
 	"wave": 0,
+	"redo": 0,
 	"cooldown": 0
 }
+	GameStats.level_in_progress = false
 	var master_bus_index = AudioServer.get_bus_index("SFX")
 	AudioServer.set_bus_mute(master_bus_index, true)
 	$GameOver.play()
@@ -408,7 +408,7 @@ func restart_game():
 	$CanvasLayer/DeathFade.show()
 	fade_tween.tween_property($CanvasLayer/DeathFade, "modulate:a", 1.0, 2.0)
 	await get_tree().create_timer(5).timeout
-	get_tree().change_scene_to_file("res://UI/LevelSelectMenu.tscn")
+	get_tree().change_scene_to_file("res://UI/StartMenu.tscn")
 	
 func _shoot_arrow():
 	can_shoot = false
@@ -478,6 +478,7 @@ func _trigger_shield_effect():
 	
 func update_stats():
 	await get_tree().process_frame
+	GameStats.refresh_lives_for_new_level()
 	if GameStats.unlocked_abilities.get("speed") == true:
 		current_speed = (speed_level * 10) + speed 
 	else:

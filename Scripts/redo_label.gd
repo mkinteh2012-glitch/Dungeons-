@@ -4,10 +4,11 @@ extends CanvasLayer # or Control, depending on your setup
 
 func _process(_delta):
 	# We check GameStats every frame to keep the number accurate
-	var lives = GameStats.ability_levels.get("redo", 0)
+	var lives = GameStats.current_floor_lives
 	
 	if lives > 0:
 		redo_label.text = "Lives:" + str(lives)
 		redo_label.show()
 	else:
 		redo_label.hide() 
+		

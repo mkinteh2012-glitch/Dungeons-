@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://f0x7f6d2eiht"]
+
+[ext_resource type="Script" uid="uid://c82yc7ruqkmg4" path="res://Scripts/victory_screen.gd" id="1_vpwkf"]
+[ext_resource type="FontFile" uid="uid://cxmyqa64tx8d2" path="res://Fonts/PressStart2P-Regular.ttf" id="2_tvrre"]
+[ext_resource type="AudioStream" uid="uid://dgr5qwpmcb3qf" path="res://Music/2-41. ENDING ~To Their Respective Futures~.mp3" id="3_gwhaw"]
+
+[node name="VictoryScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_vpwkf")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 561.0
+offset_top = 336.0
+offset_right = 633.0
+offset_bottom = 360.0
+theme_override_fonts/font = ExtResource("2_tvrre")
+text = "Exit"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -55.0
+offset_top = -51.0
+offset_right = -15.0
+offset_bottom = -11.0
+mouse_filter = 2
+
+[node name="Badge_Label" type="VBoxContainer" parent="Panel"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 57.0
+offset_top = 140.0
+offset_right = 694.0
+offset_bottom = 386.0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Coin_Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 133.0
+offset_right = 432.0
+offset_bottom = 156.0
+theme_override_fonts/font = ExtResource("2_tvrre")
+
+[node name="Stats" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 272.0
+offset_top = 57.0
+offset_right = 392.0
+offset_bottom = 81.0
+theme_override_fonts/font = ExtResource("2_tvrre")
+theme_override_font_sizes/font_size = 24
+text = "Stats"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1
+layout_mode = 0
+offset_right = 665.0
+offset_bottom = 373.0
+mouse_filter = 2
+color = Color(0.14508948, 0.3301594, 0.42537516, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_gwhaw")
+autoplay = true
+
+[connection signal="pressed" from="Button" to="." method="_on_restart_button_pressed"]

@@ -39,6 +39,7 @@ func _on_pressed():
 			print("Boss added to history.")
 		
 		Global.selected_level_path = target_level_path
+		GameStats.refresh_lives_for_new_level()
 		print("Global path set. Changing scene...")
 		
 		# Use call_deferred for scene changes to prevent the 'Parent Busy' error

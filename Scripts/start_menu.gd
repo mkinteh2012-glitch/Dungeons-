@@ -1,41 +1,51 @@
 extends Control
 
-@export var first_level_path: String = "res://scenes/levels/level_1.tscn" # Path to your scene
-@export var start_tex: Texture2D # Drag your image here
-
-@onready var btn = $CenterContainer/TextureButton
+# Match these names exactly to your scene tree
+@onready var start_button = $TextureButton
+@onready var title_label = $Label
+@onready var sub_label = $Label2 # The 'Start' text label
+@onready var music_player = $AudioStreamPlayer
 
 func _ready():
-	print("--- MENU DEBUG START ---")
+	# 1. Reset Game Progress
+	# This ensures the player starts with fresh lives/stats
+	GameStats.level_in_progress = false
 	
-	# 1. Force Texture
-	if start_tex:
-		btn.texture_normal = start_tex
-		print("Debug: Texture loaded successfully.")
-	else:
-		print("Warning: No texture assigned to 'start_tex' in Inspector!")
-
-	# 2. Force Size (So it's not a 0x0 invisible box)
-	btn.ignore_texture_size = true
-	btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	btn.custom_minimum_size = Vector2(300, 150) # Set this to your image's size
+	# 2. Play the Title Music
+	if music_player.stream:
+		music_player.play()
 	
-	# 3. Connection Check
-	if not btn.pressed.is_connected(_on_start_pressed):
-		btn.pressed.connect(_on_start_pressed)
-		print("Debug: Signal connected via code.")
-	
-	btn.grab_focus()
+	# 3. Setup Button Signal
+	# You can also do this in the 'Node' tab, but code is safer!
+	start_button.pressed.connect(_on_start_pressed)
 
 func _on_start_pressed():
-	print("SUCCESS: Start Button Clicked!")
-	
-	# Reset Global Data
-	if has_node("/root/Global"):
-		get_node("/root/Global").reset_all_data()
-	
-	# Change Scene
-	if FileAccess.file_exists(first_level_path):
-		get_tree().change_scene_to_file(first_level_path)
-	else:
-		print("Error: Scene path is wrong: ", first_level_path)
+	print("Starting Game...")
+	get_tree().change_scene_to_file("res://UI/LevelSelectMenu.tscn")
+	GameStats.coins = 0
+	Global.levels_completed = 0
+	Global.selected_level_path = ""
+	Global.levels_completed = 0
+	Global.used_bosses = []
+	GameStats.coins = 50
+	GameStats.current_floor = 1
+	GameStats.ability_levels = {
+	"attack": 0,
+	"defense": 0,
+	"health": 0,
+	"size": 0,
+	"speed": 0,
+	"wave": 0,
+	"redo": 0,
+	"cooldown": 0
+}
+	GameStats.level_in_progress = false
+# Optional: Add some juice!
+func _process(_delta):
+	# Make the title 'Dungeons' bob up and down slowly
+	var time = Time.get_ticks_msec() * 0.002
+	title_label.position.y = 22 + (sin(time) * 5)
+
+
+func _on_texture_button_pressed() -> void:
+	pass # Replace with function body.

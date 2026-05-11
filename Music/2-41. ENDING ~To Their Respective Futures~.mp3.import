@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dgr5qwpmcb3qf"
+path="res://.godot/imported/2-41. ENDING ~To Their Respective Futures~.mp3-ddb1f5149e6a942f6fd1ac9edb03ba93.mp3str"
+
+[deps]
+
+source_file="res://Music/2-41. ENDING ~To Their Respective Futures~.mp3"
+dest_files=["res://.godot/imported/2-41. ENDING ~To Their Respective Futures~.mp3-ddb1f5149e6a942f6fd1ac9edb03ba93.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

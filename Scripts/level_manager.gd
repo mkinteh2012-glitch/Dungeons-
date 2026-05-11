@@ -34,6 +34,7 @@ func _on_objective_met():
 		GameStats.coins += reward
 		Global.levels_completed += 1 
 		GameStats.current_floor += 1
+		GameStats.level_in_progress = false
 		print("Paid player: ", reward, ". Total Gold: ", GameStats.coins)
 	else:
 		# If it can't find 'ActiveLevel', it might just be the parent

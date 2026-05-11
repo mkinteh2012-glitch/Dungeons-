@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8s04forrwff"]
+[gd_scene load_steps=5 format=3 uid="uid://b8s04forrwff"]
 
 [ext_resource type="Script" uid="uid://cims62jn3pifg" path="res://Scripts/start_menu.gd" id="1_35j0k"]
 [ext_resource type="Texture2D" uid="uid://cufsgge6uwxe1" path="res://Images/StartButton.png" id="1_q0ago"]
 [ext_resource type="FontFile" uid="uid://c878e0o62n675" path="res://Font/PressStart2P-Regular.ttf" id="2_iky6m"]
+[ext_resource type="AudioStream" uid="uid://efmtw1u8gafi" path="res://Music/1-03. Title Screen - Main Theme.mp3" id="4_gnao3"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -21,28 +22,44 @@ script = ExtResource("1_35j0k")
 [node name="TextureButton" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 0
-offset_left = 288.0
-offset_top = 129.00002
-offset_right = 388.0
-offset_bottom = 229.00002
+offset_left = 253.0
+offset_top = 123.000015
+offset_right = 353.0
+offset_bottom = 223.00002
 scale = Vector2(7, 7)
 texture_normal = ExtResource("1_q0ago")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -100
 layout_mode = 0
-offset_right = 743.0
-offset_bottom = 423.0
-color = Color(0.35906002, 0.40222126, 0.81413895, 1)
+offset_left = -35.0
+offset_top = -6.0
+offset_right = 708.0
+offset_bottom = 417.0
+mouse_filter = 2
+color = Color(0.4490782, 0.25308985, 0.2546832, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Label2" type="Label" parent="."]
 layout_mode = 0
-offset_left = 262.0
-offset_top = 251.0
-offset_right = 422.0
-offset_bottom = 283.0
+offset_left = 227.0
+offset_top = 245.0
+offset_right = 387.0
+offset_bottom = 277.0
 theme_override_fonts/font = ExtResource("2_iky6m")
 theme_override_font_sizes/font_size = 32
 text = "Start"
 
-[connection signal="pressed" from="TextureButton" to="." method="_on_start_button_pressed"]
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 29.0
+offset_right = 476.0
+offset_bottom = 69.0
+theme_override_fonts/font = ExtResource("2_iky6m")
+theme_override_font_sizes/font_size = 40
+text = "Dungeons"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_gnao3")
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]

@@ -11,6 +11,7 @@ extends Control
 
 func _ready():
 	print("--- DEBUG START: LevelSelectMenu Ready ---")
+	GameStats.level_in_progress = false
 	var master_bus_index = AudioServer.get_bus_index("SFX")
 	AudioServer.set_bus_mute(master_bus_index, false)
 	update_floor_display()

@@ -167,9 +167,17 @@ func collect_badge_upgrade(type: String):
 	# Always emit the coin change or a custom signal to refresh UI
 	coins_changed.emit(coins)
 
-var current_floor_lives: int = 0 # Lives available for the current level
+var current_floor_lives: int = 0
+# Inside GameStats.gd
+var level_in_progress: bool = false
 
 func refresh_lives_for_new_level():
-	# If they bought 'Redo' levels, they get that many lives back
-	current_floor_lives = ability_levels["redo"]
-	print("Lives refreshed for floor: ", current_floor_lives)
+	# If we are just reloading (Redo), DON'T reset the lives
+	if level_in_progress:
+		print("Reload detected: Keeping current lives: ", current_floor_lives)
+		return 
+		
+	# If this is a brand new floor, reset everything
+	current_floor_lives = ability_levels.get("redo", 0)
+	level_in_progress = true
+	print("New Floor: Lives set to ", current_floor_lives)

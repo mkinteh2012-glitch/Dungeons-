@@ -299,7 +299,18 @@ func take_damage(amount: int):
 	_flash_node(self, Color(5, 0, 0))
 	
 	if boss_health <= 0:
-		queue_free()
+		# Stop the boss from moving/attacking while waiting
+		set_process(false) 
+		set_physics_process(false)
+		
+		# Optional: Play a death sound or animation here
+		print("Boss Defeated!")
+
+		# Wait for a tiny bit so the engine can settle
+		await get_tree().create_timer(1.0).timeout
+		
+		get_tree().change_scene_to_file("res://UI/victory_screen.tscn")
+		# DO NOT call queue_free() here. The scene change deletes the boss automatically.
 
 func _on_badge_destroyed(_type: String):
 	# Wait for the node to be fully removed from group
