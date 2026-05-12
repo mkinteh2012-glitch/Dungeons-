@@ -1,6 +1,6 @@
 extends StaticBody2D
 
-# --- Configuration ---
+# --- Configuration ---	
 @export var group_name := "enemy"
 @export var max_health := 500
 
@@ -22,8 +22,8 @@ var spawn_table = {
 	"res://Sprites/Enemy/Slime.tscn": 10
 }
 
-var on_screen_limit = 30
-var spawn_amount = 5
+var on_screen_limit = 25
+var spawn_amount = 4
 var spawn_cooldown = 15.0     
 
 func _ready():

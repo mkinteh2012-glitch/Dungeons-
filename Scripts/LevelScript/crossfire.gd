@@ -1,6 +1,6 @@
 extends Node2D
 @export var level_name: String = "Crossfire"
-@export var level_reward: int = 75
+@export var level_reward: int = 100
 @export var level_difficulty: String = "Hard"
 @onready var nav_region = $NavigationRegion2D # Make sure your node is named exactly this
 

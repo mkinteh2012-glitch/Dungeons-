@@ -392,8 +392,8 @@ func _execute_fire_sequence():
 	badge = _get_badge_node("fire")
 	if is_instance_valid(badge):
 		badge.modulate = Color(5, 1, 0.5)
-		var waves = 8 # Reduced waves from 12 to 8 for better dodging
-		var p_per_wave = 8 # Reduced bullets per wave to create bigger gaps
+		var waves = 10 # Reduced waves from 12 to 8 for better dodging
+		var p_per_wave = 12 # Reduced bullets per wave to create bigger gaps
 		for w in range(waves):
 			if not is_instance_valid(badge): break 
 			for i in range(p_per_wave):
@@ -401,18 +401,21 @@ func _execute_fire_sequence():
 					var fire = fire_projectile.instantiate()
 					get_tree().current_scene.add_child(fire)
 					fire.global_position = marker.global_position
+					fire.scale = Vector2(0.85, 0.85)
 					
-					# SCALE SET TO 0.8
-					fire.scale = Vector2(0.8, 0.8)
+					# --- OFFSET LOGIC ---
+					# Base angle + Wave rotation + Random offset between -45 and +45 degrees
+					var offset_rad = deg_to_rad(15.0)
+					var random_offset = randf_range(-offset_rad, offset_rad)
+					var angle = (i * (TAU/p_per_wave)) + (w * 0.6) + random_offset
 					
-					var angle = (i * (TAU/p_per_wave)) + (w * 0.4) # Faster offset rotation, but fewer bullets
 					var dir = Vector2(cos(angle), sin(angle))
 					var tween = get_tree().create_tween()
-					# Slower projectile speed (3.0s instead of 2.5s)
-					tween.tween_property(fire, "global_position", fire.global_position + (dir * 450), 3.0)
-					tween.parallel().tween_property(fire, "modulate:a", 0, 3.0) 
+					
+					tween.tween_property(fire, "global_position", fire.global_position + (dir * 550), 2.5)
+					tween.parallel().tween_property(fire, "modulate:a", 0, 2.5) 
 					tween.tween_callback(fire.queue_free) 
-			await get_tree().create_timer(0.6).timeout # More time between waves
+			await get_tree().create_timer(0.5).timeout 
 		if is_instance_valid(badge): badge.modulate = Color.WHITE
 	
 	await get_tree().create_timer(fire_cooldown).timeout
@@ -439,7 +442,7 @@ func _execute_poison_spiral():
 	if is_instance_valid(badge):
 		badge.modulate = Color(0, 5, 0)
 		var duration = 5.0
-		var shots_per_second = 20 # Reduced density
+		var shots_per_second = 25 # Reduced density
 		var total_shots = int(duration * shots_per_second)
 		
 		for i in range(total_shots):
@@ -451,11 +454,11 @@ func _execute_poison_spiral():
 					slime.global_position = marker.global_position
 					
 					# SLOWER SPIRAL: Reduced 0.1 to 0.04 for a lazy spin
-					var final_angle = (i * 0.04) + (line * (TAU / 3.0))
+					var final_angle = (i * 0.12) + (line * (TAU / 3.0))
 					var dir = Vector2(cos(final_angle), sin(final_angle))
 					var tween = get_tree().create_tween()
 					# Slower movement (2.2s instead of 1.8s)
-					tween.tween_property(slime, "global_position", slime.global_position + (dir * 300), 2.2)
+					tween.tween_property(slime, "global_position", slime.global_position + (dir * 300), 1.8)
 					tween.tween_callback(slime.queue_free)
 			await get_tree().create_timer(1.0 / shots_per_second).timeout
 		if is_instance_valid(badge): badge.modulate = Color.WHITE

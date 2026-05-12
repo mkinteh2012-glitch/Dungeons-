@@ -2,85 +2,86 @@ extends Control
 
 @export var card_scene: PackedScene
 @onready var list = $VBoxContainer
-@onready var floor_label = $CanvasLayer/FloorDisplay # Adjust path to your Label
+@onready var floor_label = $CanvasLayer/FloorDisplay
 
-# --- NEW STUFF ---
+# --- SHOP STUFF ---
 @onready var shop_menu = $UpgradeMenu
 @onready var shop_button = $ShopButtom 
-# -----------------
 
 func _ready():
 	print("--- DEBUG START: LevelSelectMenu Ready ---")
 	GameStats.level_in_progress = false
 	var master_bus_index = AudioServer.get_bus_index("SFX")
 	AudioServer.set_bus_mute(master_bus_index, false)
+	
 	update_floor_display()
+	
 	if shop_menu:
 		shop_menu.visible = false 
 	
-	if list == null:
+	if list == null or card_scene == null:
 		return
 
-	if card_scene == null:
-		return
-
-	# Clear the UI list
+	# Clear previous level cards
 	for child in list.get_children():
 		child.queue_free()
 
+	# --- NEW BOSS SPAWN LOGIC ---
 	var path_to_load = ""
-	if Global.levels_completed >= Global.levels_until_boss:
+	var current_floor = GameStats.current_floor
+	
+	if current_floor == 15:
+		# FINAL BOSS FLOOR
+		print("STATUS: FINAL BOSS ENCOUNTER!")
+		create_card_from_level("res://Levels/Boss/Final/FinalFight.tscn")
+		return # Stop here, we only want the one Final Boss card
+		
+	elif current_floor == 5 or current_floor == 10:
+		# RANDOM BOSS FLOOR
+		print("STATUS: Random Boss Encounter!")
 		path_to_load = "res://levels/boss/"
-		Global.levels_completed = 0
 	else:
+		# NORMAL LEVEL FLOOR
 		path_to_load = "res://levels/"
 
 	load_all_levels(path_to_load)
 
 func load_all_levels(path: String):
 	var dir = DirAccess.open(path)
+	if not dir:
+		print("ERROR: Could not open directory! ", path)
+		return
+
+	dir.list_dir_begin()
+	var file_names = []
+	var file_name = dir.get_next()
 	
-	if dir:
-		dir.list_dir_begin()
-		var file_names = []
-		var file_name = dir.get_next()
-		
-		while file_name != "":
+	while file_name != "":
+		if not dir.current_is_dir():
 			if file_name.ends_with(".tscn") or file_name.ends_with(".tscn.remap"):
 				file_names.append(file_name.replace(".remap", ""))
-			file_name = dir.get_next()
-		
-		# --- BOSS RESET LOGIC ---
-		if "boss" in path:
-			# Count how many boss files actually exist
-			var total_boss_files = file_names.size()
-			# If all bosses have been used, reset the list
-			if Global.used_bosses.size() >= total_boss_files:
-				print("STATUS: All bosses defeated. Resetting Boss List!")
-				Global.used_bosses.clear()
+		file_name = dir.get_next()
+	
+	# Boss recycling logic
+	if "boss" in path:
+		if Global.used_bosses.size() >= file_names.size():
+			Global.used_bosses.clear()
+	
+	file_names.shuffle()
 
-		# Shuffle the entire list of found levels
-		file_names.shuffle()
-
-		# --- LIMIT TO 3 RANDOM LEVELS ---
-		var random_selection = file_names.slice(0, 3)
+	# Pick 3 levels (or bosses)
+	var levels_added = 0
+	for f in file_names:
+		if levels_added >= 3: break
 		
-		var levels_added = 0
-		for f in random_selection:
-			var full_path = path + f
+		var full_path = path + f
+		
+		# Prevent fighting the same random boss twice in one run
+		if "boss" in path and Global.used_bosses.has(full_path):
+			continue 
 			
-			# Skip specifically if it's a boss we already fought this cycle
-			if "boss" in path and Global.used_bosses.has(full_path):
-				continue 
-			
-			create_card_from_level(full_path)
-			levels_added += 1
-		
-		# If the filter made the list too small (e.g. only 1 boss left), 
-		# we already have the reset logic above to handle the next run.
-
-	else:
-		print("ERROR: Could not open directory! ", path)
+		create_card_from_level(full_path)
+		levels_added += 1
 
 func create_card_from_level(path: String):
 	var level_scene = load(path)
@@ -93,6 +94,7 @@ func create_card_from_level(path: String):
 	var diff_raw = temp_node.get("level_difficulty")
 	var diff = str(diff_raw).to_lower() if diff_raw else "normal"
 	
+	# Color coding
 	var color_easy = Color(0.3, 0.36, 0.94) 
 	var color_boss = Color(0.35, 0.02, 0.35) 
 	
@@ -101,19 +103,25 @@ func create_card_from_level(path: String):
 		"easy": weight = 0.0
 		"normal": weight = 0.2
 		"hard": weight = 0.5
-		"?????????": weight = 0.8
+		"boss": weight = 0.8 
+		"?????????": weight = 1.0
 	
 	new_card.modulate = color_easy.lerp(color_boss, weight)
 	
 	new_card.setup({
-		"name": temp_node.get("level_name") if temp_node.get("level_name") else "Unknown",
-		"reward": temp_node.get("level_reward") if temp_node.get("level_reward") else 0,
+		"name": temp_node.get("level_name") if temp_node.has_method("get") and temp_node.get("level_name") else "Unknown",
+		"reward": temp_node.get("level_reward") if temp_node.has_method("get") and temp_node.get("level_reward") else 0,
 		"difficulty": diff.capitalize(),
 		"path": path
 	})
 	
 	temp_node.queue_free()
 
+func update_floor_display():
+	if floor_label:
+		floor_label.text = "FLOOR: " + str(GameStats.current_floor)
+
+# --- UI HANDLERS ---
 func _on_shop_buttom_pressed():
 	if shop_menu == null: return
 	shop_menu.visible = !shop_menu.visible
@@ -128,11 +136,3 @@ func _on_shop_buttom_pressed():
 
 func _on_upgrade_menu_hidden():
 	list.visible = true
-	
-func update_floor_display():
-	if floor_label:
-		# Option A: Simple text
-		floor_label.text = "FLOOR: " + str(GameStats.current_floor)
-		
-		# Option B: If using RichTextLabel for "Juicy" looks
-		# floor_label.bbcode_text = "[center]FLOOR [color=yellow]" + str(GameStats.current_floor) + "[/color][/center]"

@@ -154,7 +154,7 @@ func collect_badge_upgrade(type: String):
 		print("Badge: UNLOCKED ", key)
 	else:
 		# If already owned, add 5 levels
-		var new_lvl = current_lvl + 5
+		var new_lvl = current_lvl + 3
 		
 		# Check against Max Level (if max_lvl isn't -1)
 		if max_lvl != -1 and new_lvl > max_lvl:
