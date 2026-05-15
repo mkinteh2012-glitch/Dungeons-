@@ -3,7 +3,7 @@ extends CharacterBody2D
 # --- NEW SLIME EXPORTS ---
 @export_group("Slime Settings")
 @export var puddle_scene: PackedScene 
-@export var puddle_distance: float = 20.0 
+@export var puddle_distance: float = 40.0 
 
 @export_group("Movement")
 @export var speed_wander := 20

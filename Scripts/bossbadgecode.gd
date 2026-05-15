@@ -3,7 +3,7 @@ extends CharacterBody2D
 signal badge_destroyed(type)
 
 @export var health: int = 1000
-var badge_type: String = "fire" # Default
+var badge_type: String = "fire" 
 var is_flickering: bool = false
 var max_health: int = health
 
@@ -11,14 +11,13 @@ var max_health: int = health
 
 func _ready():
 	add_to_group("BossBadges")
-	# Set metadata here just to be safe
 	set_meta("bossbadge", true)
 
-# The Boss calls this right after instantiating
+
 func setup_badge(type: String):
 	badge_type = type
 	
-	# We wait for the sprite to be ready if it's not yet
+
 	if not is_node_ready():
 		await ready
 		
@@ -35,7 +34,7 @@ func take_damage(amount: int):
 	t.tween_property(self, "modulate", Color(10, 10, 10), 0.05)
 	t.tween_property(self, "modulate", Color.WHITE, 0.05)
 	
-	# Flicker check (50% health)
+
 	if health <= (max_health / 2.0) and not is_flickering:
 		_start_low_health_flicker()
 	

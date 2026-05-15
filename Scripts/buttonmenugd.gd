@@ -3,11 +3,9 @@ extends TextureButton
 var target_level_path: String 
 
 func _ready():
-	# 1. Automatic Signal Connection (Just in case you forgot in the editor)
 	if not pressed.is_connected(_on_pressed):
 		pressed.connect(_on_pressed)
 	
-	# 2. Visual Debugging
 	print("--- CARD DEBUG: ", name, " ---")
 	print("Position: ", position)
 	print("Size: ", size)
@@ -18,7 +16,7 @@ func _ready():
 		print("WARNING: Card size is 0! It will be invisible. Set 'Custom Minimum Size' in Inspector.")
 
 func setup(data: Dictionary):
-	# Using get_node_or_null to prevent crashes if nodes are missing
+
 	var name_label = get_node_or_null("Levelname")
 	var reward_label = get_node_or_null("Reward")
 	var diff_label = get_node_or_null("Difflabel")
@@ -42,7 +40,7 @@ func _on_pressed():
 		GameStats.refresh_lives_for_new_level()
 		print("Global path set. Changing scene...")
 		
-		# Use call_deferred for scene changes to prevent the 'Parent Busy' error
+
 		get_tree().call_deferred("change_scene_to_file", "res://game.tscn")
 	else:
 		print("ERROR: This card has no level path assigned!")

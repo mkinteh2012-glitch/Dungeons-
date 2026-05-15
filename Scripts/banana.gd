@@ -2,7 +2,7 @@ extends Area2D
 
 @export var speed := 200.0
 @export var return_delay := 2	
-@export var max_lifetime := 7.6 # New variable for self-destruction
+@export var max_lifetime := 7.6 
 @export var damage := 1
 
 var direction := Vector2.ZERO
@@ -19,9 +19,9 @@ func _physics_process(delta):
 	
 	if life_timer >= max_lifetime:
 		queue_free()
-		return # Stop processing the rest of the code for this frame
+		return 
 	
-	# 2. RETURN LOGIC
+
 	if not is_returning and life_timer >= return_delay:
 		is_returning = true
 	

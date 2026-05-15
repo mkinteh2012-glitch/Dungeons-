@@ -7,7 +7,7 @@ var cost: int
 @onready var price_label = $PriceLabel
 
 func setup(id: String, d_name: String, price_value: int, _tex = null):
-	badge_id = id # This is where we save 'id' for later use
+	badge_id = id 
 	cost = price_value
 	
 	if not is_node_ready():
@@ -22,14 +22,14 @@ func setup(id: String, d_name: String, price_value: int, _tex = null):
 	update_appearance()
 
 func update_appearance():
-	# 1. FIXED: Changed 'id' to 'badge_id'
+
 	var current_lvl = GameStats.ability_levels.get(badge_id, 0)
 	var max_lvl = GameStats.max_levels.get(badge_id, -1)
 	
-	# 2. FIXED: Changed 'id' to 'badge_id' here too
+
 	if has_node("DescriptionLabel"):
 		$DescriptionLabel.text = GameStats.get_badge_description(badge_id)
-		# Start hidden if you want the hover effect
+
 		$DescriptionLabel.visible = false 
 	
 	if current_lvl > 0:
@@ -48,7 +48,7 @@ func update_appearance():
 func _on_pressed():
 	if GameStats.buy_ability(badge_id):
 		update_appearance()
-		# If you have a coins label in the UI, you might want to refresh the whole shop
+		#refresh the coin cointer
 		if get_parent().has_method("refresh_shop"):
 			get_parent().refresh_shop()
 

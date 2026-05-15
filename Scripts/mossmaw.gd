@@ -64,11 +64,7 @@ func detach():
 	
 	# THE THROW: Calculate launch based on the player's movement
 	var throw_direction = Vector2.UP 
-	if player_ref and player_ref.velocity.length() > 0:
-		throw_direction = -player_ref.velocity.normalized() 
-	else:
-		# If player is standing still, just pop off in a random direction
-		throw_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	throw_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	
 	velocity = throw_direction * 400.0 
 	

@@ -4,7 +4,6 @@ extends CharacterBody2D
 @export var explosion_damage := 2
 @export var prime_distance = 40
 
-# Navigation & References
 @onready var nav_agent := $NavigationAgent2D as NavigationAgent2D
 @onready var area_2d = $Area2D
 @onready var sprite = $AnimatedSprite2D
@@ -20,35 +19,34 @@ func _ready():
 	add_to_group("enemy")
 	player = get_tree().get_first_node_in_group("player")
 	
-	# --- ANTI-STUCK SETTINGS ---
-	nav_agent.path_desired_distance = 10.0 # Give it more room to breathe
+	#navigation setup
+	nav_agent.path_desired_distance = 10.0 
 	nav_agent.target_desired_distance = 10.0
-	nav_agent.path_max_distance = 100.0 # Prevents it from getting lost
-	
-	# Make the physics engine more forgiving with wall gaps
-	motion_mode = MOTION_MODE_FLOATING # Prevents "floor" snapping logic
-	wall_min_slide_angle = 0.0 # Allows sliding at any angle
+	nav_agent.path_max_distance = 100.0 
+
+	motion_mode = MOTION_MODE_FLOATING 
+	wall_min_slide_angle = 0.0 
 	
 	makepath()
 
 func _physics_process(_delta):
 	if player and not is_primed:
-		# Always update the path to the player
+	
 		makepath()
 		
-		# Get pathfinding direction
+	
 		var next_path_pos = nav_agent.get_next_path_position()
 		var direction = global_position.direction_to(next_path_pos)
 		
 		velocity = direction * speed
 		
-		# Flip sprite based on movement
+
 		if velocity.x != 0:
 			sprite.flip_h = velocity.x < 0
 			
-		move_and_slide() # Handles wall sliding
+		move_and_slide() 
 		
-		# Check distance to player for the fuse
+
 		if global_position.distance_to(player.global_position) < prime_distance:
 			start_explosion_sequence()
 
@@ -56,7 +54,7 @@ func makepath() -> void:
 	if player:
 		nav_agent.target_position = player.global_position
 
-# --- THE IMMORTALITY / CHAIN REACTION LOGIC ---
+
 func take_damage(amount: int):
 	if not is_primed:
 		print("Boomkin hit! Priming...")
@@ -74,7 +72,7 @@ func start_explosion_sequence():
 	tween.finished.connect(explode)
 
 func explode():
-	# 1. VISUALS (Circle Flash)
+
 	var flash = Node2D.new()
 	var script_path = "res://Scripts/ExplosionEffect.gd"
 	if FileAccess.file_exists(script_path):
@@ -86,7 +84,7 @@ func explode():
 		tween.tween_property(flash, "modulate:a", 0.0, 0.2)
 		tween.tween_callback(flash.queue_free)
 
-	# 2. PARTICLES
+
 	var particles = $ExplosionParticles 
 	if particles:
 		var global_pos = particles.global_position
@@ -97,7 +95,7 @@ func explode():
 		particles.emitting = true
 		get_tree().create_timer(1.5).timeout.connect(particles.queue_free)
 
-	# 3. DAMAGE LOGIC
+
 	var targets = area_2d.get_overlapping_bodies()
 	for body in targets:
 		if body == self: continue
@@ -111,7 +109,8 @@ func explode():
 					health_node.die()
 		
 		elif body.is_in_group("enemy"):
-			if health_node: health_node.take_damage(50)
+			if body.has_method("start_explosion_sequence"): body.start_explosion_sequence()
+			elif health_node: health_node.take_damage(50)
 			elif body.has_method("take_damage"): body.take_damage(50)
 	
 	visible = false

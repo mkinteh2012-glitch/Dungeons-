@@ -1,10 +1,10 @@
 extends Area2D
 @onready var player = get_tree().get_first_node_in_group("player")
-# Using a Setter: This runs the second 'arrow_size' is changed by the player
+
 var arrow_size: Vector2 = Vector2(1, 1):
 	set(value):
 		arrow_size = value
-		self.scale = value # Force the Area2D to resize immediately
+		self.scale = value 
 		print("Arrow scale confirmed at: ", value)
 
 var direction = Vector2.ZERO
@@ -16,7 +16,7 @@ var is_max_power := false
 
 func _ready():
 	add_to_group("projectile")
-	# Final check to apply scale when entering the scene
+
 	self.scale = arrow_size
 
 func _physics_process(delta):
@@ -70,7 +70,7 @@ func _trigger_impact_juice():
 		var particles = $GPUParticles2D
 		var pos = particles.global_position
 		
-		# Reparent particles so they survive the arrow's queue_free()
+		
 		remove_child(particles)
 		get_tree().current_scene.add_child(particles)
 		
