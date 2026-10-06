@@ -22,7 +22,6 @@ func _ready():
 	nav_agent.path_desired_distance = 4.0
 	nav_agent.target_desired_distance = 4.0
 	# Add this line to prevent the "Stopping" bug:
-	nav_agent.debug_enabled = true # This will show a line in-game so you can see the path
 	
 	_connect_debug_signal("Health", "died", queue_free)
 	_connect_debug_signal("DetectionRange", "body_entered", _on_detection_entered)

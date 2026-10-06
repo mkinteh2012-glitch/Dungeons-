@@ -2,7 +2,7 @@ extends StaticBody2D
 
 # --- Configuration ---	
 @export var group_name := "enemy"
-@export var max_health := 500
+@export var max_health := 750
 
 @onready var spawn_sfx = $SpawnSound
 @onready var low_sfx = $LowHealthSound
@@ -14,17 +14,19 @@ var has_spawned_halfway_wave := false
 var is_flickering := false 
 
 var spawn_table = {
-	"res://Sprites/Enemy/boomkin.tscn": 5, 
+	"res://Sprites/Enemy/boomkin.tscn": 15, 
 	"res://Sprites/Enemy/Vex.tscn": 5, 
 	"res://Sprites/Enemy/skitter.tscn": 5, 
 	"res://Sprites/Enemy/Peon.tscn": 25,
-	"res://Sprites/Enemy/Mite.tscn": 45,
-	"res://Sprites/Enemy/Slime.tscn": 10
+	"res://Sprites/Enemy/Mite.tscn": 15,
+	"res://Sprites/Enemy/Slime.tscn": 10,
+	"res://Sprites/Enemy/Spark.tscn":20,
+	"res://Sprites/Enemy/shootbot.tscn":10
 }
 
 var on_screen_limit = 25
-var spawn_amount = 4
-var spawn_cooldown = 15.0     
+var spawn_amount = 3
+var spawn_cooldown = 12.0     
 
 func _ready():
 	health = max_health
@@ -61,7 +63,7 @@ func take_damage(amount: int):
 		has_spawned_halfway_wave = true
 		is_flickering = true 
 		low_sfx.play()
-		trigger_spawn_sequence(7) # Emergency wave
+		trigger_spawn_sequence(5) # Emergency wave
 		reset_spawn_timer() 
 	
 	if health <= 0:

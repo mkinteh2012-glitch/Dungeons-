@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dxhbiiulntc2x"]
+[gd_scene format=3 uid="uid://dxhbiiulntc2x"]
 
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_77kwv"]
 [ext_resource type="Script" uid="uid://bl0dmo558edjb" path="res://Scripts/peon.gd" id="1_bx8h2"]
@@ -45,7 +45,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7rs0a")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk",
 "speed": 7.0
 }]
@@ -60,58 +60,57 @@ radius = 95.42536
 radius = 6.0
 height = 14.0
 
-[node name="Peon" type="CharacterBody2D" groups=["enemy"]]
+[node name="Peon" type="CharacterBody2D" unique_id=760461766 groups=["enemy"]]
 z_index = 10
 collision_layer = 2
 script = ExtResource("1_bx8h2")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1110551365]
 sprite_frames = SubResource("SpriteFrames_8xx76")
 animation = &"walk"
 frame_progress = 0.4672587
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=591565094]
 
-[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox" unique_id=271135000]
 z_index = 1
 position = Vector2(1, 0.5)
 shape = SubResource("RectangleShape2D_c61ha")
 debug_color = Color(1, 0, 0, 0.41960785)
 
-[node name="AttackTimer" type="Timer" parent="Hurtbox"]
+[node name="AttackTimer" type="Timer" parent="Hurtbox" unique_id=401238972]
 
-[node name="Health" type="Node2D" parent="."]
+[node name="Health" type="Node2D" parent="." unique_id=350842413]
 script = ExtResource("3_br33p")
 
-[node name="Health_Bar" parent="Health" instance=ExtResource("6_j0egc")]
+[node name="Health_Bar" parent="Health" unique_id=1184266416 instance=ExtResource("6_j0egc")]
 position = Vector2(0, 10)
 
-[node name="DetectionRange" type="Area2D" parent="."]
+[node name="DetectionRange" type="Area2D" parent="." unique_id=1855092235]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange" unique_id=1913069500]
 shape = SubResource("CircleShape2D_br33p")
 debug_color = Color(0.06666667, 0.7176471, 0, 0.41960785)
 
-[node name="WanderTimer" type="Timer" parent="."]
+[node name="WanderTimer" type="Timer" parent="." unique_id=1725999821]
 
-[node name="Hitbox" type="CollisionShape2D" parent="."]
+[node name="Hitbox" type="CollisionShape2D" parent="." unique_id=1507365512]
 position = Vector2(1, 2)
 shape = SubResource("CapsuleShape2D_j0egc")
 
-[node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
+[node name="Footsteps" type="AudioStreamPlayer2D" parent="." unique_id=144762059]
 stream = ExtResource("4_cb6ge")
 script = ExtResource("5_j0egc")
 enemy_type = "peon"
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=715279543]
 target_desired_distance = 20.0
 path_postprocessing = 1
 avoidance_enabled = true
 radius = 30.0
-debug_enabled = true
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1071143528]
 wait_time = 0.2
 autostart = true

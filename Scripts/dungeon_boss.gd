@@ -10,7 +10,7 @@ extends CharacterBody2D
 ]
 
 @export_group("AI Settings")
-@export var charge_duration: float = 4.0
+@export var charge_duration: float = 2.5
 
 @export_group("Projectiles")
 @export var fire_projectile: PackedScene 

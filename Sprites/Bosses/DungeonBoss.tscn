@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ca7l0cjrgyuwx"]
+[gd_scene format=3 uid="uid://ca7l0cjrgyuwx"]
 
 [ext_resource type="Script" uid="uid://t6tl4ttyhoqh" path="res://Scripts/dungeon_boss.gd" id="1_sch0v"]
 [ext_resource type="Texture2D" uid="uid://cn88p321ynfw" path="res://Images/0x72_DungeonTilesetII_v1.7.png" id="1_xyte5"]
@@ -50,7 +50,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1mcgq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 3.0
 }, {
@@ -67,7 +67,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sql3e")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Walk",
 "speed": 5.0
 }]
@@ -79,7 +79,7 @@ height = 18.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0d3v"]
 radius = 29.068884
 
-[node name="FinalBoss" type="CharacterBody2D" groups=["boss", "enemy"]]
+[node name="FinalBoss" type="CharacterBody2D" unique_id=724721014 groups=["boss", "enemy"]]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_sch0v")
@@ -99,35 +99,35 @@ stinger_B = ExtResource("14_h0d3v")
 metadata/is_boss = true
 metadata/finalboss = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193145336]
 sprite_frames = SubResource("SpriteFrames_sr4w7")
 animation = &"Idle"
 frame_progress = 0.3959295
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1602039701]
 shape = SubResource("CapsuleShape2D_jdcb1")
 
-[node name="DecisionTimer" type="Timer" parent="."]
+[node name="DecisionTimer" type="Timer" parent="." unique_id=1043712588]
 wait_time = 0.3
 autostart = true
 
-[node name="Marker2D" type="Marker2D" parent="."]
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1219976138]
 
-[node name="SheieldBox" type="CollisionShape2D" parent="."]
+[node name="SheieldBox" type="CollisionShape2D" parent="." unique_id=1697853793]
 shape = SubResource("CircleShape2D_h0d3v")
 
-[node name="Shield" type="Sprite2D" parent="."]
+[node name="Shield" type="Sprite2D" parent="." unique_id=2066141540]
 scale = Vector2(3.75, 3.75)
 texture = ExtResource("3_ksdes")
 
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=563933540]
 bus = &"SFX"
 
-[node name="StingerPlayer" type="AudioStreamPlayer" parent="."]
+[node name="StingerPlayer" type="AudioStreamPlayer" parent="." unique_id=1494770848]
 volume_db = 2.0
 bus = &"SFX"
 
-[node name="DiscoveryTimer" type="Timer" parent="."]
+[node name="DiscoveryTimer" type="Timer" parent="." unique_id=1638146110]
 wait_time = 0.2
 autostart = true
 

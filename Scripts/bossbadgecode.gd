@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal badge_destroyed(type)
 
-@export var health: int = 1000
+@export var health: int = 2500
 var badge_type: String = "fire" 
 var is_flickering: bool = false
 var max_health: int = health
